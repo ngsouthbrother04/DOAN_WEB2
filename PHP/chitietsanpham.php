@@ -167,7 +167,7 @@ function getCartCount()
          <a href="trangchu.php">Trang chủ</a>
          <span>></span>
          <?php if (!empty($product['ten_loai'])): ?>
-            <a href="trangchu.php?category=<?php echo $product['loaisach_id']; ?>"><?php echo $product['ten_loai']; ?></a>
+            <a href="category.php?category=<?php echo $product['loaisach_id']; ?>"><?php echo $product['ten_loai']; ?></a>
             <span>></span>
          <?php endif; ?>
          <span><?php echo $product['tieu_de']; ?></span>

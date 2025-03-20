@@ -106,42 +106,40 @@ INSERT INTO LOAISACH (ten_loai) VALUES
 
 -- Chèn dữ liệu vào bảng SACH
 INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban) VALUES
-('Đồi gió hú', 'Emily Brontë', 150000, 50, 1, 'Tiểu thuyết kinh điển', 'doi_gio_hu.jpg', 'NXB Văn học'),
-('Kinh tế học cơ bản', 'Paul Samuelson', 200000, 30, 2, 'Sách giáo khoa kinh tế', 'kinh_te_co_ban.jpg', 'NXB Giáo dục'),
-('Vũ trụ trong vỏ hạt đậu', 'Stephen Hawking', 180000, 40, 3, 'Khoa học phổ thông', 'vu_tru.jpg', 'NXB Khoa học'),
-('Harry Potter', 'J.K. Rowling', 120000, 60, 4, 'Tiểu thuyết giả tưởng', 'harry_potter.jpg', 'NXB Trẻ'),
-('Sử Việt', 'Ngô Sĩ Liên', 220000, 25, 5, 'Lịch sử Việt Nam', 'su_viet.jpg', 'NXB Chính trị'),
-('Tâm lý học đám đông', 'Gustave Le Bon', 130000, 35, 6, 'Nghiên cứu tâm lý', 'tam_ly_dam_dong.jpg', 'NXB Tâm lý'),
-('Kỹ thuật phần mềm', 'Roger Pressman', 250000, 20, 7, 'Sách chuyên ngành', 'ky_thuat_phan_mem.jpg', 'NXB Thông tin'),
-('One Piece', 'Eiichiro Oda', 90000, 80, 8, 'Truyện tranh Nhật Bản', 'one_piece.jpg', 'NXB Kim Đồng'),
-('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', 'giao_duc_hien_dai.jpg', 'NXB Giáo dục'),
-('Chính trị học', 'Niccolò Machiavelli', 190000, 30, 10, 'Sách chính trị', 'chinh_tri_hoc.jpg', 'NXB Chính trị');
+('Đồi gió hú', 'Emily Brontë', 150000, 50, 1, 'Tiểu thuyết kinh điển', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Văn học'),
+('Kinh tế học cơ bản', 'Paul Samuelson', 200000, 30, 2, 'Sách giáo khoa kinh tế', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Giáo dục'),
+('Vũ trụ trong vỏ hạt đậu', 'Stephen Hawking', 180000, 40, 3, 'Khoa học phổ thông', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Khoa học'),
+('Harry Potter', 'J.K. Rowling', 120000, 60, 4, 'Tiểu thuyết giả tưởng', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Trẻ'),
+('Sử Việt', 'Ngô Sĩ Liên', 220000, 25, 5, 'Lịch sử Việt Nam', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Chính trị'),
+('Tâm lý học đám đông', 'Gustave Le Bon', 130000, 35, 6, 'Nghiên cứu tâm lý', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Tâm lý'),
+('Kỹ thuật phần mềm', 'Roger Pressman', 250000, 20, 7, 'Sách chuyên ngành', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Thông tin'),
+('One Piece', 'Eiichiro Oda', 90000, 80, 8, 'Truyện tranh Nhật Bản', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Kim Đồng'),
+('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Giáo dục'),
+('Chính trị học', 'Niccolò Machiavelli', 190000, 30, 10, 'Sách chính trị', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Chính trị');
 
 -- Chèn dữ liệu vào bảng USER
 INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, email, ngay_sinh, quyen, giohang_id) VALUES
 ('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', 'a.nguyen@gmail.com', '1990-05-15', 'KhachHang', 1),
 ('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', 'b.tran@gmail.com', '1992-07-20', 'KhachHang', 2),
-('pass789', 'Le Van C', '0923456789', 'Da Nang', 'c.le@gmail.com', '1988-03-10', 'Admin', 3),
+('admin', 'Le Van C', '0923456789', 'Ho Chi Minh', 'c.le@gmail.com', '1988-03-10', 'Admin', null),
 ('pass101', 'Pham Thi D', '0934567890', 'Can Tho', 'd.pham@gmail.com', '1995-09-25', 'KhachHang', 4),
 ('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', 'e.hoang@gmail.com', '1991-11-30', 'KhachHang', 5),
 ('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', 'f.do@outlook.com', '1987-04-05', 'KhachHang', 6),
-('pass404', 'Vu Van G', '0967890123', 'Hue', 'g.vu@outlook.com', '1993-06-15', 'Admin', 7),
-('pass505', 'N Thi H', '0978901234', 'Nha Trang', 'h.n@outlook.com', '1994-08-20', 'KhachHang', 8),
-('pass606', 'Dang Van I', '0989012345', 'Vung Tau', 'i.dang@outlook.com', '1989-12-10', 'KhachHang', 9),
-('pass707', 'Bui Thi K', '0990123456', 'Da Lat', 'k.bui@outlook.com', '1996-02-25', 'KhachHang', 10);
+('pass505', 'N Thi H', '0978901234', 'Nha Trang', 'h.n@outlook.com', '1994-08-20', 'KhachHang', 7),
+('pass606', 'Dang Van I', '0989012345', 'Vung Tau', 'i.dang@outlook.com', '1989-12-10', 'KhachHang', 8),
+('pass707', 'Bui Thi K', '0990123456', 'Da Lat', 'k.bui@outlook.com', '1996-02-25', 'KhachHang', 9);
 
 -- Chèn dữ liệu vào bảng DONHANG
 INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
 (1, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan'),
 (2, '2025-03-02 11:00:00', 450000, 'da_xac_nhan'),
-(3, '2025-03-03 12:00:00', 180000, 'da_duoc_giao'),
-(4, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan'),
-(5, '2025-03-05 14:00:00', 350000, 'da_xac_nhan'),
-(6, '2025-03-06 15:00:00', 150000, 'da_bi_huy'),
-(7, '2025-03-07 16:00:00', 270000, 'cho_xac_nhan'),
+(4, '2025-03-03 12:00:00', 180000, 'da_duoc_giao'),
+(5, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan'),
+(6, '2025-03-05 14:00:00', 350000, 'da_xac_nhan'),
+(7, '2025-03-06 15:00:00', 150000, 'da_bi_huy'),
 (8, '2025-03-08 17:00:00', 390000, 'da_duoc_giao'),
 (9, '2025-03-09 18:00:00', 200000, 'da_xac_nhan'),
-(10, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan');
+(1, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan');
 
 -- Chèn dữ liệu vào bảng CHITIETDONHANG
 INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
@@ -153,8 +151,7 @@ INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
 (6, 6, 130000, 1),
 (7, 7, 250000, 1),
 (8, 8, 90000, 3),
-(9, 9, 170000, 1),
-(10, 10, 190000, 2);
+(9, 9, 170000, 1);
 
 -- Chèn dữ liệu vào bảng GIOHANG
 INSERT INTO GIOHANG (sach_id, donhang_id, so_luong) VALUES
@@ -166,21 +163,20 @@ INSERT INTO GIOHANG (sach_id, donhang_id, so_luong) VALUES
 (6, 6, 1),
 (7, 7, 1),
 (8, 8, 3),
-(9, 9, 1),
-(10, 10, 2);
+(9, 9, 1);
 
 -- Chèn dữ liệu vào bảng FEEDBACK
 INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES
 (1, 1, 5, 'Sách rất hay', '2025-03-01 10:00:00'),
 (2, 2, 4, 'Hữu ích', '2025-03-02 11:00:00'),
-(3, 3, 5, 'Tuyệt vời', '2025-03-03 12:00:00'),
-(4, 4, 3, 'Bình thường', '2025-03-04 13:00:00'),
-(5, 5, 4, 'Rất tốt', '2025-03-05 14:00:00'),
-(6, 6, 5, 'Nội dung sâu sắc', '2025-03-06 15:00:00'),
-(7, 7, 4, 'Hữu ích', '2025-03-07 16:00:00'),
-(8, 8, 5, 'Hấp dẫn', '2025-03-08 17:00:00'),
-(9, 9, 3, 'Tạm ổn', '2025-03-09 18:00:00'),
-(10, 10, 4, 'Đáng đọc', '2025-03-10 19:00:00');
+(4, 3, 5, 'Tuyệt vời', '2025-03-03 12:00:00'),
+(5, 4, 3, 'Bình thường', '2025-03-04 13:00:00'),
+(6, 5, 4, 'Rất tốt', '2025-03-05 14:00:00'),
+(7, 6, 5, 'Nội dung sâu sắc', '2025-03-06 15:00:00'),
+(8, 7, 4, 'Hữu ích', '2025-03-07 16:00:00'),
+(9, 8, 5, 'Hấp dẫn', '2025-03-08 17:00:00'),
+(1, 9, 3, 'Tạm ổn', '2025-03-09 18:00:00'),
+(2, 10, 4, 'Đáng đọc', '2025-03-10 19:00:00');
 
 -- Chèn dữ liệu vào bảng CHITIETSACH
 INSERT INTO CHITIETSACH (chitietsach_id, sach_id, so_luong) VALUES

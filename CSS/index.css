@@ -3,6 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: "Roboto", Arial, sans-serif;
+    text-decoration: none;
 }
 
 body {
@@ -255,7 +256,8 @@ body {
 }
 
 /* Bỏ banner và quảng cáo khi search sản phẩm */
-.main.search-active .banner, .main.search-active .quangcao {
+.main.search-active .banner,
+.main.search-active .quangcao {
     display: none;
 }
 
@@ -756,28 +758,32 @@ body {
 
 /* Breadcrumb styles */
 .breadcrumb {
-    width: 100%;
-    max-width: 1200px;
-    margin: 10px 0 15px 20px;
-    padding: 10px 0;
-    background-color: #fff;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: #666;
-    text-align: left;
+    color: #333;
+    margin: 15px 0;
+
 }
 
 .breadcrumb a {
-    color: #c62828;
+    color: #333;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .breadcrumb a:hover {
-    color: #a81f1f;
+    color: #c62828;
+
     text-decoration: underline;
+
 }
 
-.breadcrumb span {
-    color: #333;
+.breadcrumb .separator {
+    color: #666;
+    margin: 0 5px;
+}
+
+.breadcrumb .current {
+    color: #c62828;
     font-weight: 500;
 }
