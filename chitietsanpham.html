@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết sản phẩm</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./CSS/index.css">
+    <link rel="stylesheet" href="./CSS/product-detail.css">
+</head>
+<body>
+    <div class="header">
+        <div id="topmenu1">
+            <img src="Picture/CT_T3_header_1263x60.webp" alt="" id="anh_topmenu">
+        </div>
+        <div id="topmenu2">
+            <a href="index.html">
+                <img src="Picture/logo.png" alt="" id="logo">
+            </a>
+            <div class="menubutton">
+                <img src="icon/bars-solid.svg" alt="" id="menubutton">
+                <p>Danh Mục</p>
+                <div class="dropdown-menu">
+                    <ul>
+                        <li><a href="#">Truyện Tranh</a></li>
+                        <li><a href="#">Kinh Dị</a></li>
+                        <li><a href="#">Tiểu Thuyết</a></li>
+                        <li><a href="#">Sách Giáo Khoa</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Tìm tại đây">
+                <button class="search-button">
+                    <img src="icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
+                </button>
+                <div class="advance_search">
+                    <div class="advance_search-menu">
+                        <form id="filter-search">
+                            <div class="filter-search-group">
+                                <label for="category-search">Danh mục:</label>
+                                <select id="category-search" name="category-search">
+                                    <option value="">Tất cả</option>
+                                    <option value="truyen-tranh">Truyện Tranh</option>
+                                    <option value="kinh-di">Kinh Dị</option>
+                                    <option value="tieu-thuyet">Tiểu Thuyết</option>
+                                    <option value="sach-giao-khoa">Sách Giáo Khoa</option>
+                                </select>
+                            </div>
+                            <div class="filter-search-group">
+                                <label for="price-min-search">Giá từ:</label>
+                                <input type="number" id="price-min-search" name="price-min-search" min="0" placeholder="0">
+                            </div>
+                            <div class="filter-search-group">
+                                <label for="price-max-search">Đến:</label>
+                                <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="userbutton">
+                <img src="icon/user-regular.svg" alt="" id="userbutton">
+                <p>Tài khoản</p>
+            </div>
+            <div class="cartbutton">
+                <img src="icon/cart-shopping-solid.svg" alt="" id="cartbutton">
+                <p>Giỏ Hàng</p>
+            </div>
+            <div class="bellbutton">
+                <img src="icon/bell-regular.svg" alt="" id="bellbutton">
+                <p>Thông Báo</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="product-detail-container">
+            <nav class="breadcrumb"></nav>
+            <div class="product-detail">
+                <div class="product-images">
+                    <img src="" alt="" class="main-image">
+                </div>
+                <div class="product-info">
+                    <h1></h1>
+                    <p class="category"></p>
+                    <p class="publisher"></p>
+                    <p class="author"></p>
+                    <div class="price">
+                        <span class="current-price"></span>
+                    </div>
+                    <div class="stock-info">
+                        <p>Sách còn hàng</p>
+                    </div>
+                    <div class="quantity">
+                        <label>Số lượng:</label>
+                        <button class="decrease">-</button>
+                        <input type="number" value="1" min="1">
+                        <button class="increase">+</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="add-to-cart">Thêm vào giỏ hàng</button>
+                        <button class="buy-now">Mua ngay</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-column">
+                <h3>DỊCH VỤ</h3>
+                <ul>
+                    <li>Điều khoản sử dụng</li>
+                    <li>Chính sách bảo mật</li>
+                    <li>Liên hệ</li>
+                    <li>Hệ thống nhà sách</li>
+                    <li>Tra cứu đơn hàng</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>HỖ TRỢ</h3>
+                <ul>
+                    <li>Hướng dẫn đặt hàng</li>
+                    <li>Chính sách đổi trả - hoàn tiền</li>
+                    <li>Phương thức vận chuyển</li>
+                    <li>Phương thức thanh toán</li>
+                    <li>Chính sách khách hàng mua sỉ</li>
+                    <li>Chính sách khách hàng cho</li>
+                    <li>Thu viện - Trường học</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>NHÀ XUẤT BẢN KIM ĐỒNG</h3>
+                <p>Giám đốc: Bùi Tuấn Nghĩa</p>
+                <p>Địa chỉ: Số 55 Quảng Trưng, Nguyễn Du, Hai Bà Trưng, Hà Nội</p>
+                <p>Số điện thoại: (+84) 1900571595</p>
+                <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c6a5b5adae99a9a8aaafa8a386a8bea4adafaba2a9a8a1e8a5a9abe8b0a8">[email&#160;protected]</a></p>
+            </div>
+        </div>
+    </footer>
+    <div class="login-container" id="login-container">
+        <div class="tabs">
+            <a href="#" class="active" id="login-tab">Đăng nhập</a>
+            <a href="#" id="register-tab">Đăng ký</a>
+        </div>
+        <!-- Form Đăng nhập -->
+        <div class="login-form" id="login-form">
+            <div class="form-group">
+                <label>Số điện thoại/Email</label>
+                <input type="text" placeholder="Nhập số điện thoại hoặc email"
+                    style="border: 1px solid #ccc; outline: none;">
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+                    <input type="password" id="password" placeholder="Nhập mật khẩu"
+                        style="border: none; outline: none;">
+                    <button type="button" class="show-password" id="togglePassword">Hiện</button>
+                </div>
+            </div>
+            <button class="btn btn-primary">Đăng nhập</button>
+            <button class="btn btn-secondary" id="exit">Thoát</button>
+        </div>
+        <!-- Form Đăng ký -->
+        <div class="register-form" id="register-form" style="display: none;">
+            <div class="form-group">
+                <label>Tên đăng nhập (Số điện thoại/Email)</label>
+                <input type="text" placeholder="Nhập số điện thoại hoặc email"
+                    style="border: 1px solid #ccc; outline: none;">
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+                    <input type="password" id="reg-password" placeholder="Nhập mật khẩu"
+                        style="border: none; outline: none;">
+                    <button type="button" class="show-password" id="toggleRegPassword">Hiện</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Xác nhận mật khẩu</label>
+                <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+                    <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu"
+                        style="border: none; outline: none;">
+                    <button type="button" class="show-password" id="toggleConfirmPassword">Hiện</button>
+                </div>
+            </div>
+            <button class="btn btn-primary">Đăng ký</button>
+            <button class="btn btn-secondary" id="exit-reg">Thoát</button>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modal"></div>
+    <script src="./js/account.js"></script>
+    <script src="./js/products.js"></script>
+    <script src="./js/product_detail.js"></script>
+</body>
+</html>
