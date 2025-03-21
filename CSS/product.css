@@ -43,17 +43,15 @@
    height: 280px;
    object-fit: contain;
    border-radius: 4px;
-   margin-bottom: 15px;
+   margin-bottom: 5px;
    background-color: #f9f9f9;
    padding: 5px;
 }
 
 .product-item h3 {
    font-size: 16px;
-   margin-bottom: 10px;
    font-weight: bold;
    text-align: center;
-   height: 40px;
    overflow: hidden;
    display: -webkit-box;
    -webkit-line-clamp: 2;
@@ -108,7 +106,8 @@
 /* Kiểu dáng riêng cho nút "Mua" */
 .buy-now-btn,
 .add-to-cart-btn {
-   background-color: #ff0000;
+   margin-top: 15px;
+   background-color: #c22432;
    color: #fff;
 }
 
@@ -116,8 +115,8 @@
 .buy-now-btn:hover,
 .add-to-cart-btn:hover {
    background-color: #fff;
-   color: #ff0000;
-   border: 1px solid #ff0000;
+   color: #c22432;
+   border: 1px solid #c22432;
 }
 
 /* Pagination */
@@ -139,7 +138,7 @@
 }
 
 .page-btn:hover:not(.disabled) {
-   background-color: var(--primary-color);
+   background-color: #c62828;
    color: #fff;
 }
 
@@ -210,20 +209,21 @@
 
 .filter-buttons button {
    padding: 8px 20px;
-   background-color: var(--primary-color);
+   background-color: #c62828;
    /* Màu đỏ chủ đạo */
    color: #fff;
    border: none;
    border-radius: 4px;
    cursor: pointer;
+   margin-right: 10px;
 }
 
 .filter-buttons button:hover {
-   background-color: var(--primary-hover);
+   background-color: #c22432;
 }
 
 .reset-filter {
-   padding: 8px 20px;
+   padding: 8px;
    background-color: #f0f0f0;
    color: #333;
    text-decoration: none;

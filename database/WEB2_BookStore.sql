@@ -101,21 +101,25 @@ INSERT INTO LOAISACH (ten_loai) VALUES
 ('Tâm lý'),
 ('Kỹ thuật'),
 ('Truyện tranh'),
-('Giáo dục'),
-('Chính trị');
+('Giáo dục');
 
 -- Chèn dữ liệu vào bảng SACH
 INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban) VALUES
-('Đồi gió hú', 'Emily Brontë', 150000, 50, 1, 'Tiểu thuyết kinh điển', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Văn học'),
-('Kinh tế học cơ bản', 'Paul Samuelson', 200000, 30, 2, 'Sách giáo khoa kinh tế', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Giáo dục'),
-('Vũ trụ trong vỏ hạt đậu', 'Stephen Hawking', 180000, 40, 3, 'Khoa học phổ thông', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Khoa học'),
-('Harry Potter', 'J.K. Rowling', 120000, 60, 4, 'Tiểu thuyết giả tưởng', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Trẻ'),
-('Sử Việt', 'Ngô Sĩ Liên', 220000, 25, 5, 'Lịch sử Việt Nam', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Chính trị'),
-('Tâm lý học đám đông', 'Gustave Le Bon', 130000, 35, 6, 'Nghiên cứu tâm lý', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Tâm lý'),
-('Kỹ thuật phần mềm', 'Roger Pressman', 250000, 20, 7, 'Sách chuyên ngành', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Thông tin'),
-('One Piece', 'Eiichiro Oda', 90000, 80, 8, 'Truyện tranh Nhật Bản', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Kim Đồng'),
-('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Giáo dục'),
-('Chính trị học', 'Niccolò Machiavelli', 190000, 30, 10, 'Sách chính trị', 'Products/tien-co-te_bia_5e29fcd7059a46d39dbc037b728021ac_master.webp', 'NXB Chính trị');
+('Blue Box tập 2', 'Không có', 250000, 50, 8, 'Truyện tranh', 'Products/bluebox.jpg', 'NXB Kim Đồng'),
+('BlueLock tập 24', 'Không có', 260000, 30, 8, 'Truyện tranh', 'Products/bluelock.jpg', 'NXB Kim Đồng'),
+('Bocchi The Rock tập 5', 'Không có', 180000, 40, 8, 'Truyện tranh', 'Products/bocchi.jpg', 'NXB Kim Đồng'),
+('Búp Sen', 'Sơn Tùng MTP', 120000, 60, 9, 'Giáo dục', 'Products/bupsen.webp', 'NXB Trẻ'),
+('Dược sư tự sự tập 11', 'Không có', 130000, 35, 8, 'Truyện tranh', 'Products/duocsu.jpg', 'NXB Kim Đồng'),
+('Lũ Trẻ Đường Tàu', 'Edith Nesbit', 90000, 80, 4, 'Tiểu thuyết', 'Products/lutre.jpg', 'NXB Thanh Niên'),
+('Nhà Giả Kim', 'PAULO COELHO', 170000, 45, 5, 'Lịch sử', 'Products/nhagiakim.jpg', 'NXB Giáo dục'),
+('Nhật Kí Trong Tù', 'Hồ Chí Minh', 150000, 50, 5, 'Lịch sử', 'Products/nhatki.jpg', 'NXB Văn học'),
+('Tăng cường khả năng học tập', 'Không có', 200000, 30, 9, 'Giáo dục', 'Products/quyluat.webp', 'NXB Giáo Dục'),
+('Điều kì diệu của tiệm tạp hóa NAMIYA', 'Higashino Keigo', 180000, 40, 3, 'Tiểu thuyết', 'Products/taphoa.jpg', 'NXB Trẻ'),
+('Tiền có tệ?', 'Không có', 120000, 60, 4, 'Giáo dục', 'Products/tien.webp', 'NXB Trẻ'),
+('250 bài toán chọn lọc', 'Nhiều tác giả', 130000, 35, 9, 'Giáo dục', 'Products/toan.jpg', 'NXB Tâm lý'),
+('Trường học biết tuốt', 'Không có', 250000, 20, 8, 'Truyện tranh', 'Products/truonghoc.webp', 'NXB Thông tin'),
+('Nghệ thuật đàm phán', 'Đỗ Nam Trung', 90000, 80, 6, 'Tâm lý', 'Products/trump.jpg', 'NXB Giáo Dục'),
+('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', 'Products/tien.webp', 'NXB Giáo dục');
 
 -- Chèn dữ liệu vào bảng USER
 INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, email, ngay_sinh, quyen, giohang_id) VALUES

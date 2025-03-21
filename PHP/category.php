@@ -127,11 +127,6 @@ $pagination = $filtered_data['pagination'];
       </div>
    </div>
    <div class="main">
-      <div class="breadcrumb">
-         <a href="trangchu.php">Trang chủ</a> &gt;
-         <span><?php echo htmlspecialchars($current_category['ten_loai']); ?></span>
-      </div>
-
       <div class="product-container">
          <!-- Lọc sản phẩm -->
          <aside class="filter-section">
@@ -176,8 +171,10 @@ $pagination = $filtered_data['pagination'];
                         $file_name = basename($row['hinh_anh']);
                         $image_path = "../Picture/Products/" . $file_name;
                         ?>
-                        <img src="<?php echo $image_path; ?>" alt="<?php echo $row['tieu_de']; ?>">
-                        <h3><?php echo $row['tieu_de']; ?></h3>
+                        <a href="chitietsanpham.php?id=<?php echo $row['sach_id']; ?>">
+                           <img src="<?php echo $image_path; ?>" alt="<?php echo $row['tieu_de']; ?>">
+                           <h3><?php echo $row['tieu_de']; ?></h3>
+                        </a>
                         <?php if (!empty($row['tac_gia'])): ?>
                            <p>Tác giả: <?php echo $row['tac_gia']; ?></p>
                         <?php endif; ?>

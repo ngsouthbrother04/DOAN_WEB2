@@ -1,0 +1,223 @@
+/* CSS chung cho trang tìm kiếm sản phẩm */
+.product-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* CSS cho tiêu đề kết quả tìm kiếm */
+.product-section h2 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin: 20px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+/* CSS cho thông báo không tìm thấy sản phẩm */
+#no-products-message {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+/* CSS cho danh sách sản phẩm */
+#product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* CSS cho mỗi sản phẩm */
+.product-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.product-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.product-item h3 {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+    height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.product-item p {
+    color: #666;
+    margin: 6px 0;
+    font-size: 14px;
+}
+
+.product-item p:last-of-type {
+    font-weight: 600;
+    color: #e63946;
+    margin-top: auto;
+}
+
+/* CSS cho các nút trên sản phẩm */
+.button-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.buy-now-btn, .add-to-cart-btn {
+    flex: 1;
+    padding: 8px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.buy-now-btn {
+    background-color: #e63946;
+    color: white;
+}
+
+.buy-now-btn:hover {
+    background-color: #c1121f;
+}
+
+.add-to-cart-btn {
+    background-color: #f1faee;
+    color: #1d3557;
+    border: 1px solid #1d3557;
+}
+
+.add-to-cart-btn:hover {
+    background-color: #a8dadc;
+}
+
+/* CSS cho phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+    gap: 8px;
+}
+
+.pagination a, .pagination span {
+    display: inline-block;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #333;
+    background-color: #f1f1f1;
+    transition: background-color 0.2s;
+}
+
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+.pagination .active {
+    background-color: #1d3557;
+    color: white;
+}
+
+/* CSS cho form tìm kiếm nâng cao */
+.advance_search-menu {
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.filter-search-group {
+    margin-bottom: 12px;
+}
+
+.filter-search-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #333;
+}
+
+.filter-search-group select,
+.filter-search-group input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.filter-search-group select:focus,
+.filter-search-group input:focus {
+    border-color: #1d3557;
+    outline: none;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    #product-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .product-item img {
+        height: 180px;
+    }
+    
+    .product-section h2 {
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    #product-list {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    
+    .product-item {
+        padding: 10px;
+    }
+    
+    .product-item img {
+        height: 150px;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .product-section h2 {
+        font-size: 18px;
+    }
+}

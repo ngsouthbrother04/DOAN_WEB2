@@ -57,13 +57,13 @@ $pagination = $filtered_data['pagination'];
             </div>
          </div>
          <div class="search-container">
-            <input type="text" class="search-input" placeholder="Tìm tại đây">
-            <button class="search-button">
-               <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
-            </button>
-            <div class="advance_search">
-               <div class="advance_search-menu">
-                  <form id="filter-search">
+            <form action="timsanpham.php" method="GET">
+               <input type="text" name="search_term" class="search-input" placeholder="Tìm tại đây">
+               <button type="submit" class="search-button">
+                  <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
+               </button>
+               <div class="advance_search">
+                  <div class="advance_search-menu">
                      <div class="filter-search-group">
                         <label for="category-search">Danh mục:</label>
                         <select id="category-search" name="category-search">
@@ -83,9 +83,9 @@ $pagination = $filtered_data['pagination'];
                         <label for="price-max-search">Đến:</label>
                         <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000">
                      </div>
-                  </form>
+                  </div>
                </div>
-            </div>
+            </form>
          </div>
          <div class="userbutton">
             <img src="../icon/user-regular.svg" alt="" id="userbutton">
@@ -203,7 +203,9 @@ $pagination = $filtered_data['pagination'];
                      </div>
                   <?php endforeach; ?>
                </div>
-               <?php echo renderPagination($pagination['current_page'], $pagination['total_pages']); ?>
+               <?php if ($pagination['total_pages'] > 1): ?>
+                  <?php echo renderPagination($pagination['current_page'], $pagination['total_pages']); ?>
+               <?php endif; ?>
             <?php endif; ?>
          </section>
       </div>
@@ -301,6 +303,7 @@ $pagination = $filtered_data['pagination'];
    </div>
 
    <script src="../js/account.js"></script>
+   <script src="../js/search.js"></script>
 </footer>
 
 </body>

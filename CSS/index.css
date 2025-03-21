@@ -184,6 +184,8 @@ body {
 }
 
 .search-input {
+    width: 573px;
+    height: 40px;
     flex: 1;
     border: none;
     outline: none;
@@ -194,6 +196,7 @@ body {
 }
 
 .search-button {
+    margin-top: 7px;
     width: 72px;
     height: 30px;
     background-color: #c62828;
@@ -267,7 +270,7 @@ body {
     padding: 20px 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     background-color: #f0f0f0;
 }
 
@@ -356,7 +359,6 @@ body {
 
 .product-item h3 {
     font-size: 16px;
-    margin-bottom: 10px;
     color: #333;
     flex-grow: 1;
     overflow: hidden;
@@ -385,7 +387,7 @@ body {
 .pagination-controls button {
     padding: 8px 16px;
     margin: 0 10px;
-    background-color: #c62828;
+    background-color: #c22432;
     color: white;
     border: none;
     border-radius: 5px;
@@ -754,36 +756,4 @@ body {
     .dropdown-menu li {
         padding: 6px 10px;
     }
-}
-
-/* Breadcrumb styles */
-.breadcrumb {
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    color: #333;
-    margin: 15px 0;
-
-}
-
-.breadcrumb a {
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb a:hover {
-    color: #c62828;
-
-    text-decoration: underline;
-
-}
-
-.breadcrumb .separator {
-    color: #666;
-    margin: 0 5px;
-}
-
-.breadcrumb .current {
-    color: #c62828;
-    font-weight: 500;
 }

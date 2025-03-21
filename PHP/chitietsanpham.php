@@ -107,18 +107,6 @@ if (isset($_POST['increase'])) {
 // Đảm bảo số lượng không vượt quá tồn kho
 $quantity = min($product['so_luong'], max(1, $quantity));
 
-// Lấy các sản phẩm liên quan (cùng thể loại)
-$related_query = "SELECT s.sach_id, s.tieu_de, s.hinh_anh, s.gia_tien, s.tac_gia 
-                 FROM sach s 
-                 WHERE s.loaisach_id = '{$product['loaisach_id']}' 
-                 AND s.sach_id != '$sach_id' 
-                 LIMIT 4";
-$related_result = mysqli_query($conn, $related_query);
-$related_products = [];
-while ($row = mysqli_fetch_assoc($related_result)) {
-   $related_products[] = $row;
-}
-
 // Hàm lấy đường dẫn hình ảnh
 function getImagePath($image_url)
 {
@@ -224,40 +212,6 @@ function getCartCount()
             </form>
          </div>
       </div>
-
-      <!-- Sản phẩm liên quan -->
-      <?php if (!empty($related_products)): ?>
-         <div class="related-products">
-            <h2>Sản phẩm liên quan</h2>
-            <div class="product-list">
-               <?php foreach ($related_products as $related): ?>
-                  <div class="product-item">
-                     <a href="chitietsanpham.php?id=<?php echo $related['sach_id']; ?>">
-                        <img src="<?php echo getImagePath($related['hinh_anh']); ?>" alt="<?php echo $related['tieu_de']; ?>">
-                        <h3><?php echo $related['tieu_de']; ?></h3>
-                        <?php if (!empty($related['tac_gia'])): ?>
-                           <p>Tác giả: <?php echo $related['tac_gia']; ?></p>
-                        <?php endif; ?>
-                        <?php if (!empty($related['gia_tien'])): ?>
-                           <p>Giá: <?php echo number_format($related['gia_tien'], 0, ',', '.'); ?> VND</p>
-                        <?php endif; ?>
-                     </a>
-                     <div class="button-container">
-                        <form method="post" action="chitietsanpham.php?id=<?php echo $related['sach_id']; ?>">
-                           <input type="hidden" name="quantity" value="1">
-                           <button type="submit" name="buy_now" class="buy-now-btn">Mua</button>
-                        </form>
-                        <form method="post" action="chitietsanpham.php?id=<?php echo $sach_id; ?>">
-                           <input type="hidden" name="related_id" value="<?php echo $related['sach_id']; ?>">
-                           <input type="hidden" name="related_quantity" value="1">
-                           <button type="submit" name="add_related_to_cart" class="add-to-cart-btn">Thêm</button>
-                        </form>
-                     </div>
-                  </div>
-               <?php endforeach; ?>
-            </div>
-         </div>
-      <?php endif; ?>
    </div>
    <!-- Form đăng nhập/đăng ký -->
    <div class="login-container" id="login-container">
