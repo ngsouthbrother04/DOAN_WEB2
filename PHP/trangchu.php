@@ -299,6 +299,8 @@ $pagination = $filtered_data['pagination'];
          <p>Email: cskh_online@nxbkimdong.com.vn</p>
       </div>
    </div>
+
+   <script src="../js/account.js"></script>
 </footer>
 
 </body>
