@@ -172,18 +172,20 @@ $pagination = $filtered_data['pagination'];
                <div id="product-list">
                   <?php foreach ($products as $row): ?>
                      <div class="product-item" data-id="<?php echo $row['sach_id']; ?>">
-                        <?php
-                        $file_name = basename($row['hinh_anh']);
-                        $image_path = "../Picture/Products/" . $file_name;
-                        ?>
-                        <img src="<?php echo $image_path; ?>" alt="<?php echo $row['tieu_de']; ?>">
-                        <h3><?php echo $row['tieu_de']; ?></h3>
-                        <?php if (!empty($row['tac_gia'])): ?>
-                           <p>Tác giả: <?php echo $row['tac_gia']; ?></p>
-                        <?php endif; ?>
-                        <?php if (!empty($row['gia_tien'])): ?>
-                           <p>Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
-                        <?php endif; ?>
+                        <a href="chitietsanpham.php?id=<?php echo $row['sach_id']; ?>">
+                           <?php
+                           $file_name = basename($row['hinh_anh']);
+                           $image_path = "../Picture/Products/" . $file_name;
+                           ?>
+                           <img src="<?php echo $image_path; ?>" alt="<?php echo $row['tieu_de']; ?>">
+                           <h3><?php echo $row['tieu_de']; ?></h3>
+                           <?php if (!empty($row['tac_gia'])): ?>
+                              <p>Tác giả: <?php echo $row['tac_gia']; ?></p>
+                           <?php endif; ?>
+                           <?php if (!empty($row['gia_tien'])): ?>
+                              <p>Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
+                           <?php endif; ?>
+                        </a>
                         <div class="button-container">
                            <button class="buy-now-btn">Mua</button>
                            <button class="add-to-cart-btn">Thêm</button>

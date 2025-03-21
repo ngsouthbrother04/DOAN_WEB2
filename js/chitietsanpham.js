@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-   // Lấy các phần tử DOM
    const quantityInput = document.getElementById('quantity');
    const decreaseBtn = document.getElementById('decrease-btn');
    const increaseBtn = document.getElementById('increase-btn');
