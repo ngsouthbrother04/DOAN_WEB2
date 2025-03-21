@@ -37,36 +37,36 @@ if ($category_result) {
          </div>
       </div>
       <div class="search-container">
-         <input type="text" class="search-input" placeholder="Tìm tại đây">
-         <button class="search-button">
-            <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
-         </button>
-         <div class="advance_search">
-            <div class="advance_search-menu">
-               <form id="filter-search">
-                  <div class="filter-search-group">
-                     <label for="category-search">Danh mục:</label>
-                     <select id="category-search" name="category-search">
-                        <option value="">Tất cả</option>
-                        <?php foreach ($categories as $category): ?>
-                           <option value="<?php echo htmlspecialchars($category['loaisach_id']); ?>">
-                              <?php echo htmlspecialchars($category['ten_loai']); ?>
-                           </option>
-                        <?php endforeach; ?>
-                     </select>
+            <form action="timsanpham.php" method="GET">
+               <input type="text" name="search_term" class="search-input" placeholder="Tìm tại đây">
+               <button type="submit" class="search-button">
+                  <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
+               </button>
+               <div class="advance_search">
+                  <div class="advance_search-menu">
+                     <div class="filter-search-group">
+                        <label for="category-search">Danh mục:</label>
+                        <select id="category-search" name="category-search">
+                           <option value="">Tất cả</option>
+                           <?php foreach ($categories as $category): ?>
+                              <option value="<?php echo htmlspecialchars($category['loaisach_id']); ?>">
+                                 <?php echo htmlspecialchars($category['ten_loai']); ?>
+                              </option>
+                           <?php endforeach; ?>
+                        </select>
+                     </div>
+                     <div class="filter-search-group">
+                        <label for="price-min-search">Giá từ:</label>
+                        <input type="number" id="price-min-search" name="price-min-search" min="0" placeholder="0">
+                     </div>
+                     <div class="filter-search-group">
+                        <label for="price-max-search">Đến:</label>
+                        <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000">
+                     </div>
                   </div>
-                  <div class="filter-search-group">
-                     <label for="price-min-search">Giá từ:</label>
-                     <input type="number" id="price-min-search" name="price-min-search" min="0" placeholder="0">
-                  </div>
-                  <div class="filter-search-group">
-                     <label for="price-max-search">Đến:</label>
-                     <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000">
-                  </div>
-               </form>
-            </div>
+               </div>
+            </form>
          </div>
-      </div>
       <div class="userbutton">
          <img src="../icon/user-regular.svg" alt="" id="userbutton">
          <p>Tài khoản</p>
