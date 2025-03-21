@@ -83,7 +83,7 @@ $pagination = $filtered_data['pagination'];
          </div>
          <div class="search-container">
             <form action="timsanpham.php" method="GET">
-               <input type="text" name="search_term" class="search-input" placeholder="Tìm tại đây">
+               <input type="text" autocomplete="off" name="search_term" class="search-input" placeholder="Tìm tại đây">
                <button type="submit" class="search-button">
                   <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
                </button>

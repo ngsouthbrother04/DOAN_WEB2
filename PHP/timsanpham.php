@@ -8,6 +8,10 @@ $total_pages = 1;
 $current_page = 1;
 $items_per_page = 6;
 $search_term = '';
+$category_id = '';
+$min_price = '';
+$max_price = '';
+$sort = 'default';
 $categories = [];
 
 // Lấy danh sách loại sách
@@ -19,109 +23,130 @@ if ($category_result) {
    }
 }
 
-// Xử lý tìm kiếm
+// Lấy tham số từ URL
+if (isset($_GET['page']) && is_numeric($_GET['page'])) {
+   $current_page = (int)$_GET['page'];
+} else {
+   $current_page = 1;
+}
+
+if (isset($_GET['category-search']) && !empty($_GET['category-search'])) {
+   $category_id = $_GET['category-search'];
+}
+
+if (isset($_GET['price-min-search']) && $_GET['price-min-search'] !== '') {
+   $min_price = (int)$_GET['price-min-search'];
+}
+
+if (isset($_GET['price-max-search']) && $_GET['price-max-search'] !== '') {
+   $max_price = (int)$_GET['price-max-search'];
+}
+
 if (isset($_GET['search_term']) && !empty($_GET['search_term'])) {
    $search_term = trim($_GET['search_term']);
-   
-   // Tính toán phân trang
-   if (isset($_GET['page']) && is_numeric($_GET['page'])) {
-      $current_page = (int)$_GET['page'];
-   } else {
-      $current_page = 1;
-   }
-   
-   $start = ($current_page - 1) * $items_per_page;
-   
-   // Tìm kiếm dựa trên tiêu đề hoặc tác giả
-   $count_query = "SELECT COUNT(*) as total FROM SACH 
-                  WHERE (tieu_de LIKE ? OR tac_gia LIKE ?)";
-                  
+}
+
+if (isset($_GET['sort'])) {
+   $sort = $_GET['sort'];
+}
+
+// Tính vị trí bắt đầu cho LIMIT trong truy vấn
+$start = ($current_page - 1) * $items_per_page;
+
+// Khởi tạo truy vấn cơ bản
+$base_query = "SELECT * FROM SACH WHERE 1=1";
+$count_query = "SELECT COUNT(*) as total FROM SACH WHERE 1=1";
+$params = [];
+$param_types = "";
+
+// Thêm điều kiện tìm kiếm theo từ khóa
+if (!empty($search_term)) {
+   $base_query .= " AND (tieu_de LIKE ? OR tac_gia LIKE ?)";
+   $count_query .= " AND (tieu_de LIKE ? OR tac_gia LIKE ?)";
    $search_param = "%" . $search_term . "%";
+   $params[] = $search_param;
+   $params[] = $search_param;
+   $param_types .= "ss";
+}
+
+// Thêm điều kiện lọc theo danh mục
+if (!empty($category_id)) {
+   $base_query .= " AND loaisach_id = ?";
+   $count_query .= " AND loaisach_id = ?";
+   $params[] = $category_id;
+   $param_types .= "s";
+}
+
+// Thêm điều kiện lọc theo giá
+if ($min_price !== '') {
+   $base_query .= " AND gia_tien >= ?";
+   $count_query .= " AND gia_tien >= ?";
+   $params[] = $min_price;
+   $param_types .= "i";
+}
+
+if ($max_price !== '') {
+   $base_query .= " AND gia_tien <= ?";
+   $count_query .= " AND gia_tien <= ?";
+   $params[] = $max_price;
+   $param_types .= "i";
+}
+
+// Thêm sắp xếp
+switch ($sort) {
+   case 'asc':
+      $base_query .= " ORDER BY gia_tien ASC";
+      break;
+   case 'desc':
+      $base_query .= " ORDER BY gia_tien DESC";
+      break;
+   case 'alpha-asc':
+      $base_query .= " ORDER BY tieu_de ASC";
+      break;
+   case 'alpha-desc':
+      $base_query .= " ORDER BY tieu_de DESC";
+      break;
+   default:
+      // Sắp xếp mặc định
+      $base_query .= " ORDER BY sach_id DESC";
+      break;
+}
+
+// Thực hiện truy vấn đếm tổng số sản phẩm
+if (!empty($params)) {
    $stmt = $conn->prepare($count_query);
-   $stmt->bind_param("ss", $search_param, $search_param);
+   $stmt->bind_param($param_types, ...$params);
    $stmt->execute();
    $count_result = $stmt->get_result();
    $total_items = $count_result->fetch_assoc()['total'];
-   $total_pages = ceil($total_items / $items_per_page);
-   
-   // Truy vấn sản phẩm
-   $product_query = "SELECT * FROM SACH 
-                     WHERE (tieu_de LIKE ? OR tac_gia LIKE ?) 
-                     LIMIT ?, ?";
-   $stmt = $conn->prepare($product_query);
-   $stmt->bind_param("ssii", $search_param, $search_param, $start, $items_per_page);
+} else {
+   $count_result = $conn->query($count_query);
+   $total_items = $count_result->fetch_assoc()['total'];
+}
+
+// Tính tổng số trang
+$total_pages = ceil($total_items / $items_per_page);
+
+// Thêm LIMIT vào truy vấn cơ bản
+$base_query .= " LIMIT ?, ?";
+$params[] = $start;
+$params[] = $items_per_page;
+$param_types .= "ii";
+
+// Thực hiện truy vấn lấy dữ liệu sản phẩm
+if (!empty($params)) {
+   $stmt = $conn->prepare($base_query);
+   $stmt->bind_param($param_types, ...$params);
    $stmt->execute();
    $result = $stmt->get_result();
-   
+} else {
+   $result = $conn->query($base_query);
+}
+
+// Lấy dữ liệu sản phẩm
+if ($result && $result->num_rows > 0) {
    while ($row = $result->fetch_assoc()) {
       $products[] = $row;
-   }
-}
-
-// Lọc theo danh mục nâng cao (nếu có)
-if (isset($_GET['category-search']) && !empty($_GET['category-search'])) {
-   $category_id = $_GET['category-search'];
-   
-   // Lọc lại mảng products nếu đã có kết quả tìm kiếm
-   if (!empty($products)) {
-      $products = array_filter($products, function($product) use ($category_id) {
-         return $product['loaisach_id'] == $category_id;
-      });
-   } else {
-      // Nếu chưa có tìm kiếm, thực hiện truy vấn mới
-      $count_query = "SELECT COUNT(*) as total FROM SACH WHERE loaisach_id = ?";
-      $stmt = $conn->prepare($count_query);
-      $stmt->bind_param("s", $category_id);
-      $stmt->execute();
-      $total_items = $stmt->get_result()->fetch_assoc()['total'];
-      $total_pages = ceil($total_items / $items_per_page);
-      
-      $product_query = "SELECT * FROM SACH WHERE loaisach_id = ? LIMIT ?, ?";
-      $stmt = $conn->prepare($product_query);
-      $stmt->bind_param("sii", $category_id, $start, $items_per_page);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      
-      while ($row = $result->fetch_assoc()) {
-         $products[] = $row;
-      }
-   }
-}
-
-// Lọc theo giá (nếu có)
-if ((isset($_GET['price-min-search']) && $_GET['price-min-search'] !== '') || 
-    (isset($_GET['price-max-search']) && $_GET['price-max-search'] !== '')) {
-   
-   $min_price = (isset($_GET['price-min-search']) && $_GET['price-min-search'] !== '') ? 
-                (int)$_GET['price-min-search'] : 0;
-   
-   $max_price = (isset($_GET['price-max-search']) && $_GET['price-max-search'] !== '') ? 
-                (int)$_GET['price-max-search'] : PHP_INT_MAX;
-   
-   // Lọc lại mảng products nếu đã có kết quả
-   if (!empty($products)) {
-      $products = array_filter($products, function($product) use ($min_price, $max_price) {
-         $price = (int)$product['gia_tien'];
-         return ($price >= $min_price && $price <= $max_price);
-      });
-   } else {
-      // Thực hiện truy vấn mới nếu chưa có kết quả
-      $count_query = "SELECT COUNT(*) as total FROM SACH WHERE gia_tien BETWEEN ? AND ?";
-      $stmt = $conn->prepare($count_query);
-      $stmt->bind_param("ii", $min_price, $max_price);
-      $stmt->execute();
-      $total_items = $stmt->get_result()->fetch_assoc()['total'];
-      $total_pages = ceil($total_items / $items_per_page);
-      
-      $product_query = "SELECT * FROM SACH WHERE gia_tien BETWEEN ? AND ? LIMIT ?, ?";
-      $stmt = $conn->prepare($product_query);
-      $stmt->bind_param("iiii", $min_price, $max_price, $start, $items_per_page);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      
-      while ($row = $result->fetch_assoc()) {
-         $products[] = $row;
-      }
    }
 }
 
@@ -145,6 +170,104 @@ $pagination = [
    <link rel="stylesheet" href="../CSS/index.css">
    <link rel="stylesheet" href="../CSS/product.css">
    <link rel="stylesheet" href="../CSS/timsanpham.css">
+   <!-- CSS trực tiếp để ghi đè -->
+   <style>
+      /* CSS cho danh sách sản phẩm */
+      #product-list {
+         display: grid !important;
+         grid-template-columns: repeat(3, 1fr) !important;
+         gap: 20px !important;
+      }
+
+      /* CSS cho mỗi sản phẩm */
+      .product-item {
+         padding: 15px !important;
+         border: 1px solid #ddd !important;
+         border-radius: 5px !important;
+         text-align: center !important;
+         background-color: #fff !important;
+         display: flex !important;
+         flex-direction: column !important;
+         min-height: 350px !important;
+         justify-content: space-between !important;
+         box-shadow: none !important;
+      }
+
+      .product-item img {
+         width: 100% !important;
+         height: 280px !important;
+         object-fit: contain !important;
+         margin-bottom: 5px;
+      }
+
+      .product-item h3 {
+         height: 20px;
+         margin-bottom: 3px;
+         object-fit: contain !important;
+      }
+
+
+      .button-container {
+         display: flex !important;
+         justify-content: space-between !important;
+         gap: 10px !important;
+         margin-top: auto !important;
+         width: 100% !important;
+      }
+
+      .buy-now-btn,
+      .add-to-cart-btn {
+         background-color: #a81f1f !important;
+         color: white !important;
+         padding: 8px 16px !important;
+         font-size: 14px !important;
+         border: none !important;
+      }
+
+      .buy-now-btn:hover,
+      .add-to-cart-btn:hover {
+         background-color: white !important;
+         color: #a81f1f !important;
+         border: 1px solid #a81f1f !important;
+      }
+
+      .main .product-container {
+         display: flex !important;
+         flex-direction: row !important;
+         gap: 20px !important;
+         max-width: 1200px !important;
+         margin: 20px auto !important;
+         padding: 0 15px !important;
+      }
+
+      .main .product-container .filter-section {
+         width: 25% !important;
+         min-width: 250px !important;
+         height: fit-content !important;
+         flex-shrink: 0 !important;
+         order: 1 !important;
+         /* Đảm bảo filter hiển thị trước tiên (bên trái) */
+      }
+
+      .main .product-container .product-section {
+         width: 75% !important;
+         flex-grow: 1 !important;
+         order: 2 !important;
+         /* Đảm bảo sản phẩm hiển thị bên phải */
+      }
+
+      /* Chỉnh sửa responsive khi màn hình nhỏ */
+      @media screen and (max-width: 992px) {
+         .main .product-container {
+            flex-direction: column !important;
+         }
+
+         .main .product-container .filter-section,
+         .main .product-container .product-section {
+            width: 100% !important;
+         }
+      }
+   </style>
 </head>
 
 <body>
@@ -173,34 +296,34 @@ $pagination = [
          </div>
          <div class="search-container">
             <form action="timsanpham.php" method="GET" class="search-demo">
-               <input type="text" name="search_term" class="search-input" placeholder="Tìm tại đây" value="<?php echo htmlspecialchars($search_term); ?>">
+               <input type="text" autocomplete="off" name="search_term" class="search-input" placeholder="Tìm tại đây" value="<?php echo htmlspecialchars($search_term); ?>">
+               <div class="advance_search">
+                  <div class="advance_search-menu">
+                     <div class="filter-search-group">
+                        <label for="category-search">Danh mục:</label>
+                        <select id="category-search" name="category-search">
+                           <option value="">Tất cả</option>
+                           <?php foreach ($categories as $category): ?>
+                              <option value="<?php echo htmlspecialchars($category['loaisach_id']); ?>" <?php echo ($category_id == $category['loaisach_id']) ? 'selected' : ''; ?>>
+                                 <?php echo htmlspecialchars($category['ten_loai']); ?>
+                              </option>
+                           <?php endforeach; ?>
+                        </select>
+                     </div>
+                     <div class="filter-search-group">
+                        <label for="price-min-search">Giá từ:</label>
+                        <input type="number" id="price-min-search" name="price-min-search" min="0" placeholder="0" value="<?php echo htmlspecialchars($min_price); ?>">
+                     </div>
+                     <div class="filter-search-group">
+                        <label for="price-max-search">Đến:</label>
+                        <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000" value="<?php echo htmlspecialchars($max_price); ?>">
+                     </div>
+                  </div>
+               </div>
                <button type="submit" class="search-button">
                   <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px; filter: brightness(10);">
                </button>
             </form>
-            <div class="advance_search">
-               <div class="advance_search-menu">
-                  <div class="filter-search-group">
-                     <label for="category-search">Danh mục:</label>
-                     <select id="category-search" name="category-search">
-                        <option value="">Tất cả</option>
-                        <?php foreach ($categories as $category): ?>
-                           <option value="<?php echo htmlspecialchars($category['loaisach_id']); ?>">
-                              <?php echo htmlspecialchars($category['ten_loai']); ?>
-                           </option>
-                        <?php endforeach; ?>
-                     </select>
-                  </div>
-                  <div class="filter-search-group">
-                     <label for="price-min-search">Giá từ:</label>
-                     <input type="number" id="price-min-search" name="price-min-search" min="0" placeholder="0">
-                  </div>
-                  <div class="filter-search-group">
-                     <label for="price-max-search">Đến:</label>
-                     <input type="number" id="price-max-search" name="price-max-search" min="0" placeholder="1000000">
-                  </div>
-               </div>
-            </div>
          </div>
          <div class="userbutton">
             <img src="../icon/user-regular.svg" alt="" id="userbutton">
@@ -216,10 +339,56 @@ $pagination = [
          </div>
       </div>
    </div>
-   
+
    <div class="main">
       <div class="product-container">
-         <section class="product-section" style="width: 100%;">
+         <!-- Thêm phần lọc sản phẩm -->
+         <aside class="filter-section">
+            <h3>Lọc sản phẩm</h3>
+            <form id="filter-form" method="get" action="timsanpham.php">
+               <!-- Giữ lại từ khóa tìm kiếm khi lọc -->
+               <input type="hidden" name="search_term" value="<?php echo htmlspecialchars($search_term); ?>">
+
+               <div class="filter-group">
+                  <label for="category">Danh mục:</label>
+                  <select id="category" name="category-search">
+                     <option value="">Tất cả</option>
+                     <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo htmlspecialchars($category['loaisach_id']); ?>"
+                           <?php if (isset($_GET['category-search']) && $_GET['category-search'] == $category['loaisach_id']) echo 'selected'; ?>>
+                           <?php echo htmlspecialchars($category['ten_loai']); ?>
+                        </option>
+                     <?php endforeach; ?>
+                  </select>
+               </div>
+               <div class="filter-group">
+                  <label for="price-min">Giá từ:</label>
+                  <input type="number" id="price-min" name="price-min-search" min="0"
+                     value="<?php echo htmlspecialchars($min_price); ?>" placeholder="0">
+               </div>
+               <div class="filter-group">
+                  <label for="price-max">Đến:</label>
+                  <input type="number" id="price-max" name="price-max-search" min="0"
+                     value="<?php echo htmlspecialchars($max_price); ?>" placeholder="1000000">
+               </div>
+               <div class="filter-group">
+                  <label for="sort-order">Sắp xếp:</label>
+                  <select id="sort-order" name="sort">
+                     <option value="default" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'default') echo 'selected'; ?>>Mặc định</option>
+                     <option value="asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'asc') echo 'selected'; ?>>Giá: Từ thấp đến cao</option>
+                     <option value="desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'desc') echo 'selected'; ?>>Giá: Từ cao đến thấp</option>
+                     <option value="alpha-asc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'alpha-asc') echo 'selected'; ?>>Tên: A-Z</option>
+                     <option value="alpha-desc" <?php if (isset($_GET['sort']) && $_GET['sort'] == 'alpha-desc') echo 'selected'; ?>>Tên: Z-A</option>
+                  </select>
+               </div>
+               <div class="filter-buttons">
+                  <button type="submit" style="font-weight: bold; font-size: 16px;">Hoàn tất</button>
+                  <a href="timsanpham.php?search_term=<?php echo urlencode($search_term); ?>" class="reset-filter">Reset</a>
+               </div>
+            </form>
+         </aside>
+
+         <section class="product-section">
             <h2 style="margin-bottom: 10px;">KẾT QUẢ TÌM KIẾM CHO: "<?php echo htmlspecialchars($search_term); ?>"</h2>
             <?php if (empty($products)): ?>
                <div id="no-products-message">Không tìm thấy sản phẩm phù hợp. Vui lòng thử lại với từ khóa khác!</div>
@@ -236,10 +405,10 @@ $pagination = [
                            <h3><?php echo $row['tieu_de']; ?></h3>
                         </a>
                         <?php if (!empty($row['tac_gia'])): ?>
-                           <p>Tác giả: <?php echo $row['tac_gia']; ?></p>
+                           <p style="margin-bottom: 5px; margin-top: 5px;">Tác giả: <?php echo $row['tac_gia']; ?></p>
                         <?php endif; ?>
                         <?php if (!empty($row['gia_tien'])): ?>
-                           <p>Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
+                           <p style="margin-bottom: 15px; color: #a81f1f; font-weight: bold;">Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
                         <?php endif; ?>
                         <div class="button-container">
                            <button class="buy-now-btn">Mua</button>
@@ -292,5 +461,32 @@ $pagination = [
 
    <script src="../js/account.js"></script>
    <script src="../js/search.js"></script>
+   <script>
+      document.addEventListener('DOMContentLoaded', function() {
+         // Thay đổi trực tiếp bằng JavaScript
+         const productItems = document.querySelectorAll('.product-item');
+         productItems.forEach(item => {
+            item.style.padding = '15px';
+            item.style.border = '1px solid #ddd';
+            item.style.borderRadius = '5px';
+            item.style.textAlign = 'center';
+            item.style.minHeight = '350px';
+            item.style.boxShadow = 'none';
+         });
+
+         const productImages = document.querySelectorAll('.product-item img');
+         productImages.forEach(img => {
+            img.style.height = '200px';
+         });
+
+         const buttons = document.querySelectorAll('.buy-now-btn, .add-to-cart-btn');
+         buttons.forEach(btn => {
+            btn.style.backgroundColor = '#c22432';
+            btn.style.color = 'white';
+            btn.style.padding = '8px 16px';
+         });
+      });
+   </script>
 </body>
+
 </html>

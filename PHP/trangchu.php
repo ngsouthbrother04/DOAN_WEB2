@@ -58,7 +58,7 @@ $pagination = $filtered_data['pagination'];
          </div>
          <div class="search-container">
             <form action="timsanpham.php" method="GET">
-               <input type="text" name="search_term" class="search-input" placeholder="Tìm tại đây">
+               <input type="text" autocomplete="off" name="search_term" class="search-input" placeholder="Tìm tại đây">
                <button type="submit" class="search-button">
                   <img src="../icon/magnifying-glass-solid.svg" alt="" style="width: 17px; height: 17px;">
                </button>
@@ -167,7 +167,7 @@ $pagination = $filtered_data['pagination'];
                   </select>
                </div>
                <div class="filter-buttons">
-                  <button type="submit">Lọc</button>
+                  <button type="submit" style="font-weight: bold; font-size: 16px;">Hoàn tất</button>
                   <a href="trangchu.php" class="reset-filter">Reset</a>
                </div>
             </form>
@@ -194,7 +194,7 @@ $pagination = $filtered_data['pagination'];
                            <p>Tác giả: <?php echo $row['tac_gia']; ?></p>
                         <?php endif; ?>
                         <?php if (!empty($row['gia_tien'])): ?>
-                           <p>Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
+                           <p style="color: #c22432; font-weight: bold;">Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
                         <?php endif; ?>
                         <div class="button-container">
                            <button class="buy-now-btn">Mua</button>
