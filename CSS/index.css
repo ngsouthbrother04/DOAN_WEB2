@@ -31,7 +31,9 @@ body {
     margin: 0 auto;
     padding-top: 13px;
     display: flex;
-    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
 }
 
 #logo {
@@ -106,19 +108,43 @@ body {
 }
 
 .userbutton {
-    width: 75px;
     display: flex;
     flex-direction: column;
-    margin-left: 35px;
-    margin-right: 10px;
+    align-items: center;
     cursor: pointer;
+    position: relative;
+    min-width: 80px;
+}
+
+.userbutton img {
+    width: 20px;
+    height: 20px;
+    margin-bottom: 5px;
 }
 
 .userbutton p {
-    color: #808281;
-    margin: 0 auto;
-    padding-top: 4px;
-    font-size: 14.5px;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100px;
+}
+
+.userbutton p[title]:hover:after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 100;
+    display: block;
 }
 
 #userbutton {
@@ -172,42 +198,53 @@ body {
 }
 
 .search-container {
+    position: relative;
     display: flex;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: white;
-    width: 680px;
-    height: 40px;
-    padding: 5px;
-    position: relative;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .search-input {
-    width: 573px;
-    height: 40px;
-    flex: 1;
-    border: none;
-    outline: none;
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 25px;
     font-size: 14px;
-    padding: 8px;
-    color: #999;
-    background: transparent;
+    outline: none;
 }
 
 .search-button {
-    margin-top: 7px;
-    width: 72px;
-    height: 30px;
-    background-color: #c62828;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #c22432;
     border: none;
-    border-radius: 10px;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    color: white;
 }
 
 .search-button:hover {
-    background-color: #a81f1f;
+    background-color: #a51e2b;
+}
+
+.search-button img {
+    width: 17px;
+    height: 17px;
+    filter: brightness(0) invert(1);
+}
+
+.search-container form {
+    width: 100%;
+    display: flex;
+    position: relative;
 }
 
 .advance_search {
@@ -682,7 +719,79 @@ body {
     color: #c62828;
 }
 
+/* Thông báo đăng nhập */
+#login-message {
+    margin-bottom: 15px;
+}
 
+.success-message {
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.error-message {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Thông tin người dùng */
+#user-info-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    width: 300px;
+    max-width: 90%;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-info h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+}
+
+.user-info p {
+    margin-bottom: 15px;
+    color: #666;
+    font-size: 14px;
+}
+
+.user-info .btn {
+    display: inline-block;
+    padding: 8px 15px;
+    margin: 5px;
+    background-color: #c22432;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+    min-width: 100px;
+}
+
+.user-info .btn:hover {
+    background-color: #a51e2b;
+}
 
 @media (max-width: 1250px) {
 
@@ -713,6 +822,23 @@ body {
 
     .bannernho {
         width: 100%;
+    }
+
+    .search-container {
+        max-width: 40%;
+    }
+    
+    .userbutton p, .cartbutton p, .bellbutton p {
+        font-size: 12px;
+        max-width: 70px;
+    }
+    
+    .userbutton, .cartbutton, .bellbutton {
+        margin-left: 10px;
+    }
+    
+    #user-info-container {
+        width: 250px;
     }
 }
 
@@ -756,4 +882,10 @@ body {
     .dropdown-menu li {
         padding: 6px 10px;
     }
+}
+
+.right-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }

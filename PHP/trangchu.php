@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'db_connect.php';
 include 'pagination.php';
 include 'product_filter.php';
@@ -87,17 +88,24 @@ $pagination = $filtered_data['pagination'];
                </div>
             </form>
          </div>
-         <div class="userbutton">
-            <img src="../icon/user-regular.svg" alt="" id="userbutton">
-            <p>Tài khoản</p>
-         </div>
-         <div class="cartbutton">
-            <img src="../icon/cart-shopping-solid.svg" alt="" id="cartbutton">
-            <p>Giỏ Hàng</p>
-         </div>
-         <div class="bellbutton">
-            <img src="../icon/bell-regular.svg" alt="" id="bellbutton">
-            <p>Thông Báo</p>
+         <div class="right-buttons">
+            <div class="userbutton">
+               <?php if(isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
+                  <img src="../icon/user-regular.svg" alt="" id="userbutton">
+                  <p title="<?php echo $_SESSION['user_name']; ?>"><?php echo $_SESSION['user_name']; ?></p>
+               <?php else: ?>
+                  <img src="../icon/user-regular.svg" alt="" id="userbutton">
+                  <p>Tài khoản</p>
+               <?php endif; ?>
+            </div>
+            <div class="cartbutton">
+               <img src="../icon/cart-shopping-solid.svg" alt="" id="cartbutton">
+               <p>Giỏ Hàng</p>
+            </div>
+            <div class="bellbutton">
+               <img src="../icon/bell-regular.svg" alt="" id="bellbutton">
+               <p>Thông Báo</p>
+            </div>
          </div>
       </div>
    </div>
@@ -223,21 +231,24 @@ $pagination = $filtered_data['pagination'];
    </div>
    <!-- Form Đăng nhập -->
    <div class="login-form" id="login-form">
-      <div class="form-group">
-         <label>Số điện thoại/Email</label>
-         <input type="text" placeholder="Nhập số điện thoại hoặc email"
-            style="border: 1px solid #ccc; outline: none;">
-      </div>
-      <div class="form-group">
-         <label>Mật khẩu</label>
-         <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-            <input type="password" id="password" placeholder="Nhập mật khẩu"
-               style="border: none; outline: none;">
-            <button type="button" class="show-password" id="togglePassword">Hiện</button>
+      <div id="login-message"></div>
+      <form id="login-form-submit" method="post">
+         <div class="form-group">
+            <label>Số điện thoại/Email</label>
+            <input type="text" id="login-username" name="username" placeholder="Nhập số điện thoại hoặc email"
+               style="border: 1px solid #ccc; outline: none;" required>
          </div>
-      </div>
-      <button class="btn btn-primary">Đăng nhập</button>
-      <button class="btn btn-secondary" id="exit">Thoát</button>
+         <div class="form-group">
+            <label>Mật khẩu</label>
+            <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+               <input type="password" id="password" name="password" placeholder="Nhập mật khẩu"
+                  style="border: none; outline: none;" required>
+               <button type="button" class="show-password" id="togglePassword">Hiện</button>
+            </div>
+         </div>
+         <button type="submit" class="btn btn-primary">Đăng nhập</button>
+         <button type="button" class="btn btn-secondary" id="exit">Thoát</button>
+      </form>
    </div>
    <!-- Form Đăng ký -->
    <div class="register-form" id="register-form" style="display: none;">
@@ -268,6 +279,20 @@ $pagination = $filtered_data['pagination'];
    </div>
 </div>
 <div class="modal-overlay" id="modal"></div>
+
+<!-- Hiển thị thông tin người dùng đã đăng nhập -->
+<?php if(isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
+<div id="user-info-container" style="display: none;">
+   <div class="user-info">
+      <h3>Xin chào, <?php echo $_SESSION['user_name']; ?></h3>
+      <p>Quyền: <?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></p>
+      <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
+      <a href="admin.php" class="btn">Quản trị</a>
+      <?php endif; ?>
+      <a href="login.php?action=logout" class="btn">Đăng xuất</a>
+   </div>
+</div>
+<?php endif; ?>
 
 <footer class="footer">
    <div class="footer-container">
