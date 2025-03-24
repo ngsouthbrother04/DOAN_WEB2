@@ -123,12 +123,10 @@ body {
 }
 
 .userbutton p {
-    font-size: 14px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100px;
+    color: #808281;
+    margin: 0 auto;
+    padding-top: 4px;
+    font-size: 14.5px;
 }
 
 .userbutton p[title]:hover:after {
@@ -210,7 +208,7 @@ body {
     width: 100%;
     padding: 10px 15px;
     border: 1px solid #ddd;
-    border-radius: 25px;
+    border-radius: 10px;
     font-size: 14px;
     outline: none;
 }
@@ -222,9 +220,9 @@ body {
     transform: translateY(-50%);
     background-color: #c22432;
     border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    border-radius: 10px;
+    width: 60px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;

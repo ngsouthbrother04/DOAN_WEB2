@@ -32,11 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          // Đăng nhập thành công
          $_SESSION['user_id'] = $user['user_id'];
          $_SESSION['user_name'] = $user['ho_ten']; // Đổi tên biến để khớp với session hiện tại
+         $_SESSION['user_phone'] = $user['sdt']; // Lưu thêm số điện thoại
          $_SESSION['user_role'] = $user['quyen']; // Đổi tên biến để khớp với session hiện tại
 
          // Trả về kết quả thành công
          echo json_encode(['success' => true, 'message' => 'Đăng nhập thành công!', 'user' => [
             'ho_ten' => $user['ho_ten'],
+            'sdt' => $user['sdt'],
             'quyen' => $user['quyen']
          ]]);
       } else {
