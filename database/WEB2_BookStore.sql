@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS WEB2_BookStore;
+USE WEB2_BookStore;
+
 -- Tạo cấu trúc cơ sở dữ liệu
 CREATE TABLE LOAISACH (
     loaisach_id INT PRIMARY KEY AUTO_INCREMENT,
