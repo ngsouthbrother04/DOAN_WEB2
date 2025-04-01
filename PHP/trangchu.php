@@ -90,7 +90,7 @@ $pagination = $filtered_data['pagination'];
          </div>
          <div class="right-buttons">
             <div class="userbutton">
-               <?php if(isset($_SESSION['user_id']) && isset($_SESSION['user_phone'])): ?>
+               <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_phone'])): ?>
                   <img src="../icon/user-regular.svg" alt="" id="userbutton">
                   <p title="<?php echo $_SESSION['user_name']; ?>"><?php echo $_SESSION['user_phone']; ?></p>
                <?php else: ?>
@@ -281,18 +281,18 @@ $pagination = $filtered_data['pagination'];
 <div class="modal-overlay" id="modal"></div>
 
 <!-- Hiển thị thông tin người dùng đã đăng nhập -->
-<?php if(isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
-<div id="user-info-container" style="display: none;">
-   <div class="user-info">
-      <h3>Xin chào, <?php echo $_SESSION['user_name']; ?></h3>
-      <p>SĐT: <?php echo isset($_SESSION['user_phone']) ? $_SESSION['user_phone'] : 'Chưa cập nhật'; ?></p>
-      <p>Quyền: <?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></p>
-      <?php if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
-      <a href="admin.php" class="btn">Quản trị</a>
-      <?php endif; ?>
-      <a href="login.php?action=logout" class="btn">Đăng xuất</a>
+<?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
+   <div id="user-info-container" style="display: none;">
+      <div class="user-info">
+         <h3>Xin chào, <?php echo $_SESSION['user_name']; ?></h3>
+         <p>SĐT: <?php echo isset($_SESSION['user_phone']) ? $_SESSION['user_phone'] : 'Chưa cập nhật'; ?></p>
+         <p>Quyền: <?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></p>
+         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
+            <a href="admin.php" class="btn">Quản trị</a>
+         <?php endif; ?>
+         <a href="login.php?action=logout" class="btn">Đăng xuất</a>
+      </div>
    </div>
-</div>
 <?php endif; ?>
 
 <footer class="footer">
