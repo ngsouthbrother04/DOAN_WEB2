@@ -114,6 +114,7 @@ body {
     cursor: pointer;
     position: relative;
     min-width: 80px;
+    margin-right: 10px;
 }
 
 .userbutton img {
@@ -535,8 +536,6 @@ body {
     display: none;
     z-index: 2000;
     height: auto;
-    max-height: 80vh;
-    overflow-y: auto;
 }
 
 .tabs {
@@ -557,6 +556,17 @@ body {
 .tabs a.active {
     color: #c62828;
     border-bottom: 2px solid #c62828;
+}
+
+.register-info{
+    padding: 20px;
+    margin-top: -15px;
+}
+
+.form-line {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .form-group {
@@ -746,36 +756,73 @@ body {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 8px; 
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     z-index: 1001;
-    width: 300px;
-    max-width: 90%;
+    width: 650px;
+    height: 410px;
 }
 
 .user-info {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    /* align-items: center; */
+}
+
+.user-info h1 {
+    color: #333;
+    font-size: 25px;
 }
 
 .user-info h3 {
-    margin-bottom: 10px;
     color: #333;
-    font-size: 18px;
-    text-align: center;
+    font-size: 17px;
 }
 
-.user-info p {
+/* .user-info p {
     margin-bottom: 15px;
     color: #666;
     font-size: 14px;
+} */
+
+.user-info-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.user-info-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-info span {
+    color: #5f5f5f;
+}
+
+.btn-edit-user-info {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: white;
+    color: rgb(18, 107, 232);
+    border: 1px solid rgb(18, 107, 232); 
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+    width: 100px;
+
+    &:hover {
+        background-color: rgb(18, 107, 232);
+        color: white;
+    }
 }
 
 .user-info .btn {
     display: inline-block;
     padding: 8px 15px;
-    margin: 5px;
     background-color: #c22432;
     color: white;
     border: none;
@@ -784,7 +831,8 @@ body {
     text-decoration: none;
     font-size: 14px;
     text-align: center;
-    min-width: 100px;
+    width: 100px;
+    margin-top: 20px;
 }
 
 .user-info .btn:hover {

@@ -250,33 +250,64 @@ $pagination = $filtered_data['pagination'];
          <button type="button" class="btn btn-secondary" id="exit">Thoát</button>
       </form>
    </div>
+
+   <!-- Form Đăng ký -->
    <!-- Form Đăng ký -->
    <div class="register-form" id="register-form" style="display: none;">
-      <div class="form-group">
-         <label>Tên đăng nhập (Số điện thoại/Email)</label>
-         <input type="text" placeholder="Nhập số điện thoại hoặc email"
-            style="border: 1px solid #ccc; outline: none;">
-      </div>
+      <form class="register-form-submit" method="post" id="register-form-submit"> <!-- Thêm thẻ <form> và ID -->
+         <div class="form-line">
+            <div class="form-group">
+               <label>Họ và tên</label>
+               <input type="text" id="full-name" placeholder="Nhập họ và tên" style="border: 1px solid #ccc; outline: none; width: 200px">
+            </div>
 
-      <div class="form-group">
-         <label>Mật khẩu</label>
-         <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-            <input type="password" id="reg-password" placeholder="Nhập mật khẩu"
-               style="border: none; outline: none;">
-            <button type="button" class="show-password" id="toggleRegPassword">Hiện</button>
+            <div class="form-group">
+               <label>Email</label>
+               <input type="text" id="email" placeholder="Nhập email" style="border: 1px solid #ccc; outline: none; width: 200px">
+            </div>
          </div>
-      </div>
-      <div class="form-group">
-         <label>Xác nhận mật khẩu</label>
-         <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-            <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu"
-               style="border: none; outline: none;">
-            <button type="button" class="show-password" id="toggleConfirmPassword">Hiện</button>
+
+         <div class="form-line">
+            <div class="form-group">
+               <label>Địa chỉ</label>
+               <input type="text" id="address" placeholder="Nhập địa chỉ" style="border: 1px solid #ccc; outline: none; width: 200px">
+            </div>
+
+            <div class="form-group">
+               <label>Ngày sinh</label>
+               <input type="date" id="dob" style="border: 1px solid #ccc; outline: none; width: 178px; margin-right: 20px">
+            </div>
          </div>
-      </div>
-      <button class="btn btn-primary">Đăng ký</button>
-      <button class="btn btn-secondary" id="exit-reg">Thoát</button>
+
+         <div class="register-info">
+            <div class="form-group">
+               <label>Tên đăng nhập (Số điện thoại)</label>
+               <input type="text" id="username" placeholder="Nhập số điện thoại" style="border: 1px solid #ccc; outline: none;">
+            </div>
+
+            <div class="form-group">
+               <label>Mật khẩu</label>
+               <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+                  <input type="password" id="reg-password" placeholder="Nhập mật khẩu" style="border: none; outline: none;">
+                  <button type="button" class="show-password" id="toggleRegPassword">Hiện</button>
+               </div>
+            </div>
+
+            <div class="form-group">
+               <label>Xác nhận mật khẩu</label>
+               <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
+                  <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu" style="border: none; outline: none;">
+                  <button type="button" class="show-password" id="toggleConfirmPassword">Hiện</button>
+               </div>
+            </div>
+         </div>
+
+         <button type="submit" class="btn btn-primary">Đăng ký</button>
+         <button class="btn btn-secondary" id="exit-reg">Thoát</button>
+      </form>
    </div>
+
+
 </div>
 <div class="modal-overlay" id="modal"></div>
 
@@ -284,16 +315,51 @@ $pagination = $filtered_data['pagination'];
 <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_name'])): ?>
    <div id="user-info-container" style="display: none;">
       <div class="user-info">
-         <h3>Xin chào, <?php echo $_SESSION['user_name']; ?></h3>
-         <p>SĐT: <?php echo isset($_SESSION['user_phone']) ? $_SESSION['user_phone'] : 'Chưa cập nhật'; ?></p>
-         <p>Quyền: <?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></p>
-         <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
-            <a href="admin.php" class="btn">Quản trị</a>
-         <?php endif; ?>
+         <div class="user-info-header">
+            <h1>Thông Tin Cá Nhân</h1>
+            <button class="btn-edit-user-info">Chỉnh sửa</button>
+         </div>
+
+         <hr style="margin: 20px">
+
+         <div class="user-info-item user-name">
+            <h3>Họ và tên:</h3>
+            <span><?php echo $_SESSION['user_name']; ?></span>
+         </div>
+
+         <div class="user-info-item user-email">
+            <h3>Email:</h3>
+            <span><?php echo $_SESSION['user_email']; ?></span>
+         </div>
+
+         <div class="user-info-item user-dob">
+            <h3>Ngày sinh:</h3>
+            <span><?php echo $_SESSION['user_dob']; ?></span>
+         </div>
+
+         <div class="user-info-item user-phone">
+            <h3>Số điện thoại:</h3>
+            <span><?php echo $_SESSION['user_phone']; ?></span>
+         </div>
+
+         <div class="user-info-item user-address">
+            <h3>Địa chỉ:</h3>
+            <span><?php echo $_SESSION['user_address']; ?></span>
+         </div>
+
+         <div class="user-info-item user-role">
+            <h3>Quyền:</h3>
+            <span><?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></span>
+            <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
+               <a href="admin.php" class="btn">Quản trị</a>
+            <?php endif; ?>
+         </div>
+
          <a href="login.php?action=logout" class="btn">Đăng xuất</a>
       </div>
    </div>
 <?php endif; ?>
+
 
 <footer class="footer">
    <div class="footer-container">
