@@ -349,13 +349,17 @@ $pagination = $filtered_data['pagination'];
 
          <div class="user-info-item user-role">
             <h3>Quyền:</h3>
-            <span><?php echo isset($_SESSION['user_role']) ? $_SESSION['user_role'] : 'Khách hàng'; ?></span>
+            <span>
+               <?php
+               echo (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'KhachHang') ? 'Khách hàng' : 'Khách hàng';
+               ?>
+            </span>
             <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
                <a href="admin.php" class="btn">Quản trị</a>
             <?php endif; ?>
          </div>
 
-         <a href="login.php?action=logout" class="btn">Đăng xuất</a>
+         <a href="login.php?action=logout" class="btn-log-out">Đăng xuất</a>
       </div>
    </div>
 <?php endif; ?>
@@ -396,6 +400,7 @@ $pagination = $filtered_data['pagination'];
 
    <script src="../js/account.js"></script>
    <script src="../js/search.js"></script>
+   <script src="../js/edit-profile.js"></script>
 </footer>
 
 </body>

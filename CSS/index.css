@@ -820,7 +820,29 @@ body {
     }
 }
 
+.edit-input {
+    padding: 7px;
+    width: 200px;
+    font-size: 14px;
+    text-align: end;
+  }
+  
 .user-info .btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #c22432;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 14px;
+    text-align: center;
+    width: 100px;
+    margin-top: 20px;
+}
+
+ .btn-log-out {
     display: inline-block;
     padding: 8px 15px;
     background-color: #c22432;
@@ -838,6 +860,27 @@ body {
 .user-info .btn:hover {
     background-color: #a51e2b;
 }
+
+.input-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .clear-input {
+    font-size: 16px;
+    color: red;
+    margin-right: 8px; /* Tạo khoảng cách giữa biểu tượng x và input */
+    cursor: pointer;
+  }
+  
+  .clear-input:hover {
+    color: darkred;
+  }
+  
+  .edit-input {
+    padding-left: 8px; /* Thêm khoảng cách bên trái cho input để tránh va chạm với biểu tượng x */
+  }
+  
 
 @media (max-width: 1250px) {
 

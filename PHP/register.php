@@ -40,9 +40,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Chèn dữ liệu vào database
-    $stmt = $conn->prepare("INSERT INTO `USER` (ho_ten, sdt, dia_chi, ngay_sinh, email, mat_khau) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssssss", $full_name, $username, $address, $dob, $email, $password);
+    // Chèn dữ liệu vào database với quyền mặc định là 'KhachHang'
+    $stmt = $conn->prepare("INSERT INTO `USER` (ho_ten, sdt, dia_chi, ngay_sinh, email, mat_khau, quyen) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $role = 'KhachHang'; // Quyền mặc định
+    $stmt->bind_param("sssssss", $full_name, $username, $address, $dob, $email, $password, $role);
 
     if ($stmt->execute()) {
         // Lưu thông tin vào session sau khi đăng ký thành công
@@ -52,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_email'] = $email;
         $_SESSION['user_dob'] = date('d-m-Y', strtotime($dob)); // Chuyển đổi ngày sinh sang định dạng 'd-m-Y'
         $_SESSION['user_address'] = $address;
+        $_SESSION['user_role'] = $role; // Lưu quyền vào session
 
         // Trả về kết quả thành công
         echo json_encode(['success' => true, 'message' => 'Đăng ký thành công!']);
@@ -64,3 +66,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn->close();
     exit;
 }
+?>

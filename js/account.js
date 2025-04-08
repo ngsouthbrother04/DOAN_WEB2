@@ -75,9 +75,6 @@ document.getElementById("modal").addEventListener("click", (event) => {
     this.classList.remove("active");
     document.getElementById("login-container").style.display = "none";
 
-    const userInfoContainer = document.getElementById("user-info-container");
-    if (userInfoContainer) userInfoContainer.style.display = "none";
-
     resetPasswordToggle();
     resetRegisterForm();
     resetLoginForm();
