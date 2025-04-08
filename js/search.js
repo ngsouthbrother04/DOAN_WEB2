@@ -1,11 +1,11 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   // Lấy các form tìm kiếm
   const searchForms = document.querySelectorAll(
     'form[action="timsanpham.php"]'
   );
 
-  searchForms.forEach((form) => {
-    form.addEventListener("submit", (e) => {
+  searchForms.forEach(function (form) {
+    form.addEventListener("submit", function (e) {
       // Lấy giá trị từ ô tìm kiếm
       const searchInput = this.querySelector('input[name="search_term"]');
       const searchTerm = searchInput.value.trim();

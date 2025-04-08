@@ -51,6 +51,7 @@
 .product-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    transition: 0.3s;
 }
 
 .product-item img {
@@ -109,6 +110,7 @@
 
 .buy-now-btn:hover {
     background-color: #c1121f;
+    transition: 0.3s;
 }
 
 .add-to-cart-btn {
@@ -119,6 +121,7 @@
 
 .add-to-cart-btn:hover {
     background-color: #a8dadc;
+    transition: 0.3s;
 }
 
 /* CSS cho phân trang */
@@ -141,6 +144,7 @@
 
 .pagination a:hover {
     background-color: #ddd;
+    transition: 0.3s;
 }
 
 .pagination .active {

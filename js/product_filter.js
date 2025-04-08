@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded - checking filter functionality");
 
   const filterForm = document.getElementById("filter-form");
@@ -195,41 +195,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Đồng bộ giữa form lọc chính và form tìm kiếm nâng cao
   if (categorySelect && categorySearchSelect)
-    categorySelect.addEventListener(
-      "change",
-      () => (categorySearchSelect.value = this.value)
-    );
+    categorySelect.addEventListener("change", function () {
+      categorySearchSelect.value = this.value;
+    });
 
   if (priceMinInput && priceMinSearchInput)
-    priceMinInput.addEventListener(
-      "input",
-      () => (priceMinSearchInput.value = this.value)
-    );
+    priceMinInput.addEventListener("input", function () {
+      priceMinSearchInput.value = this.value;
+    });
 
   if (priceMaxInput && priceMaxSearchInput)
-    priceMaxInput.addEventListener(
-      "input",
-      () => (priceMaxSearchInput.value = this.value)
-    );
+    priceMaxInput.addEventListener("input", function () {
+      priceMaxSearchInput.value = this.value;
+    });
 
   // Đồng bộ từ form tìm kiếm nâng cao sang form lọc chính
   if (categorySearchSelect && categorySelect)
-    categorySearchSelect.addEventListener(
-      "change",
-      () => (categorySelect.value = this.value)
-    );
+    categorySearchSelect.addEventListener("change", function () {
+      categorySelect.value = this.value;
+    });
 
   if (priceMinSearchInput && priceMinInput)
-    priceMinSearchInput.addEventListener(
-      "input",
-      () => (priceMinInput.value = this.value)
-    );
+    priceMinSearchInput.addEventListener("input", function () {
+      priceMinInput.value = this.value;
+    });
 
   if (priceMaxSearchInput && priceMaxInput)
-    priceMaxSearchInput.addEventListener(
-      "input",
-      () => (priceMaxInput.value = this.value)
-    );
+    priceMaxSearchInput.addEventListener("input", function () {
+      priceMaxInput.value = this.value;
+    });
 
   // Xử lý nút reset bộ lọc
   const resetFilterBtn = document.querySelector(".reset-filter");
@@ -242,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Xử lý thêm vào giỏ hàng
   const addToCartBtns = document.querySelectorAll(".add-to-cart-btn");
   addToCartBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", function () {
       const productItem = this.closest(".product-item");
       const productId = productItem.getAttribute("data-id");
       const productTitle = productItem.getAttribute("data-title");
@@ -273,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Xử lý nút mua ngay
   const buyNowBtns = document.querySelectorAll(".buy-now-btn");
   buyNowBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", function () {
       const productItem = this.closest(".product-item");
       const productId = productItem.getAttribute("data-id");
 

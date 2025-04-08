@@ -18,11 +18,11 @@ $message = '';
 // Xử lý thêm thể loại mới
 if (isset($_POST['add_category'])) {
     $category_name = mysqli_real_escape_string($conn, $_POST['category_name']);
-    
+
     // Kiểm tra thể loại đã tồn tại chưa
     $check_query = "SELECT * FROM LOAISACH WHERE ten_loai = '$category_name'";
     $check_result = mysqli_query($conn, $check_query);
-    
+
     if (mysqli_num_rows($check_result) > 0) {
         $_SESSION['message'] = "Thể loại này đã tồn tại!";
     } else {
@@ -33,7 +33,7 @@ if (isset($_POST['add_category'])) {
             $_SESSION['message'] = "Lỗi: " . mysqli_error($conn);
         }
     }
-    
+
     // Redirect để tránh form resubmission
     header("Location: edit_loaisach.php");
     exit();
@@ -43,14 +43,14 @@ if (isset($_POST['add_category'])) {
 if (isset($_POST['update_category'])) {
     $category_id = mysqli_real_escape_string($conn, $_POST['category_id']);
     $category_name = mysqli_real_escape_string($conn, $_POST['category_name']);
-    
+
     $update_query = "UPDATE LOAISACH SET ten_loai = '$category_name' WHERE loaisach_id = '$category_id'";
     if (mysqli_query($conn, $update_query)) {
         $_SESSION['message'] = "Cập nhật thể loại thành công!";
     } else {
         $_SESSION['message'] = "Lỗi: " . mysqli_error($conn);
     }
-    
+
     // Redirect để tránh form resubmission
     header("Location: edit_loaisach.php");
     exit();
@@ -59,12 +59,12 @@ if (isset($_POST['update_category'])) {
 // Xử lý xóa thể loại
 if (isset($_GET['delete'])) {
     $category_id = mysqli_real_escape_string($conn, $_GET['delete']);
-    
+
     // Kiểm tra xem có sách nào thuộc thể loại này không
     $check_books = "SELECT COUNT(*) as total FROM SACH WHERE loaisach_id = '$category_id'";
     $result_check = mysqli_query($conn, $check_books);
     $count = mysqli_fetch_assoc($result_check)['total'];
-    
+
     if ($count > 0) {
         $_SESSION['message'] = "Không thể xóa thể loại này vì có $count sách đang sử dụng!";
     } else {
@@ -75,7 +75,7 @@ if (isset($_GET['delete'])) {
             $_SESSION['message'] = "Lỗi: " . mysqli_error($conn);
         }
     }
-    
+
     // Redirect để tránh form resubmission
     header("Location: edit_loaisach.php");
     exit();
@@ -135,19 +135,21 @@ while ($row = mysqli_fetch_assoc($unremovable_result)) {
 }
 
 // Hàm tạo liên kết sắp xếp
-function getSortLink($field, $current_sort_field, $current_sort_direction, $search_keyword) {
+function getSortLink($field, $current_sort_field, $current_sort_direction, $search_keyword)
+{
     $direction = ($field == $current_sort_field && $current_sort_direction == 'asc') ? 'desc' : 'asc';
     $link = "edit_loaisach.php?sort=" . $field . "&direction=" . $direction;
-    
+
     if (!empty($search_keyword)) {
         $link .= "&search=" . urlencode($search_keyword);
     }
-    
+
     return $link;
 }
 
 // Hàm hiển thị mũi tên sắp xếp
-function getSortIcon($field, $current_sort_field, $current_sort_direction) {
+function getSortIcon($field, $current_sort_field, $current_sort_direction)
+{
     if ($field == $current_sort_field) {
         return ($current_sort_direction == 'asc') ? '<i class="fas fa-sort-up"></i>' : '<i class="fas fa-sort-down"></i>';
     }
@@ -172,28 +174,29 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
-        
-        .form-group input, .form-group textarea {
+
+        .form-group input,
+        .form-group textarea {
             width: 100%;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        
+
         .form-group textarea {
             height: 100px;
         }
-        
+
         .btn {
             padding: 10px 15px;
             background-color: #4CAF50;
@@ -202,43 +205,45 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .btn:hover {
             background-color: #45a049;
+            transition: 0.3s;
         }
-        
+
         .categories-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        
-        .categories-table th, .categories-table td {
+
+        .categories-table th,
+        .categories-table td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: left;
         }
-        
+
         .categories-table th {
             background-color: #f2f2f2;
         }
-        
+
         .sort-header {
             cursor: pointer;
             white-space: nowrap;
         }
-        
+
         .sort-header a {
             color: #333;
             text-decoration: none;
             display: flex;
             align-items: center;
         }
-        
+
         .sort-header i {
             margin-left: 5px;
         }
-        
+
         .action-btn {
             padding: 5px 10px;
             margin-right: 5px;
@@ -246,42 +251,42 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             border-radius: 3px;
             cursor: pointer;
         }
-        
+
         .edit-btn {
             background-color: #2196F3;
             color: white;
         }
-        
+
         .delete-btn {
             background-color: #f44336;
             color: white;
         }
-        
+
         .message {
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 4px;
             background-color: #f2f2f2;
         }
-        
+
         .disabled {
             opacity: 0.6;
             pointer-events: none;
         }
-        
+
         .search-box {
             margin-bottom: 20px;
             display: flex;
             gap: 10px;
         }
-        
+
         .search-box input {
             flex: 1;
             padding: 8px;
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        
+
         .search-box button {
             padding: 8px 15px;
             background-color: #2196F3;
@@ -290,33 +295,34 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             border-radius: 4px;
             cursor: pointer;
         }
-        
+
         .book-count {
             font-weight: bold;
             color: #000;
         }
-        
+
         .book-count a {
             color: #000;
             text-decoration: none;
         }
-        
+
         .book-count a:hover {
             text-decoration: underline;
+            transition: 0.3s;
         }
-        
+
         .zero-books {
             opacity: 0.5;
             font-style: italic;
         }
-        
+
         .reset-filter {
             display: inline-block;
             margin-left: 10px;
             color: #f44336;
             text-decoration: none;
         }
-        
+
         .view-books-btn {
             display: inline-block;
             margin-left: 8px;
@@ -327,9 +333,10 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             font-size: 12px;
             text-decoration: none;
         }
-        
+
         .view-books-btn:hover {
             background-color: #e0e0e0;
+            transition: 0.3s;
         }
     </style>
 </head>
@@ -382,11 +389,11 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                 <form method="GET" action="">
                     <input type="text" name="search" placeholder="Tìm kiếm thể loại..." value="<?php echo $search_keyword; ?>">
                     <button type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
-                    
+
                     <!-- Giữ lại các tham số sắp xếp hiện tại -->
                     <input type="hidden" name="sort" value="<?php echo $sort_field; ?>">
                     <input type="hidden" name="direction" value="<?php echo $sort_direction; ?>">
-                    
+
                     <?php if (!empty($search_keyword)): ?>
                         <a href="edit_loaisach.php?sort=<?php echo $sort_field; ?>&direction=<?php echo $sort_direction; ?>" class="reset-filter"><i class="fas fa-times"></i> Xóa bộ lọc</a>
                     <?php endif; ?>
@@ -417,36 +424,36 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
+                    <?php
                     if (mysqli_num_rows($categories_result) > 0) {
-                        while ($category = mysqli_fetch_assoc($categories_result)): 
+                        while ($category = mysqli_fetch_assoc($categories_result)):
                     ?>
-                    <tr>
-                        <td><?php echo $category['loaisach_id']; ?></td>
-                        <td><?php echo $category['ten_loai']; ?></td>
-                        <td class="book-count <?php echo ($category['book_count'] == 0) ? 'zero-books' : ''; ?>">
-                            <?php echo $category['book_count']; ?> cuốn sách
-                        </td>
-                        <td>
-                            <button class="action-btn edit-btn" 
-                                    data-id="<?php echo $category['loaisach_id']; ?>" 
-                                    data-name="<?php echo $category['ten_loai']; ?>">
-                                <i class="fas fa-edit"></i> Sửa
-                            </button>
-                            <a href="javascript:void(0);" class="action-btn delete-btn <?php echo ($category['book_count'] > 0) ? 'disabled' : ''; ?>" 
-                               onclick="<?php echo ($category['book_count'] > 0) ? 'alert(\'Không thể xóa thể loại này vì đã có sách liên kết\'); return false;' : 'confirmDelete('.$category['loaisach_id'].')'; ?>"
-                               title="<?php echo ($category['book_count'] > 0) ? 'Không thể xóa thể loại này vì đã có sách liên kết' : 'Xóa thể loại'; ?>">
-                                <i class="fas fa-trash"></i> Xóa
-                            </a>
-                        </td>
-                    </tr>
-                    <?php 
-                        endwhile; 
+                            <tr>
+                                <td><?php echo $category['loaisach_id']; ?></td>
+                                <td><?php echo $category['ten_loai']; ?></td>
+                                <td class="book-count <?php echo ($category['book_count'] == 0) ? 'zero-books' : ''; ?>">
+                                    <?php echo $category['book_count']; ?> cuốn sách
+                                </td>
+                                <td>
+                                    <button class="action-btn edit-btn"
+                                        data-id="<?php echo $category['loaisach_id']; ?>"
+                                        data-name="<?php echo $category['ten_loai']; ?>">
+                                        <i class="fas fa-edit"></i> Sửa
+                                    </button>
+                                    <a href="javascript:void(0);" class="action-btn delete-btn <?php echo ($category['book_count'] > 0) ? 'disabled' : ''; ?>"
+                                        onclick="<?php echo ($category['book_count'] > 0) ? 'alert(\'Không thể xóa thể loại này vì đã có sách liên kết\'); return false;' : 'confirmDelete(' . $category['loaisach_id'] . ')'; ?>"
+                                        title="<?php echo ($category['book_count'] > 0) ? 'Không thể xóa thể loại này vì đã có sách liên kết' : 'Xóa thể loại'; ?>">
+                                        <i class="fas fa-trash"></i> Xóa
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php
+                        endwhile;
                     } else {
-                    ?>
-                    <tr>
-                        <td colspan="4" style="text-align: center;">Không tìm thấy thể loại nào</td>
-                    </tr>
+                        ?>
+                        <tr>
+                            <td colspan="4" style="text-align: center;">Không tìm thấy thể loại nào</td>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
@@ -455,7 +462,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
 
     <script>
         // Click event cho menu ở ADMIN
-        document.querySelectorAll('.menu-item').forEach(item => {
+        document.querySelectorAll('.menu-item').forEach(function(item) {
             item.addEventListener('click', function() {
                 const menuText = this.textContent.trim();
                 if (menuText === 'Đăng xuất') {
@@ -477,21 +484,21 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         });
 
         // Xử lý nút sửa
-        document.querySelectorAll('.edit-btn').forEach(button => {
+        document.querySelectorAll('.edit-btn').forEach(function(button) {
             button.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 const name = this.getAttribute('data-name');
-                
+
                 document.getElementById('category_id').value = id;
                 document.getElementById('category_name').value = name;
-                
+
                 document.getElementById('form-title').textContent = 'Sửa thể loại';
                 document.getElementById('submit-btn').textContent = 'Cập nhật';
                 document.getElementById('submit-btn').name = 'update_category';
                 document.getElementById('cancel-btn').style.display = 'inline-block';
             });
         });
-        
+
         // Xử lý nút hủy
         document.getElementById('cancel-btn').addEventListener('click', function() {
             document.getElementById('category-form').reset();
@@ -500,7 +507,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             document.getElementById('submit-btn').name = 'add_category';
             this.style.display = 'none';
         });
-        
+
         // Hàm xác nhận xóa
         function confirmDelete(id) {
             if (confirm('Bạn có chắc muốn xóa thể loại này?')) {
@@ -510,4 +517,4 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
     </script>
 </body>
 
-</html> 
+</html>

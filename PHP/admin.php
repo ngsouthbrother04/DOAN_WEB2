@@ -99,7 +99,7 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
 
    <script>
       // Click event cho menu ở ADMIN
-      document.querySelectorAll('.menu-item').forEach(item => {
+      document.querySelectorAll('.menu-item').forEach(function(item) {
          item.addEventListener('click', function() {
             const menuText = this.textContent.trim();
             if (menuText === 'Đăng xuất') {

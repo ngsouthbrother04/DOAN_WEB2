@@ -36,6 +36,7 @@
 .product-item:hover {
    transform: translateY(-5px);
    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+   transition: 0.3s;
 }
 
 .product-item img {
@@ -55,6 +56,7 @@
    overflow: hidden;
    display: -webkit-box;
    -webkit-line-clamp: 2;
+   line-clamp: 2;
    -webkit-box-orient: vertical;
 }
 
@@ -117,6 +119,7 @@
    background-color: #fff;
    color: #c22432;
    border: 1px solid #c22432;
+   transition: 0.3s;
 }
 
 /* Pagination */
@@ -138,8 +141,9 @@
 }
 
 .page-btn:hover:not(.disabled) {
-   background-color: #c62828;
+   background: #999; /* tối hơn #ccc một chút */
    color: #fff;
+   transition: 0.3s;
 }
 
 .page-btn.disabled {
@@ -166,8 +170,9 @@
 }
 
 .reset-filter:hover {
-   background-color: var(--primary-color);
+   background-color: red;
    color: #fff;
+   transition: 0.3s;
 }
 
 /* Tìm kiếm nâng cao */
@@ -198,6 +203,7 @@
 
 .advanced-search-btn:hover {
    background-color: var(--primary-hover);
+   transition: 0.3s;
 }
 
 /* Thông báo không có sản phẩm */
@@ -209,17 +215,19 @@
 
 .filter-buttons button {
    padding: 8px 20px;
-   background-color: #c62828;
+   background-color: #c22432;
    /* Màu đỏ chủ đạo */
    color: #fff;
-   border: none;
+   border: 1px solid #c22432;
    border-radius: 4px;
    cursor: pointer;
    margin-right: 10px;
 }
 
 .filter-buttons button:hover {
-   background-color: #c22432;
+   background-color: white;
+   color: #c22432;
+   transition: 0.3s;
 }
 
 .reset-filter {
@@ -233,7 +241,9 @@
 }
 
 .reset-filter:hover {
-   background-color: #e0e0e0;
+   background: #999; /* tối hơn #ccc một chút */
+   color: #fff;
+   transition: 0.3s;
 }
 
 #no-products-message {

@@ -213,58 +213,12 @@ function getCartCount()
          </div>
       </div>
    </div>
-   <!-- Form đăng nhập/đăng ký -->
-   <div class="login-container" id="login-container">
-      <div class="tabs">
-         <a href="#" class="active" id="login-tab">Đăng nhập</a>
-         <a href="#" id="register-tab">Đăng ký</a>
-      </div>
-      <!-- Form Đăng nhập -->
-      <div class="login-form" id="login-form">
-         <div class="form-group">
-            <label>Số điện thoại/Email</label>
-            <input type="text" placeholder="Nhập số điện thoại hoặc email" style="border: 1px solid #ccc; outline: none;">
-         </div>
-         <div class="form-group">
-            <label>Mật khẩu</label>
-            <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-               <input type="password" id="password" placeholder="Nhập mật khẩu" style="border: none; outline: none;">
-               <button type="button" class="show-password" id="togglePassword">Hiện</button>
-            </div>
-         </div>
-         <button class="btn btn-primary">Đăng nhập</button>
-         <button class="btn btn-secondary" id="exit">Thoát</button>
-      </div>
-      <!-- Form Đăng ký -->
-      <div class="register-form" id="register-form" style="display: none;">
-         <div class="form-group">
-            <label>Tên đăng nhập (Số điện thoại/Email)</label>
-            <input type="text" placeholder="Nhập số điện thoại hoặc email" style="border: 1px solid #ccc; outline: none;">
-         </div>
-         <div class="form-group">
-            <label>Mật khẩu</label>
-            <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-               <input type="password" id="reg-password" placeholder="Nhập mật khẩu" style="border: none; outline: none;">
-               <button type="button" class="show-password" id="toggleRegPassword">Hiện</button>
-            </div>
-         </div>
-         <div class="form-group">
-            <label>Xác nhận mật khẩu</label>
-            <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-               <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu" style="border: none; outline: none;">
-               <button type="button" class="show-password" id="toggleConfirmPassword">Hiện</button>
-            </div>
-         </div>
-         <button class="btn btn-primary">Đăng ký</button>
-         <button class="btn btn-secondary" id="exit-reg">Thoát</button>
-      </div>
-   </div>
-   <div class="modal-overlay" id="modal"></div>
 
+   <?php include 'login-register/login-register-form.php'; ?>
+   <?php include 'profile-form.php'; ?>
    <?php include 'footer.php'; ?>
 
    <script src="../js/chitietsanpham.js"></script>
-   <script src="../js/account.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db_connect.php';
+include '../db_connect.php';
 
 // Kiểm tra nếu form đăng nhập được gửi
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -60,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
    session_unset();
    session_destroy();
-   header('Location: trangchu.php');
+   header('Location: ../trangchu.php');
+
    exit;
 }

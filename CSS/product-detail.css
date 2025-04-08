@@ -10,10 +10,9 @@ body {
 }
 
 .product-detail-container {
-    width: 100%;
     max-width: 1200px;
     margin: 20px auto;
-    padding: 0 15px;
+    padding: 150px 15px;
 }
 
 .breadcrumb {
@@ -29,6 +28,7 @@ body {
 
 .breadcrumb a:hover {
     color: #c62828;
+    transition: 0.3s;
 }
 
 .breadcrumb span {
@@ -149,6 +149,7 @@ body {
 
 .buy-now:hover {
     background-color: #a81f1f;
+    transition: 0.3s;
 }
 
 .product-info .publisher,
@@ -168,6 +169,7 @@ body {
 .product-info .author:hover {
     background-color: #f0f0f0; /* Nền thay đổi khi hover */
     color: #333; /* Màu chữ đậm hơn khi hover */
+    transition: 0.3s;
 }
 
 /* Đảm bảo text không bị vượt quá khung */

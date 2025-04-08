@@ -4,7 +4,7 @@ require_once 'db_connect.php';
 
 // Bắt đầu session nếu chưa bắt đầu
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+   session_start();
 }
 
 // Sửa đường dẫn ảnh cho các sản phẩm cũ
@@ -158,12 +158,12 @@ $sort_order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
 // Đảm bảo các tham số sắp xếp hợp lệ
 $valid_sort_fields = ['sach_id', 'tieu_de', 'gia_tien', 'so_luong', 'ten_loai'];
 if (!in_array($sort_by, $valid_sort_fields)) {
-    $sort_by = 'sach_id';
+   $sort_by = 'sach_id';
 }
 
 $valid_sort_orders = ['ASC', 'DESC'];
 if (!in_array($sort_order, $valid_sort_orders)) {
-    $sort_order = 'DESC';
+   $sort_order = 'DESC';
 }
 
 // Xây dựng câu truy vấn với điều kiện lọc
@@ -171,11 +171,11 @@ $query = "SELECT s.*, l.ten_loai FROM SACH s
           LEFT JOIN LOAISACH l ON s.loaisach_id = l.loaisach_id WHERE 1=1";
 
 if ($filter_category > 0) {
-    $query .= " AND s.loaisach_id = $filter_category";
+   $query .= " AND s.loaisach_id = $filter_category";
 }
 
 if (!empty($search_keyword)) {
-    $query .= " AND (s.tieu_de LIKE '%$search_keyword%' OR s.tac_gia LIKE '%$search_keyword%' OR l.ten_loai LIKE '%$search_keyword%')";
+   $query .= " AND (s.tieu_de LIKE '%$search_keyword%' OR s.tac_gia LIKE '%$search_keyword%' OR l.ten_loai LIKE '%$search_keyword%')";
 }
 
 $query .= " ORDER BY $sort_by $sort_order";
@@ -183,27 +183,29 @@ $query .= " ORDER BY $sort_by $sort_order";
 $sach_result = mysqli_query($conn, $query);
 
 // Hàm tạo URL sắp xếp
-function getSortUrl($field, $current_sort, $current_order, $filter_category, $search_keyword) {
-    $new_order = ($field == $current_sort && $current_order == 'ASC') ? 'DESC' : 'ASC';
-    $url = "edit_sach.php?sort=$field&order=$new_order";
-    
-    if ($filter_category > 0) {
-        $url .= "&filter_category=$filter_category";
-    }
-    
-    if (!empty($search_keyword)) {
-        $url .= "&search=" . urlencode($search_keyword);
-    }
-    
-    return $url;
+function getSortUrl($field, $current_sort, $current_order, $filter_category, $search_keyword)
+{
+   $new_order = ($field == $current_sort && $current_order == 'ASC') ? 'DESC' : 'ASC';
+   $url = "edit_sach.php?sort=$field&order=$new_order";
+
+   if ($filter_category > 0) {
+      $url .= "&filter_category=$filter_category";
+   }
+
+   if (!empty($search_keyword)) {
+      $url .= "&search=" . urlencode($search_keyword);
+   }
+
+   return $url;
 }
 
 // Hàm hiển thị biểu tượng sắp xếp
-function getSortIcon($field, $current_sort, $current_order) {
-    if ($field == $current_sort) {
-        return ($current_order == 'ASC') ? '<i class="fas fa-sort-up"></i>' : '<i class="fas fa-sort-down"></i>';
-    }
-    return '<i class="fas fa-sort"></i>';
+function getSortIcon($field, $current_sort, $current_order)
+{
+   if ($field == $current_sort) {
+      return ($current_order == 'ASC') ? '<i class="fas fa-sort-up"></i>' : '<i class="fas fa-sort-down"></i>';
+   }
+   return '<i class="fas fa-sort"></i>';
 }
 ?>
 
@@ -246,7 +248,8 @@ function getSortIcon($field, $current_sort, $current_order) {
       .product-table {
          width: 100%;
          border-collapse: collapse;
-         table-layout: fixed; /* Thêm thuộc tính này để cố định chiều rộng các cột */
+         table-layout: fixed;
+         /* Thêm thuộc tính này để cố định chiều rộng các cột */
       }
 
       .product-table th,
@@ -254,9 +257,12 @@ function getSortIcon($field, $current_sort, $current_order) {
          padding: 10px;
          text-align: left;
          border-bottom: 1px solid #ddd;
-         white-space: nowrap; /* Ngăn văn bản xuống dòng */
-         overflow: hidden; /* Ẩn nội dung tràn ra */
-         text-overflow: ellipsis; /* Hiện dấu ... khi văn bản quá dài */
+         white-space: nowrap;
+         /* Ngăn văn bản xuống dòng */
+         overflow: hidden;
+         /* Ẩn nội dung tràn ra */
+         text-overflow: ellipsis;
+         /* Hiện dấu ... khi văn bản quá dài */
       }
 
       .product-table th {
@@ -264,63 +270,72 @@ function getSortIcon($field, $current_sort, $current_order) {
          color: white;
          font-size: 15px;
       }
-      
+
       /* Thiết lập chiều rộng cụ thể cho từng cột */
-      .product-table th:nth-child(1), 
+      .product-table th:nth-child(1),
       .product-table td:nth-child(1) {
-         width: 50px; /* STT */
+         width: 50px;
+         /* STT */
       }
-      
-      .product-table th:nth-child(2), 
+
+      .product-table th:nth-child(2),
       .product-table td:nth-child(2) {
-         width: 180px; /* Tên sản phẩm */
+         width: 180px;
+         /* Tên sản phẩm */
       }
-      
-      .product-table th:nth-child(3), 
+
+      .product-table th:nth-child(3),
       .product-table td:nth-child(3) {
-         width: 100px; /* Ảnh sản phẩm */
+         width: 100px;
+         /* Ảnh sản phẩm */
          text-align: center;
       }
-      
-      .product-table th:nth-child(4), 
+
+      .product-table th:nth-child(4),
       .product-table td:nth-child(4) {
-         width: 120px; /* Giá */
+         width: 120px;
+         /* Giá */
       }
-      
-      .product-table th:nth-child(5), 
+
+      .product-table th:nth-child(5),
       .product-table td:nth-child(5) {
-         width: 200px; /* Mô tả */
+         width: 200px;
+         /* Mô tả */
       }
-      
-      .product-table th:nth-child(6), 
+
+      .product-table th:nth-child(6),
       .product-table td:nth-child(6) {
-         width: 80px; /* Số lượng */
+         width: 80px;
+         /* Số lượng */
          text-align: center;
       }
-      
-      .product-table th:nth-child(7), 
+
+      .product-table th:nth-child(7),
       .product-table td:nth-child(7) {
-         width: 100px; /* Thể loại */
+         width: 100px;
+         /* Thể loại */
          text-align: center;
       }
-      
-      .product-table th:nth-child(8), 
+
+      .product-table th:nth-child(8),
       .product-table td:nth-child(8) {
-         width: 100px; /* Trạng thái */
+         width: 100px;
+         /* Trạng thái */
          text-align: center;
       }
-      
-      .product-table th:nth-child(9), 
+
+      .product-table th:nth-child(9),
       .product-table td:nth-child(9) {
-         width: 120px; /* Hành động */
+         width: 120px;
+         /* Hành động */
          text-align: center;
       }
-      
+
       /* Thêm tooltip để hiện đầy đủ nội dung khi hover */
       .product-table td {
          position: relative;
       }
-      
+
       .product-table td:hover::after {
          content: attr(data-full-text);
          position: absolute;
@@ -333,17 +348,20 @@ function getSortIcon($field, $current_sort, $current_order) {
          z-index: 999;
          white-space: normal;
          max-width: 300px;
-         display: none; /* Ẩn mặc định, chỉ hiển thị cho những cột có đặt thuộc tính data-full-text */
+         display: none;
+         transition: 0.3s;
+         /* Ẩn mặc định, chỉ hiển thị cho những cột có đặt thuộc tính data-full-text */
       }
-      
+
       .product-table td[data-full-text]:hover::after {
          display: block;
+         transition: 0.3s;
       }
-      
+
       .sort-header {
          cursor: pointer;
       }
-      
+
       .sort-header a {
          color: white;
          text-decoration: none;
@@ -351,7 +369,7 @@ function getSortIcon($field, $current_sort, $current_order) {
          align-items: center;
          justify-content: space-between;
       }
-      
+
       .sort-header i {
          margin-left: 5px;
       }
@@ -386,7 +404,7 @@ function getSortIcon($field, $current_sort, $current_order) {
          height: 80px;
          object-fit: cover;
       }
-      
+
       .filter-container {
          display: flex;
          justify-content: space-between;
@@ -395,18 +413,19 @@ function getSortIcon($field, $current_sort, $current_order) {
          padding: 15px;
          border-radius: 5px;
       }
-      
+
       .filter-form {
          display: flex;
          gap: 10px;
       }
-      
-      .filter-form select, .filter-form input {
+
+      .filter-form select,
+      .filter-form input {
          padding: 8px;
          border: 1px solid #ddd;
          border-radius: 4px;
       }
-      
+
       .filter-form button {
          background-color: #2196F3;
          color: white;
@@ -415,7 +434,7 @@ function getSortIcon($field, $current_sort, $current_order) {
          border-radius: 4px;
          cursor: pointer;
       }
-      
+
       .reset-filter {
          background-color: #f44336;
          color: white;
@@ -424,7 +443,7 @@ function getSortIcon($field, $current_sort, $current_order) {
          border-radius: 4px;
          display: inline-block;
       }
-      
+
       .category-badge {
          background-color: #2196F3;
          color: white;
@@ -437,17 +456,17 @@ function getSortIcon($field, $current_sort, $current_order) {
          overflow: hidden;
          text-overflow: ellipsis;
       }
-      
+
       .con-hang {
          color: green;
          font-weight: bold;
       }
-      
+
       .het-hang {
          color: red;
          font-weight: bold;
       }
-      
+
       /* Đảm bảo nội dung không bị tràn container chính */
       .content {
          overflow-x: auto;
@@ -476,11 +495,11 @@ function getSortIcon($field, $current_sort, $current_order) {
       <div class="header">QUẢN LÝ SÁCH</div>
 
       <?php if (!empty($message)): ?>
-      <div class="alert" style="padding: 10px; margin-bottom: 15px; background-color: #4CAF50; color: white; border-radius: 4px;">
-         <?php echo $message; ?>
-      </div>
+         <div class="alert" style="padding: 10px; margin-bottom: 15px; background-color: #4CAF50; color: white; border-radius: 4px;">
+            <?php echo $message; ?>
+         </div>
       <?php endif; ?>
-      
+
       <div class="product-form">
          <h2>Sản Phẩm</h2>
          <form action="" method="post" enctype="multipart/form-data">
@@ -500,10 +519,10 @@ function getSortIcon($field, $current_sort, $current_order) {
             <div>Chọn thể loại:</div>
             <select name="loaisach_id" id="loaisach_id" required>
                <option value="">-- Chọn thể loại --</option>
-               <?php 
+               <?php
                // Reset con trỏ kết quả để đọc lại từ đầu
                mysqli_data_seek($loaisach_result, 0);
-               while ($loai = mysqli_fetch_assoc($loaisach_result)): 
+               while ($loai = mysqli_fetch_assoc($loaisach_result)):
                ?>
                   <option value="<?php echo $loai['loaisach_id']; ?>"><?php echo $loai['ten_loai']; ?></option>
                <?php endwhile; ?>
@@ -512,10 +531,10 @@ function getSortIcon($field, $current_sort, $current_order) {
             <div>Chọn nhà xuất bản:</div>
             <select name="nha_xuat_ban" id="nha_xuat_ban" required>
                <option value="">-- Chọn nhà xuất bản --</option>
-               <?php 
+               <?php
                // Reset con trỏ kết quả để đọc lại từ đầu
                mysqli_data_seek($nxb_result, 0);
-               while ($nxb = mysqli_fetch_assoc($nxb_result)): 
+               while ($nxb = mysqli_fetch_assoc($nxb_result)):
                ?>
                   <option value="<?php echo $nxb['nha_xuat_ban']; ?>"><?php echo $nxb['nha_xuat_ban']; ?></option>
                <?php endwhile; ?>
@@ -526,30 +545,30 @@ function getSortIcon($field, $current_sort, $current_order) {
             <button type="submit" name="them_sach" id="submit_btn">Thêm mới</button>
          </form>
       </div>
-      
+
       <!-- Filter và tìm kiếm đã được di chuyển xuống đây -->
       <div class="filter-container">
          <form class="filter-form" method="GET" action="">
             <select name="filter_category">
                <option value="0">Tất cả thể loại</option>
-               <?php 
+               <?php
                // Reset con trỏ kết quả để đọc lại từ đầu
                mysqli_data_seek($loaisach_result, 0);
-               while ($loai = mysqli_fetch_assoc($loaisach_result)): 
+               while ($loai = mysqli_fetch_assoc($loaisach_result)):
                ?>
                   <option value="<?php echo $loai['loaisach_id']; ?>" <?php echo ($filter_category == $loai['loaisach_id']) ? 'selected' : ''; ?>>
                      <?php echo $loai['ten_loai']; ?>
                   </option>
                <?php endwhile; ?>
             </select>
-            
+
             <input type="text" name="search" placeholder="Tìm kiếm..." value="<?php echo $search_keyword; ?>">
-            
+
             <input type="hidden" name="sort" value="<?php echo $sort_by; ?>">
             <input type="hidden" name="order" value="<?php echo $sort_order; ?>">
-            
+
             <button type="submit"><i class="fas fa-filter"></i> Lọc</button>
-            
+
             <?php if ($filter_category > 0 || !empty($search_keyword)): ?>
                <a href="edit_sach.php" class="btn reset-filter"><i class="fas fa-times"></i> Xóa bộ lọc</a>
             <?php endif; ?>
@@ -599,36 +618,36 @@ function getSortIcon($field, $current_sort, $current_order) {
                      $trang_thai = ($sach['so_luong'] > 0) ? "Còn hàng" : "Hết hàng";
                      $mo_ta_short = substr($sach['mo_ta'], 0, 50) . (strlen($sach['mo_ta']) > 50 ? '...' : '');
                ?>
-                  <tr>
-                     <td><?php echo $stt++; ?></td>
-                     <td data-full-text="<?php echo htmlspecialchars($sach['tieu_de']); ?>"><?php echo $sach['tieu_de']; ?></td>
-                     <td>
-                        <?php if (!empty($sach['hinh_anh'])): ?>
-                           <img src="../<?php echo $sach['hinh_anh']; ?>" alt="<?php echo $sach['tieu_de']; ?>" class="product-image" onerror="this.onerror=null; this.src='../images/no-image.jpg'; console.log('Lỗi tải ảnh: <?php echo $sach['hinh_anh']; ?>');">
-                        <?php else: ?>
-                           <span>Không có ảnh</span>
-                        <?php endif; ?>
-                     </td>
-                     <td><?php echo number_format($sach['gia_tien'], 0, ',', '.'); ?> VND</td>
-                     <td data-full-text="<?php echo htmlspecialchars($sach['mo_ta']); ?>"><?php echo $mo_ta_short; ?></td>
-                     <td><?php echo $sach['so_luong']; ?></td>
-                     <td>
-                        <span class="category-badge" title="<?php echo $sach['ten_loai']; ?>">
-                           <?php echo $sach['ten_loai']; ?>
-                        </span>
-                     </td>
-                     <td class="<?php echo $trang_thai == 'Còn hàng' ? 'con-hang' : 'het-hang'; ?>">
-                        <?php echo $trang_thai; ?>
-                     </td>
-                     <td class="action-buttons">
-                        <button class="edit-btn" onclick="editSach(<?php echo htmlspecialchars(json_encode($sach)); ?>)">Sửa</button>
-                        <button class="delete-btn" onclick="deleteSach(<?php echo $sach['sach_id']; ?>)">Xóa</button>
-                     </td>
-                  </tr>
-               <?php 
+                     <tr>
+                        <td><?php echo $stt++; ?></td>
+                        <td data-full-text="<?php echo htmlspecialchars($sach['tieu_de']); ?>"><?php echo $sach['tieu_de']; ?></td>
+                        <td>
+                           <?php if (!empty($sach['hinh_anh'])): ?>
+                              <img src="../<?php echo $sach['hinh_anh']; ?>" alt="<?php echo $sach['tieu_de']; ?>" class="product-image" onerror="this.onerror=null; this.src='../images/no-image.jpg'; console.log('Lỗi tải ảnh: <?php echo $sach['hinh_anh']; ?>');">
+                           <?php else: ?>
+                              <span>Không có ảnh</span>
+                           <?php endif; ?>
+                        </td>
+                        <td><?php echo number_format($sach['gia_tien'], 0, ',', '.'); ?> VND</td>
+                        <td data-full-text="<?php echo htmlspecialchars($sach['mo_ta']); ?>"><?php echo $mo_ta_short; ?></td>
+                        <td><?php echo $sach['so_luong']; ?></td>
+                        <td>
+                           <span class="category-badge" title="<?php echo $sach['ten_loai']; ?>">
+                              <?php echo $sach['ten_loai']; ?>
+                           </span>
+                        </td>
+                        <td class="<?php echo $trang_thai == 'Còn hàng' ? 'con-hang' : 'het-hang'; ?>">
+                           <?php echo $trang_thai; ?>
+                        </td>
+                        <td class="action-buttons">
+                           <button class="edit-btn" onclick="editSach(<?php echo htmlspecialchars(json_encode($sach)); ?>)">Sửa</button>
+                           <button class="delete-btn" onclick="deleteSach(<?php echo $sach['sach_id']; ?>)">Xóa</button>
+                        </td>
+                     </tr>
+                  <?php
                   endwhile;
                } else {
-               ?>
+                  ?>
                   <tr>
                      <td colspan="9" style="text-align: center;">Không tìm thấy sách nào</td>
                   </tr>
@@ -640,7 +659,7 @@ function getSortIcon($field, $current_sort, $current_order) {
 
    <script>
       // JavaScript để xử lý sự kiện menu
-      document.querySelectorAll('.menu-item').forEach(item => {
+      document.querySelectorAll('.menu-item').forEach(function(item) {
          item.addEventListener('click', function(e) {
             e.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a (nếu có)
 
@@ -681,7 +700,7 @@ function getSortIcon($field, $current_sort, $current_order) {
       });
 
       // Hàm xử lý sửa sách
-      function editSach(sach) {
+      const editSach = sach => {
          document.getElementById('sach_id').value = sach.sach_id;
          document.getElementById('tieu_de').value = sach.tieu_de;
          document.getElementById('gia_tien').value = sach.gia_tien;
@@ -700,10 +719,8 @@ function getSortIcon($field, $current_sort, $current_order) {
       }
 
       // Hàm xử lý xóa sách
-      function deleteSach(sachId) {
-         if (confirm('Bạn có chắc muốn xóa sách này?')) {
-            window.location.href = 'edit_sach.php?delete_id=' + sachId;
-         }
+      const deleteSach = sachId => {
+         if (confirm('Bạn có chắc muốn xóa sách này?')) window.location.href = 'edit_sach.php?delete_id=' + sachId;
       }
    </script>
 </body>

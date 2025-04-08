@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     if (isEditing) {
-      userInfoContainer.style.height = "490px";
+      userInfoContainer.style.height = "520px";
       btnLogOut.style.marginTop = "15px";
 
       originalUserData = {};

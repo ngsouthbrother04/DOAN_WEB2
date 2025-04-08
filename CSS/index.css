@@ -11,7 +11,12 @@ body {
 }
 
 .header {
-    height: 128px;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    background-color: #fff; /* Đảm bảo header không trong suốt */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    top: 0;
 }
 
 
@@ -26,13 +31,13 @@ body {
 }
 
 #topmenu2 {
-    width: 1230px;
+    width: 1500px;
     height: 68px;
     margin: 0 auto;
     padding-top: 13px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    /* align-items: center; */
+    /* justify-content: space-between; */
     padding: 10px 20px;
 }
 
@@ -101,10 +106,12 @@ body {
 .dropdown-menu a:hover {
     background-color: #f0f0f0;
     border-radius: 10px;
+    transition: 0.3s;
 }
 
 .menubutton:hover .dropdown-menu {
     display: block;
+    transition: 0.3s;
 }
 
 .userbutton {
@@ -114,7 +121,8 @@ body {
     cursor: pointer;
     position: relative;
     min-width: 80px;
-    margin-right: 10px;
+    margin-left: 20px;
+    margin-right: -10px;
 }
 
 .userbutton img {
@@ -144,6 +152,7 @@ body {
     white-space: nowrap;
     z-index: 100;
     display: block;
+    transition: 0.3s;
 }
 
 #userbutton {
@@ -157,7 +166,7 @@ body {
     width: 75px;
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
+    /* margin-left: 100px; */
     cursor: pointer;
 }
 
@@ -180,6 +189,7 @@ body {
     display: flex;
     flex-direction: column;
     cursor: pointer;
+    margin-left: 20px;
 }
 
 .bellbutton p {
@@ -220,7 +230,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     background-color: #c22432;
-    border: none;
+    border: 1px solid #c22432;
     border-radius: 10px;
     width: 60px;
     height: 30px;
@@ -231,14 +241,23 @@ body {
 }
 
 .search-button:hover {
-    background-color: #a51e2b;
+    background-color: white;
+    color: #c22432;
+    transition: 0.3s;
 }
 
 .search-button img {
     width: 17px;
     height: 17px;
     filter: brightness(0) invert(1);
+    transition: filter 0.3s ease;
 }
+
+.search-button:hover img {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(100%) saturate(600%) hue-rotate(340deg);
+    transition: 0.3s;
+}
+
 
 .search-container form {
     width: 100%;
@@ -292,6 +311,8 @@ body {
 
 .search-container:hover .advance_search {
     display: block;
+    transition: 0.3s;
+
 }
 
 /* Bỏ banner và quảng cáo khi search sản phẩm */
@@ -303,7 +324,7 @@ body {
 .main {
     width: 100%;
     height: auto;
-    padding: 20px 0;
+    padding: 150px 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -355,15 +376,19 @@ body {
 .filter-section button {
     width: 100%;
     padding: 10px;
-    background-color: #c62828;
+    background-color: #c22432;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold; 
+    font-size: 16px;
 }
 
 .filter-section button:hover {
-    background-color: #a81f1f;
+    background-color: white;
+    color: #c22432;
+    transition: 0.3s;
 }
 
 #product-list {
@@ -632,8 +657,14 @@ body {
 
 .btn-primary {
     background: white;
-    color: #c62828;
-    border: 1px solid #c62828;
+    color: #c22432;
+    border: 1px solid #c22432;
+}
+
+.btn-primary:hover {
+    background-color: #c22432;
+    color: white;
+    transition: 0.3s;
 }
 
 .btn-secondary {
@@ -644,7 +675,8 @@ body {
 }
 
 .btn-secondary:hover {
-    background-color: #c62828;
+    background: #999; /* tối hơn #ccc một chút */
+    color: #fff;
     transition: 0.3s;
 }
 
@@ -730,6 +762,7 @@ body {
 
 .footer-column a:hover {
     color: #c62828;
+    transition: 0.3s;
 }
 
 /* Thông báo đăng nhập */
@@ -822,11 +855,12 @@ body {
     &:hover {
         background-color: rgb(18, 107, 232);
         color: white;
+        transition: 0.3s;
     }
 }
 
 .edit-input {
-    padding: 7px;
+    padding: 10px;
     width: 200px;
     font-size: 14px;
     text-align: end;
@@ -873,6 +907,7 @@ body {
 
 .user-info .btn:hover {
     background-color: #a51e2b;
+    transition: 0.3s;
 }
 
 .input-container {
@@ -975,4 +1010,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+}
+
+.hoan-tat-btn {
+    font-weight: bold; 
+    font-size: 16px;
 }

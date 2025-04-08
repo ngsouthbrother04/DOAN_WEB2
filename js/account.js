@@ -69,7 +69,7 @@ document.querySelector(".userbutton").addEventListener("click", () => {
   }
 });
 
-document.getElementById("modal").addEventListener("click", (event) => {
+document.getElementById("modal").addEventListener("click", function (event) {
   if (event.target === this) {
     document.body.style.overflow = "auto";
     this.classList.remove("active");
@@ -110,9 +110,6 @@ document.getElementById("exit-reg").addEventListener("click", () => {
   document.body.style.overflow = "auto";
   document.getElementById("modal").classList.remove("active");
   document.getElementById("login-container").style.display = "none";
-
-  const messageDiv = document.getElementById("login-message");
-  messageDiv.innerHTML = "";
 
   resetPasswordToggle();
   resetRegisterForm();
@@ -191,7 +188,7 @@ document
     formData.append("password", password);
 
     // Gửi yêu cầu AJAX
-    fetch("login.php", {
+    fetch("login-register/login.php", {
       method: "POST",
       body: formData,
     })
@@ -264,7 +261,7 @@ document
     formData.append("confirm_password", confirm_password);
 
     // Gửi yêu cầu AJAX
-    fetch("register.php", {
+    fetch("login-register/register.php", {
       method: "POST",
       body: formData,
     })
