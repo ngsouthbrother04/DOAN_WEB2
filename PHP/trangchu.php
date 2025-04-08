@@ -234,8 +234,8 @@ $pagination = $filtered_data['pagination'];
       <div id="login-message"></div>
       <form id="login-form-submit" method="post">
          <div class="form-group">
-            <label>Số điện thoại/Email</label>
-            <input type="text" id="login-username" name="username" placeholder="Nhập số điện thoại hoặc email"
+            <label>Số điện thoại</label>
+            <input type="text" id="login-username" name="username" placeholder="Nhập số điện thoại"
                style="border: 1px solid #ccc; outline: none;" required>
          </div>
          <div class="form-group">
@@ -323,32 +323,32 @@ $pagination = $filtered_data['pagination'];
          <hr style="margin: 20px">
 
          <div class="user-info-item user-name">
-            <h3>Họ và tên:</h3>
+            <h3>Họ và tên</h3>
             <span><?php echo $_SESSION['user_name']; ?></span>
          </div>
 
          <div class="user-info-item user-email">
-            <h3>Email:</h3>
+            <h3>Email</h3>
             <span><?php echo $_SESSION['user_email']; ?></span>
          </div>
 
          <div class="user-info-item user-dob">
-            <h3>Ngày sinh:</h3>
+            <h3>Ngày sinh</h3>
             <span><?php echo $_SESSION['user_dob']; ?></span>
          </div>
 
          <div class="user-info-item user-phone">
-            <h3>Số điện thoại:</h3>
+            <h3>Số điện thoại</h3>
             <span><?php echo $_SESSION['user_phone']; ?></span>
          </div>
 
          <div class="user-info-item user-address">
-            <h3>Địa chỉ:</h3>
+            <h3>Địa chỉ</h3>
             <span><?php echo $_SESSION['user_address']; ?></span>
          </div>
 
          <div class="user-info-item user-role">
-            <h3>Quyền:</h3>
+            <h3>Quyền</h3>
             <span>
                <?php
                echo (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'KhachHang') ? 'Khách hàng' : 'Khách hàng';

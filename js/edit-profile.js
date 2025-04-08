@@ -1,5 +1,27 @@
 let originalUserData = {};
 
+const formatDateToDisplay = (dateStr) => {
+  const parts = dateStr.split("-");
+
+  if (parts.length === 3) {
+    const [part1, part2, part3] = parts;
+
+    // Nếu part1 có độ dài 4 => định dạng YYYY-mm-dd => đổi thành dd-mm-YYYY
+    if (part1.length === 4) return `${part3}-${part2}-${part1}`;
+
+    // Nếu đã là dd-mm-YYYY thì giữ nguyên
+    return dateStr;
+  }
+
+  return dateStr;
+};
+
+const formatDateToInput = (dateStr) => {
+  const parts = dateStr.split("-");
+
+  return parts.length === 3 ? `${parts[2]}-${parts[1]}-${parts[0]}` : dateStr;
+};
+
 const saveUserInfo = () => {
   const updatedData = {};
   const fields = [
@@ -18,6 +40,7 @@ const saveUserInfo = () => {
     if (fields[index] === "user-dob") {
       const parts = value.split("-");
       if (parts.length === 3) value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      
       dateInputValue = input.value.trim();
     }
 
@@ -37,6 +60,7 @@ const saveUserInfo = () => {
     .then((response) => {
       if (!response.ok)
         throw new Error("Đã xảy ra lỗi với phản hồi từ server.");
+      
       return response.json();
     })
     .then((data) =>
@@ -77,22 +101,20 @@ document.getElementById("modal").addEventListener("click", function (event) {
 
       if (hasChanges) {
         const confirmExit = confirm("Bạn có muốn thoát mà không lưu thay đổi?");
+
         if (!confirmExit) return;
       }
 
-      // Đặt lại nút và thay input bằng dữ liệu cũ từ originalUserData
+      // Reset lại UI về dữ liệu gốc
       btnEdit.textContent = "Chỉnh sửa";
       inputs.forEach((input, index) => {
         const span = document.createElement("span");
         const field = fields[index];
         let value = originalUserData[field] || "";
 
-        if (field === "user-dob") {
-          span.textContent = value;
-        } else {
-          span.textContent = value;
-        }
+        if (field === "user-dob") value = formatDateToDisplay(value);
 
+        span.textContent = value;
         input.replaceWith(span);
       });
     }
@@ -107,11 +129,20 @@ document.getElementById("modal").addEventListener("click", function (event) {
     }
 
     const btnLogOut = document.querySelector(".btn-log-out");
+
     if (btnLogOut) btnLogOut.style.marginTop = "20px";
   }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Format ngày sinh sau khi trang load xong
+  const dobElement = document.querySelector(".user-dob span");
+  if (dobElement) {
+    const currentVal = dobElement.textContent.trim();
+
+    dobElement.textContent = formatDateToDisplay(currentVal);
+  }
+
   const editButton = document.querySelector(".btn-edit-user-info");
   const userInfoContainer = document.getElementById("user-info-container");
   const btnLogOut = document.querySelector(".btn-log-out");
@@ -139,16 +170,11 @@ document.addEventListener("DOMContentLoaded", () => {
         .forEach((span, index) => {
           const value = span.textContent.trim();
           const input = document.createElement("input");
-
           const field = fieldList[index];
 
           if (span.closest(".user-info-item").classList.contains("user-dob")) {
             input.type = "date";
-            const parts = value.split("-");
-            input.value =
-              parts.length === 3
-                ? `${parts[2]}-${parts[1]}-${parts[0]}`
-                : value;
+            input.value = formatDateToInput(value);
             originalUserData[field] = value;
           } else {
             input.type = "text";

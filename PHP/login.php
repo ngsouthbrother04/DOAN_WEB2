@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                'sdt' => $user['sdt'],
                'quyen' => $user['quyen'],
                'email' => $user['email'],
-               'ngay_sinh' => $user['ngay_sinh'],
+               'ngay_sinh' => date('d-m-Y', strtotime($user['ngay_sinh'])),
                'dia_chi' => $user['dia_chi'],
             ]]);
          } else {

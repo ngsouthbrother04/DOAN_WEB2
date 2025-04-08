@@ -613,6 +613,11 @@ body {
     background-color: #fff;
     font-size: 15px;
     margin: 3px 10px 0 0;
+
+    &:hover {
+        color: #146286;
+        transition: 0.3s;
+    }
 }
 
 .btn {
@@ -825,6 +830,8 @@ body {
     width: 200px;
     font-size: 14px;
     text-align: end;
+    border-radius: 5px;
+    border: 1px solid #5f5f5f;
   }
   
 .user-info .btn {
@@ -855,6 +862,13 @@ body {
     text-align: center;
     width: 100px;
     margin-top: 20px;
+
+    &:hover{
+        background-color: white;
+        color: #c22432;
+        border: 1px solid #c22432
+
+    }
 }
 
 .user-info .btn:hover {
@@ -865,22 +879,6 @@ body {
     display: flex;
     align-items: center;
   }
-  
-  .clear-input {
-    font-size: 16px;
-    color: red;
-    margin-right: 8px; /* Tạo khoảng cách giữa biểu tượng x và input */
-    cursor: pointer;
-  }
-  
-  .clear-input:hover {
-    color: darkred;
-  }
-  
-  .edit-input {
-    padding-left: 8px; /* Thêm khoảng cách bên trái cho input để tránh va chạm với biểu tượng x */
-  }
-  
 
 @media (max-width: 1250px) {
 
