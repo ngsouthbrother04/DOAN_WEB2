@@ -492,8 +492,6 @@ function getSortIcon($field, $current_sort, $current_order)
    </div>
 
    <div class="content">
-      <div class="header">QUẢN LÝ SÁCH</div>
-
       <?php if (!empty($message)): ?>
          <div class="alert" style="padding: 10px; margin-bottom: 15px; background-color: #4CAF50; color: white; border-radius: 4px;">
             <?php echo $message; ?>

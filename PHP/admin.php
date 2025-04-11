@@ -45,8 +45,6 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
    </div>
 
    <div class="content">
-      <div class="header">ZUALAN | ADMIN</div>
-
       <div class="dashboard">
          <div class="dashboard-title">
             <i class="fas fa-chart-line"></i>

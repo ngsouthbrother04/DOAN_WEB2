@@ -359,8 +359,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
     </div>
 
     <div class="content">
-        <div class="header">ZUALAN | QUẢN LÝ THỂ LOẠI</div>
-
         <?php if (!empty($message)): ?>
             <div class="message"><?php echo $message; ?></div>
         <?php endif; ?>

@@ -1,7 +1,7 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = ""; 
+$password = "root"; 
 $dbname = "WEB2_BookStore";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
