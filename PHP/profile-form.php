@@ -14,11 +14,6 @@
                 <span><?php echo $_SESSION['user_name']; ?></span>
             </div>
 
-            <div class="user-info-item user-email">
-                <h3>Email</h3>
-                <span><?php echo $_SESSION['user_email']; ?></span>
-            </div>
-
             <div class="user-info-item user-dob">
                 <h3>Ngày sinh</h3>
                 <span><?php echo $_SESSION['user_dob']; ?></span>
@@ -38,15 +33,18 @@
                 <h3>Quyền</h3>
                 <span>
                     <?php
-                    echo (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'KhachHang') ? 'Khách hàng' : 'Khách hàng';
+                    echo (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'KhachHang') ? 'Khách hàng' : 'Admin';
                     ?>
                 </span>
-                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'Admin'): ?>
-                    <a href="admin.php" class="btn">Quản trị</a>
-                <?php endif; ?>
             </div>
 
-            <a href="login-register/login.php?action=logout" class="btn-log-out">Đăng xuất</a>
+            <div class="user-info-item user-actions">
+                <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Admin'): ?>
+                    <a href="admin.php" class="btn">Quản trị</a>
+                <?php endif; ?>
+
+                <a href="login-register/login.php?action=logout" class="btn-log-out">Đăng xuất</a>
+            </div>
         </div>
     </div>
 <?php endif; ?>

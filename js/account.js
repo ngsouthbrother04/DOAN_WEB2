@@ -132,7 +132,6 @@ const resetLoginForm = () => {
 
 const resetRegisterForm = () => {
   document.getElementById("full-name").value = "";
-  document.getElementById("email").value = "";
   document.getElementById("address").value = "";
   document.getElementById("dob").value = "";
   document.getElementById("username").value = "";
@@ -140,8 +139,13 @@ const resetRegisterForm = () => {
   document.getElementById("confirm-password").value = "";
 };
 
+const loginContainer = document.querySelector(".login-container");
+
 loginTab.addEventListener("click", (e) => {
   e.preventDefault();
+  loginContainer.style.width = "400px";
+  loginContainer.style.height = "auto";
+
   loginTab.classList.add("active");
   registerTab.classList.remove("active");
   loginForm.style.display = "block";
@@ -149,11 +153,6 @@ loginTab.addEventListener("click", (e) => {
 
   resetPasswordToggle();
   resetRegisterForm();
-
-  Object.assign(document.querySelector(".login-container").style, {
-    width: "400px",
-    height: "auto",
-  });
 });
 
 registerTab.addEventListener("click", (e) => {
@@ -166,10 +165,8 @@ registerTab.addEventListener("click", (e) => {
   resetPasswordToggle();
   resetLoginForm();
 
-  Object.assign(document.querySelector(".login-container").style, {
-    width: "460px",
-    height: "650px",
-  });
+  loginContainer.style.width = "600px";
+  loginContainer.style.height = "470px";
 });
 
 // Xử lý đăng nhập bằng AJAX
@@ -224,7 +221,6 @@ document
     event.preventDefault(); // Ngừng gửi form theo cách thông thường
 
     const full_name = document.getElementById("full-name").value.trim();
-    const email = document.getElementById("email").value.trim();
     const address = document.getElementById("address").value.trim();
     const dob = document.getElementById("dob").value;
     const username = document.getElementById("username").value.trim();
@@ -234,7 +230,6 @@ document
     // Kiểm tra các trường hợp nhập liệu cần thiết
     if (
       !full_name ||
-      !email ||
       !address ||
       !dob ||
       !username ||
@@ -253,7 +248,6 @@ document
 
     const formData = new FormData();
     formData.append("full_name", full_name);
-    formData.append("email", email);
     formData.append("address", address);
     formData.append("dob", dob);
     formData.append("username", username);
@@ -266,32 +260,27 @@ document
       body: formData,
     })
       .then((response) => {
-        // Kiểm tra xem phản hồi có thành công và trả về JSON không
         if (!response.ok)
           throw new Error("Đã xảy ra lỗi với phản hồi từ server.");
 
-        return response.json(); // Chuyển đổi phản hồi thành JSON
+        return response.json();
       })
       .then((data) => {
-        // Kiểm tra nếu server trả về kết quả thành công
         if (data.success) {
-          alert(data.message); // Thông báo thành công
+          alert(data.message);
 
           resetRegisterForm();
 
           setTimeout(() => {
             document.getElementById("modal").classList.remove("active");
             document.getElementById("login-container").style.display = "none";
-
-            // Tải lại trang để cập nhật trạng thái đăng nhập
             window.location.reload();
           }, 1000);
         } else {
-          alert(data.message); // Thông báo lỗi từ server
+          alert(data.message);
         }
       })
       .catch((error) => {
-        // Catch tất cả lỗi phát sinh trong quá trình fetch hoặc xử lý dữ liệu
         console.error("Lỗi:", error);
         alert("Đã xảy ra lỗi khi đăng ký!");
       });

@@ -583,15 +583,9 @@ body {
     border-bottom: 2px solid #c62828;
 }
 
-.register-info{
-    padding: 20px;
-    margin-top: -15px;
-}
-
 .form-line {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
 }
 
 .form-group {
@@ -798,7 +792,7 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     width: 650px;
-    height: 410px;
+    height: 370px;
 }
 
 .user-info {
@@ -871,9 +865,9 @@ body {
 .user-info .btn {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #c22432;
-    color: white;
-    border: none;
+    background-color: white;
+    color: rgb(18, 107, 232);;
+    border: 1px solid rgb(18, 107, 232); 
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
@@ -881,6 +875,18 @@ body {
     text-align: center;
     width: 100px;
     margin-top: 20px;
+
+    &:hover {
+        background-color: rgb(18, 107, 232);
+        color: white;
+        transition: 0.3s;
+    }
+}
+
+.user-actions {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse;
 }
 
  .btn-log-out {
@@ -888,7 +894,7 @@ body {
     padding: 8px 15px;
     background-color: #c22432;
     color: white;
-    border: none;
+    border: 1px solid #c22432;
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
@@ -896,17 +902,11 @@ body {
     text-align: center;
     width: 100px;
     margin-top: 20px;
-
-    &:hover{
-        background-color: white;
-        color: #c22432;
-        border: 1px solid #c22432
-
-    }
 }
 
-.user-info .btn:hover {
-    background-color: #a51e2b;
+.btn-log-out:hover {
+    background-color: white;
+    color: #c22432;
     transition: 0.3s;
 }
 
@@ -1016,3 +1016,35 @@ body {
     font-weight: bold; 
     font-size: 16px;
 }
+
+.register-form-submit {
+    display: flex;
+    flex-direction: column;
+    /* gap: 20px; */
+  }
+
+    .register-form-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  
+  .form-left{
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+  }
+
+  .form-right {
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
+  }
+  
+  .vertical-line {
+    width: 1px;
+    background-color: #d4cfcf;
+    height: 250px;
+    margin-top: 20px;
+  }
