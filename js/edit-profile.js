@@ -99,7 +99,7 @@ document.getElementById("modal").addEventListener("click", function (event) {
   const userInfoContainer = document.getElementById("user-info-container");
   if (userInfoContainer) {
     userInfoContainer.style.display = "none";
-    userInfoContainer.style.height = "370px";
+    userInfoContainer.style.height = "330px";
   }
 
   const btnLogOut = document.querySelector(".btn-log-out");
@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const fields = ["user-name", "user-dob", "user-phone", "user-address"];
 
     if (isEditing) {
-      userInfoContainer.style.height = "460px";
+      userInfoContainer.style.height = "410px";
       btnLogOut.style.marginTop = "15px";
 
       originalUserData = {};
@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
         span.replaceWith(input);
       });
     } else {
-      userInfoContainer.style.height = "370px";
+      userInfoContainer.style.height = "330px";
       btnLogOut.style.marginTop = "20px";
       saveUserInfo();
     }

@@ -29,15 +29,6 @@
                 <span><?php echo $_SESSION['user_address']; ?></span>
             </div>
 
-            <div class="user-info-item user-role">
-                <h3>Quyền</h3>
-                <span>
-                    <?php
-                    echo (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'KhachHang') ? 'Khách hàng' : 'Admin';
-                    ?>
-                </span>
-            </div>
-
             <div class="user-info-item user-actions">
                 <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'Admin'): ?>
                     <a href="admin.php" class="btn">Quản trị</a>
