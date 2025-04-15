@@ -5,20 +5,54 @@ if (session_status() === PHP_SESSION_NONE) {
    session_start();
 }
 
+// Hàm kiểm tra số điện thoại hợp lệ
+function isValidPhoneNumber($sdt)
+{
+   return preg_match('/^0[0-9]{9}$/', $sdt);
+}
+
 // Xử lý thêm tài khoản mới
 if (isset($_POST['them_taikhoan'])) {
-   $ho_ten = mysqli_real_escape_string($conn, $_POST['ho_ten']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $sdt = mysqli_real_escape_string($conn, $_POST['sdt']);
-   $dia_chi = mysqli_real_escape_string($conn, $_POST['dia_chi']);
+   // Kiểm tra tất cả các trường bắt buộc
+   if (!isset($_POST['ho_ten'], $_POST['email'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'], $_POST['mat_khau'])) {
+      $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+      header("Location: edit_taikhoan.php?error=add");
+      exit();
+   }
+
+   $ho_ten = mysqli_real_escape_string($conn, trim($_POST['ho_ten']));
+   $email = mysqli_real_escape_string($conn, trim($_POST['email']));
+   $sdt = mysqli_real_escape_string($conn, trim($_POST['sdt']));
+   $dia_chi = mysqli_real_escape_string($conn, trim($_POST['dia_chi']));
    $ngay_sinh = $_POST['ngay_sinh'];
    $quyen = $_POST['quyen'];
    $mat_khau = password_hash($_POST['mat_khau'], PASSWORD_DEFAULT);
 
+   // Kiểm tra các trường không được để trống
+   if (empty($ho_ten) || empty($email) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen) || empty($_POST['mat_khau'])) {
+      $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+      header("Location: edit_taikhoan.php?error=add");
+      exit();
+   }
+
+   // Kiểm tra định dạng email
+   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $_SESSION['error'] = "Email không hợp lệ!";
+      header("Location: edit_taikhoan.php?error=add");
+      exit();
+   }
+
+   // Kiểm tra số điện thoại hợp lệ
+   if (!isValidPhoneNumber($sdt)) {
+      $_SESSION['error'] = "Số điện thoại phải bắt đầu bằng 0 và có đúng 10 số!";
+      header("Location: edit_taikhoan.php?error=add");
+      exit();
+   }
+
    // Kiểm tra trùng email
    $check_email_sql = "SELECT user_id FROM `USER` WHERE email = '$email'";
    $email_result = mysqli_query($conn, $check_email_sql);
-   
+
    // Kiểm tra trùng số điện thoại
    $check_sdt_sql = "SELECT user_id FROM `USER` WHERE sdt = '$sdt'";
    $sdt_result = mysqli_query($conn, $check_sdt_sql);
@@ -50,31 +84,31 @@ if (isset($_POST['them_taikhoan'])) {
 // Xử lý xóa tài khoản
 if (isset($_GET['delete_id'])) {
    $delete_id = intval($_GET['delete_id']);
-   
+
    // Bắt đầu giao dịch
    mysqli_begin_transaction($conn);
-   
+
    try {
       // Xóa các bản ghi trong CHITIETDONHANG liên quan đến DONHANG của user
       $sql_delete_chitiet = "DELETE c FROM CHITIETDONHANG c 
                            INNER JOIN DONHANG d ON c.donhang_id = d.donhang_id 
                            WHERE d.user_id = $delete_id";
       mysqli_query($conn, $sql_delete_chitiet);
-      
+
       // Xóa các bản ghi trong GIOHANG liên quan đến DONHANG của user
       $sql_delete_giohang = "DELETE g FROM GIOHANG g 
                            INNER JOIN DONHANG d ON g.donhang_id = d.donhang_id 
                            WHERE d.user_id = $delete_id";
       mysqli_query($conn, $sql_delete_giohang);
-      
+
       // Xóa các bản ghi trong DONHANG
       $sql_delete_donhang = "DELETE FROM DONHANG WHERE user_id = $delete_id";
       mysqli_query($conn, $sql_delete_donhang);
-      
+
       // Xóa các bản ghi trong FEEDBACK
       $sql_delete_feedback = "DELETE FROM FEEDBACK WHERE user_id = $delete_id";
       mysqli_query($conn, $sql_delete_feedback);
-      
+
       // Xóa tài khoản trong USER
       $sql_delete_user = "DELETE FROM `USER` WHERE user_id = $delete_id";
       if (mysqli_query($conn, $sql_delete_user)) {
@@ -94,18 +128,46 @@ if (isset($_GET['delete_id'])) {
 
 // Xử lý sửa tài khoản
 if (isset($_POST['sua_taikhoan'])) {
+   // Kiểm tra các trường bắt buộc
+   if (!isset($_POST['user_id'], $_POST['ho_ten'], $_POST['email'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'])) {
+      $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+      header("Location: edit_taikhoan.php?error=update");
+      exit();
+   }
+
    $user_id = intval($_POST['user_id']);
-   $ho_ten = mysqli_real_escape_string($conn, $_POST['ho_ten']);
-   $email = mysqli_real_escape_string($conn, $_POST['email']);
-   $sdt = mysqli_real_escape_string($conn, $_POST['sdt']);
-   $dia_chi = mysqli_real_escape_string($conn, $_POST['dia_chi']);
+   $ho_ten = mysqli_real_escape_string($conn, trim($_POST['ho_ten']));
+   $email = mysqli_real_escape_string($conn, trim($_POST['email']));
+   $sdt = mysqli_real_escape_string($conn, trim($_POST['sdt']));
+   $dia_chi = mysqli_real_escape_string($conn, trim($_POST['dia_chi']));
    $ngay_sinh = $_POST['ngay_sinh'];
    $quyen = $_POST['quyen'];
+
+   // Kiểm tra các trường không được để trống
+   if (empty($ho_ten) || empty($email) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen)) {
+      $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
+      header("Location: edit_taikhoan.php?error=update");
+      exit();
+   }
+
+   // Kiểm tra định dạng email
+   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $_SESSION['error'] = "Email không hợp lệ!";
+      header("Location: edit_taikhoan.php?error=update");
+      exit();
+   }
+
+   // Kiểm tra số điện thoại hợp lệ
+   if (!isValidPhoneNumber($sdt)) {
+      $_SESSION['error'] = "Số điện thoại phải bắt đầu bằng 0 và có đúng 10 số!";
+      header("Location: edit_taikhoan.php?error=update");
+      exit();
+   }
 
    // Kiểm tra trùng email (ngoại trừ chính tài khoản đang sửa)
    $check_email_sql = "SELECT user_id FROM `USER` WHERE email = '$email' AND user_id != $user_id";
    $email_result = mysqli_query($conn, $check_email_sql);
-   
+
    // Kiểm tra trùng số điện thoại (ngoại trừ chính tài khoản đang sửa)
    $check_sdt_sql = "SELECT user_id FROM `USER` WHERE sdt = '$sdt' AND user_id != $user_id";
    $sdt_result = mysqli_query($conn, $check_sdt_sql);
@@ -188,7 +250,8 @@ $query .= " ORDER BY $sort_by $sort_order";
 
 $user_result = mysqli_query($conn, $query);
 
-function getSortUrl($field, $current_sort, $current_order, $filter_quyen, $search_keyword) {
+function getSortUrl($field, $current_sort, $current_order, $filter_quyen, $search_keyword)
+{
    $new_order = ($field == $current_sort && $current_order == 'ASC') ? 'DESC' : 'ASC';
    $url = "edit_taikhoan.php?sort=$field&order=$new_order";
    if (!empty($filter_quyen)) {
@@ -200,7 +263,8 @@ function getSortUrl($field, $current_sort, $current_order, $filter_quyen, $searc
    return $url;
 }
 
-function getSortIcon($field, $current_sort, $current_order) {
+function getSortIcon($field, $current_sort, $current_order)
+{
    if ($field == $current_sort) {
       return ($current_order == 'ASC') ? '<i class="fas fa-sort-up"></i>' : '<i class="fas fa-sort-down"></i>';
    }
@@ -210,6 +274,7 @@ function getSortIcon($field, $current_sort, $current_order) {
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -265,21 +330,44 @@ function getSortIcon($field, $current_sort, $current_order) {
       }
 
       .account-table th:nth-child(1),
-      .account-table td:nth-child(1) { width: 50px; }
+      .account-table td:nth-child(1) {
+         width: 50px;
+      }
+
       .account-table th:nth-child(2),
-      .account-table td:nth-child(2) { width: 150px; }
+      .account-table td:nth-child(2) {
+         width: 150px;
+      }
+
       .account-table th:nth-child(3),
-      .account-table td:nth-child(3) { width: 150px; }
+      .account-table td:nth-child(3) {
+         width: 150px;
+      }
+
       .account-table th:nth-child(4),
-      .account-table td:nth-child(4) { width: 100px; }
+      .account-table td:nth-child(4) {
+         width: 100px;
+      }
+
       .account-table th:nth-child(5),
-      .account-table td:nth-child(5) { width: 150px; }
+      .account-table td:nth-child(5) {
+         width: 150px;
+      }
+
       .account-table th:nth-child(6),
-      .account-table td:nth-child(6) { width: 100px; }
+      .account-table td:nth-child(6) {
+         width: 100px;
+      }
+
       .account-table th:nth-child(7),
-      .account-table td:nth-child(7) { width: 80px; }
+      .account-table td:nth-child(7) {
+         width: 80px;
+      }
+
       .account-table th:nth-child(8),
-      .account-table td:nth-child(8) { width: 120px; }
+      .account-table td:nth-child(8) {
+         width: 120px;
+      }
 
       .account-table td {
          position: relative;
@@ -412,6 +500,11 @@ function getSortIcon($field, $current_sort, $current_order) {
       .alert.error {
          background-color: #f44336;
       }
+
+      .alert.success {
+         background-color: #4CAF50;
+         color: #ffffff;
+      }
    </style>
 </head>
 
@@ -434,7 +527,7 @@ function getSortIcon($field, $current_sort, $current_order) {
 
    <div class="content">
       <?php if (!empty($message)): ?>
-         <div class="alert <?php echo (isset($_GET['error']) ? 'error' : ''); ?>" style="padding: 10px; margin-bottom: 15px; color: white; border-radius: 4px;">
+         <div class="alert <?php echo (isset($_GET['error']) ? 'error' : 'success'); ?>" style="padding: 10px; margin-bottom: 15px; border-radius: 4px;">
             <?php echo htmlspecialchars($message); ?>
          </div>
       <?php endif; ?>
@@ -444,7 +537,7 @@ function getSortIcon($field, $current_sort, $current_order) {
             <input type="hidden" name="user_id" id="user_id">
             <input type="text" name="ho_ten" id="ho_ten" placeholder="Họ tên" required>
             <input type="email" name="email" id="email" placeholder="Email" required>
-            <input type="text" name="sdt" id="sdt" placeholder="Số điện thoại" required>
+            <input type="text" name="sdt" id="sdt" placeholder="Số điện thoại" pattern="0[0-9]{9}" title="Số điện thoại phải bắt đầu bằng 0 và có đúng 10 số" required>
             <input type="text" name="dia_chi" id="dia_chi" placeholder="Địa chỉ" required>
             <input type="date" name="ngay_sinh" id="ngay_sinh" required>
             <input type="password" name="mat_khau" id="mat_khau" placeholder="Mật khẩu">
@@ -524,9 +617,9 @@ function getSortIcon($field, $current_sort, $current_order) {
                         </td>
                         <td class="action-buttons">
                            <button class="edit-btn" onclick="editTaiKhoan(<?php echo htmlspecialchars(json_encode($user)); ?>)">Sửa</button>
-                           <button class="delete-btn <?php echo ($user['quyen'] === 'Admin') ? 'disabled' : ''; ?>" 
-                                   onclick="deleteTaiKhoan(<?php echo $user['user_id']; ?>)"
-                                   title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể xóa tài khoản Admin' : 'Xóa tài khoản'; ?>">
+                           <button class="delete-btn <?php echo ($user['quyen'] === 'Admin') ? 'disabled' : ''; ?>"
+                              onclick="deleteTaiKhoan(<?php echo $user['user_id']; ?>)"
+                              title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể xóa tài khoản Admin' : 'Xóa tài khoản'; ?>">
                               Xóa
                            </button>
                         </td>
@@ -551,12 +644,24 @@ function getSortIcon($field, $current_sort, $current_order) {
             const menuText = this.textContent.trim();
             let page = '';
             switch (menuText) {
-               case 'Thể loại': page = 'edit_loaisach.php'; break;
-               case 'Sách': page = 'edit_sach.php'; break;
-               case 'Tài khoản': page = 'edit_taikhoan.php'; break;
-               case 'Hóa đơn': page = 'hoa_don.php'; break;
-               case 'Bảo hành': page = 'bao_hanh.php'; break;
-               case 'Trang chủ': page = 'trangchu.php'; break;
+               case 'Thể loại':
+                  page = 'edit_loaisach.php';
+                  break;
+               case 'Sách':
+                  page = 'edit_sach.php';
+                  break;
+               case 'Tài khoản':
+                  page = 'edit_taikhoan.php';
+                  break;
+               case 'Hóa đơn':
+                  page = 'hoa_don.php';
+                  break;
+               case 'Bảo hành':
+                  page = 'bao_hanh.php';
+                  break;
+               case 'Trang chủ':
+                  page = 'trangchu.php';
+                  break;
                case 'Đăng xuất':
                   if (confirm('Bạn có chắc muốn đăng xuất?')) {
                      page = 'logout.php';
@@ -564,7 +669,8 @@ function getSortIcon($field, $current_sort, $current_order) {
                      return;
                   }
                   break;
-               default: page = 'edit_taikhoan.php';
+               default:
+                  page = 'edit_taikhoan.php';
             }
             window.location.href = window.location.origin + '/DOAN_WEB2/PHP/' + page;
          });
@@ -584,7 +690,7 @@ function getSortIcon($field, $current_sort, $current_order) {
          document.getElementById('submit_btn').name = 'sua_taikhoan';
          window.scrollTo(0, 0);
       }
-
+      
       const deleteTaiKhoan = userId => {
          if (confirm('Bạn có chắc muốn xóa tài khoản này?')) {
             window.location.href = 'edit_taikhoan.php?delete_id=' + userId;
@@ -592,4 +698,5 @@ function getSortIcon($field, $current_sort, $current_order) {
       }
    </script>
 </body>
+
 </html>
