@@ -36,9 +36,10 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
          <div>Admin</div>
       </div>
 
+      <div class="menu-item" data-target="edit_taikhoan.php">Trang chủ</div>
       <div class="menu-item" data-target="edit_theLoai.php">Thể loại</div>
       <div class="menu-item" data-target="edit_sach.php">Sách</div>
-      <div class="menu-item" data-target="tai_khoan.php">Tài khoản</div>
+      <div class="menu-item" data-target="edit_taikhoan.php">Tài khoản</div>
       <div class="menu-item" data-target="hoa_don.php">Hóa đơn</div>
       <div class="menu-item" data-target="bao_hanh.php">Bảo hành</div>
       <div class="menu-item" data-target="logout.php">Đăng xuất</div>
@@ -114,6 +115,8 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
                window.location.href = 'edit_hoadon.php';
             } else if (menuText === 'Bảo hành') {
                window.location.href = 'edit_baohanh.php';
+            } else if (menuText === 'Trang chủ') {
+               window.location.href = 'trangchu.php';
             }
          });
       });

@@ -349,13 +349,14 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
             </div>
             <div>Admin</div>
         </div>
-
+        <div class="menu-item" data-target="trangchu.php">Trang chủ</div>
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="tai_khoan.php">Tài khoản</div>
         <div class="menu-item" data-target="hoa_don.php">Hóa đơn</div>
         <div class="menu-item" data-target="bao_hanh.php">Bảo hành</div>
         <div class="menu-item" data-target="logout.php">Đăng xuất</div>
+
     </div>
 
     <div class="content">
@@ -477,6 +478,8 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
                     window.location.href = 'edit_hoadon.php';
                 } else if (menuText === 'Bảo hành') {
                     window.location.href = 'edit_baohanh.php';
+                } else if (menuText === 'Trang chủ') {
+                    window.location.href = 'trangchu.php';
                 }
             });
         });

@@ -483,6 +483,7 @@ function getSortIcon($field, $current_sort, $current_order)
          <div>Admin</div>
       </div>
 
+      <div class="menu-item">Trang chủ</div>
       <div class="menu-item">Thể loại</div>
       <div class="menu-item active">Sách</div>
       <div class="menu-item">Tài khoản</div>
@@ -673,13 +674,16 @@ function getSortIcon($field, $current_sort, $current_order)
                   page = 'edit_sach.php';
                   break;
                case 'Tài khoản':
-                  page = 'tai_khoan.php';
+                  page = 'edit_taikhoan.php';
                   break;
                case 'Hóa đơn':
                   page = 'hoa_don.php';
                   break;
                case 'Bảo hành':
                   page = 'bao_hanh.php';
+                  break;
+               case 'Trang chủ':
+                  page = 'trangchu.php';
                   break;
                case 'Đăng xuất':
                   if (confirm('Bạn có chắc muốn đăng xuất?')) {
