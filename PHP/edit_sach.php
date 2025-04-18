@@ -500,7 +500,6 @@ function getSortIcon($field, $current_sort, $current_order)
       <?php endif; ?>
 
       <div class="product-form">
-         <h2>Sản Phẩm</h2>
          <form action="" method="post" enctype="multipart/form-data">
             <input type="hidden" name="sach_id" id="sach_id">
             <input type="text" name="tieu_de" id="tieu_de" placeholder="Nhập tên sản phẩm" required>
