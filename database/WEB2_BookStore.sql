@@ -26,7 +26,6 @@ CREATE TABLE `USER` (
     ho_ten VARCHAR(255),
     sdt VARCHAR(20),
     dia_chi VARCHAR(255),
-    email VARCHAR(255),
     ngay_sinh DATETIME,
     quyen VARCHAR(20) CHECK (quyen IN ('Admin', 'KhachHang')),
     giohang_id INT
@@ -74,7 +73,6 @@ CREATE TABLE FEEDBACK (
 CREATE TABLE CHITIETSACH (
     chitietsach_id VARCHAR(255) PRIMARY KEY,
     sach_id INT,
-    so_luong INT,
     FOREIGN KEY (sach_id) REFERENCES SACH(sach_id)
 );
 
@@ -129,16 +127,16 @@ BẮT ĐẦU TRẬN ĐẤU THỨ 5 VỚI UBERS! MỌI THỨ SẼ ĐƯỢC CHỨN
 ('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', '../Picture/Products/tien.webp', 'NXB Giáo dục');
 
 -- Chèn dữ liệu vào bảng USER
-INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, email, ngay_sinh, quyen, giohang_id) VALUES
-('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', 'a.nguyen@gmail.com', '1990-05-15', 'KhachHang', 1),
-('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', 'b.tran@gmail.com', '1992-07-20', 'KhachHang', 2),
-('admin', 'Le Van C', '0923456789', 'Ho Chi Minh', 'c.le@gmail.com', '1988-03-10', 'Admin', null),
-('pass101', 'Pham Thi D', '0934567890', 'Can Tho', 'd.pham@gmail.com', '1995-09-25', 'KhachHang', 4),
-('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', 'e.hoang@gmail.com', '1991-11-30', 'KhachHang', 5),
-('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', 'f.do@outlook.com', '1987-04-05', 'KhachHang', 6),
-('pass505', 'N Thi H', '0978901234', 'Nha Trang', 'h.n@outlook.com', '1994-08-20', 'KhachHang', 7),
-('pass606', 'Dang Van I', '0989012345', 'Vung Tau', 'i.dang@outlook.com', '1989-12-10', 'KhachHang', 8),
-('pass707', 'Bui Thi K', '0990123456', 'Da Lat', 'k.bui@outlook.com', '1996-02-25', 'KhachHang', 9);
+INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id) VALUES
+('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', null),
+('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1),
+('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2),
+('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 4),
+('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 5),
+('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 6),
+('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 7),
+('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 8),
+('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 9);
 
 -- Chèn dữ liệu vào bảng DONHANG
 INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
@@ -190,17 +188,17 @@ INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES
 (2, 10, 4, 'Đáng đọc', '2025-03-10 19:00:00');
 
 -- Chèn dữ liệu vào bảng CHITIETSACH
-INSERT INTO CHITIETSACH (chitietsach_id, sach_id, so_luong) VALUES
-('CT001', 1, 50),
-('CT002', 2, 30),
-('CT003', 3, 40),
-('CT004', 4, 60),
-('CT005', 5, 25),
-('CT006', 6, 35),
-('CT007', 7, 20),
-('CT008', 8, 80),
-('CT009', 9, 45),
-('CT010', 10, 30);
+INSERT INTO CHITIETSACH (chitietsach_id, sach_id) VALUES
+('CT001', 1),
+('CT002', 2),
+('CT003', 3),
+('CT004', 4),
+('CT005', 5),
+('CT006', 6),
+('CT007', 7),
+('CT008', 8),
+('CT009', 9),
+('CT010', 10);
 
 -- Chèn dữ liệu vào bảng DONBAOHANH
 INSERT INTO DONBAOHANH (ly_do, ngay, trang_thai) VALUES
