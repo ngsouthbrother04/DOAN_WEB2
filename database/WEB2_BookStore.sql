@@ -38,6 +38,7 @@ CREATE TABLE DONHANG (
     ngay_dat DATETIME,
     tong_tien DECIMAL(10,2),
     trang_thai VARCHAR(20) CHECK (trang_thai IN ('cho_xac_nhan', 'da_xac_nhan', 'da_duoc_giao', 'da_bi_huy')),
+    hinh_thuc_thanh_toan VARCHAR(8) CHECK (hinh_thuc_thanh_toan IN ('COD', 'Banking')),
     FOREIGN KEY (user_id) REFERENCES `USER`(user_id)
 );
 
@@ -52,12 +53,11 @@ CREATE TABLE CHITIETDONHANG (
 );
 
 CREATE TABLE GIOHANG (
-    giohang_id INT PRIMARY KEY AUTO_INCREMENT,
+    giohang_id INT,
     sach_id INT,
-    donhang_id INT,
     so_luong INT,
     FOREIGN KEY (sach_id) REFERENCES SACH(sach_id),
-    FOREIGN KEY (donhang_id) REFERENCES DONHANG(donhang_id)
+    PRIMARY KEY (giohang_id, sach_id)
 );
 
 CREATE TABLE FEEDBACK (
@@ -141,16 +141,16 @@ INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, email, ngay_sinh, quyen, gio
 ('pass707', 'Bui Thi K', '0990123456', 'Da Lat', 'k.bui@outlook.com', '1996-02-25', 'KhachHang', 9);
 
 -- Chèn dữ liệu vào bảng DONHANG
-INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
-(1, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan'),
-(2, '2025-03-02 11:00:00', 450000, 'da_xac_nhan'),
-(4, '2025-03-03 12:00:00', 180000, 'da_duoc_giao'),
-(5, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan'),
-(6, '2025-03-05 14:00:00', 350000, 'da_xac_nhan'),
-(7, '2025-03-06 15:00:00', 150000, 'da_bi_huy'),
-(8, '2025-03-08 17:00:00', 390000, 'da_duoc_giao'),
-(9, '2025-03-09 18:00:00', 200000, 'da_xac_nhan'),
-(1, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan');
+INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai, hinh_thuc_thanh_toan) VALUES
+(1, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan', 'COD'),
+(2, '2025-03-02 11:00:00', 450000, 'da_xac_nhan', 'COD'),
+(4, '2025-03-03 12:00:00', 180000, 'da_duoc_giao', 'COD'),
+(5, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan', 'Banking'),
+(6, '2025-03-05 14:00:00', 350000, 'da_xac_nhan', 'COD'),
+(7, '2025-03-06 15:00:00', 150000, 'da_bi_huy', 'Banking'),
+(8, '2025-03-08 17:00:00', 390000, 'da_duoc_giao', 'COD'),
+(9, '2025-03-09 18:00:00', 200000, 'da_xac_nhan', 'COD'),
+(1, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan', 'Banking');
 
 -- Chèn dữ liệu vào bảng CHITIETDONHANG
 INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
@@ -165,16 +165,16 @@ INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
 (9, 9, 170000, 1);
 
 -- Chèn dữ liệu vào bảng GIOHANG
-INSERT INTO GIOHANG (sach_id, donhang_id, so_luong) VALUES
+INSERT INTO GIOHANG (giohang_id, sach_id, so_luong) VALUES
 (1, 1, 2),
 (2, 2, 1),
-(3, 3, 1),
-(4, 4, 2),
-(5, 5, 1),
+(1, 5, 1),
+(4, 2, 2),
+(5, 9, 1),
 (6, 6, 1),
 (7, 7, 1),
-(8, 8, 3),
-(9, 9, 1);
+(8, 3, 3),
+(9, 2, 1);
 
 -- Chèn dữ liệu vào bảng FEEDBACK
 INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES

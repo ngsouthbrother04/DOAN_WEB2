@@ -221,6 +221,15 @@ $pagination = $filtered_data['pagination'];
 
    <!-- Phần còn lại của trang (login, footer, v.v.) giữ nguyên -->
 </body>
+<script>
+   document.querySelector(".cartbutton").addEventListener("click", () => {
+      <?php if (isset($_SESSION['user_id'])): ?>
+         window.location.href = "giohang.php";
+      <?php else: ?>
+         alert("Bạn cần đăng nhập để xem giỏ hàng!");
+      <?php endif; ?>
+   });
+</script>
 
 </html>
 

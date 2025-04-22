@@ -1,0 +1,149 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+}
+
+td {
+    background-color: #f9f9f9;
+    border: 1px solid black;
+    text-align: center;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.table-scroll {
+    height: 550px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+.cart-table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.cart-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #4CAF50;
+    color: white;
+    z-index: 10;
+}
+
+.table-scroll tbody input {
+    width: 40px;
+    padding: 5px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.message {
+    text-align: center;
+    font-size: 18px;
+    color: #555;
+    margin-top: 20px;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.empty-cart-message {
+    font-size: 18px;
+    color: #d9534f;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#book_img{
+    width: 100px;
+    height: 150px;
+}
+
+.cart_summary{
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    background-color: rgb(239, 215, 0);
+    border-radius: 5px;
+}
+
+.cart-buttons {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    column-gap: 180px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.update-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.checkout-btn {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.continue-btn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.container .table-scroll .so_luong button{
+    width: 25px;
+    height: 25px;
+}
+
+.container .table-scroll #trash_btn:hover{
+    cursor: pointer;
+}
