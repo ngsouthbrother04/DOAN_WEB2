@@ -1,12 +1,14 @@
+-- Tạo cơ sở dữ liệu
 CREATE DATABASE IF NOT EXISTS WEB2_BookStore;
 USE WEB2_BookStore;
 
--- Tạo cấu trúc cơ sở dữ liệu
+-- Tạo bảng LOAISACH
 CREATE TABLE LOAISACH (
     loaisach_id INT PRIMARY KEY AUTO_INCREMENT,
     ten_loai VARCHAR(255)
 );
 
+-- Tạo bảng SACH
 CREATE TABLE SACH (
     sach_id INT PRIMARY KEY AUTO_INCREMENT,
     tieu_de VARCHAR(255),
@@ -20,6 +22,7 @@ CREATE TABLE SACH (
     FOREIGN KEY (loaisach_id) REFERENCES LOAISACH(loaisach_id)
 );
 
+-- Tạo bảng USER
 CREATE TABLE `USER` (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     mat_khau VARCHAR(255),
@@ -31,6 +34,7 @@ CREATE TABLE `USER` (
     giohang_id INT
 );
 
+-- Tạo bảng DONHANG
 CREATE TABLE DONHANG (
     donhang_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -40,6 +44,7 @@ CREATE TABLE DONHANG (
     FOREIGN KEY (user_id) REFERENCES `USER`(user_id)
 );
 
+-- Tạo bảng CHITIETDONHANG
 CREATE TABLE CHITIETDONHANG (
     chitiet_id INT PRIMARY KEY AUTO_INCREMENT,
     donhang_id INT,
@@ -50,15 +55,17 @@ CREATE TABLE CHITIETDONHANG (
     FOREIGN KEY (sach_id) REFERENCES SACH(sach_id)
 );
 
+-- Tạo bảng GIOHANG (sửa đổi để loại bỏ tham chiếu DONHANG)
 CREATE TABLE GIOHANG (
     giohang_id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT,
     sach_id INT,
-    donhang_id INT,
     so_luong INT,
-    FOREIGN KEY (sach_id) REFERENCES SACH(sach_id),
-    FOREIGN KEY (donhang_id) REFERENCES DONHANG(donhang_id)
+    FOREIGN KEY (user_id) REFERENCES `USER`(user_id),
+    FOREIGN KEY (sach_id) REFERENCES SACH(sach_id)
 );
 
+-- Tạo bảng FEEDBACK
 CREATE TABLE FEEDBACK (
     feedback_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT,
@@ -70,48 +77,64 @@ CREATE TABLE FEEDBACK (
     FOREIGN KEY (sach_id) REFERENCES SACH(sach_id)
 );
 
+-- Tạo bảng CHITIETSACH (chỉ lưu bản sao đã bán)
 CREATE TABLE CHITIETSACH (
     chitietsach_id VARCHAR(255) PRIMARY KEY,
     sach_id INT,
-    FOREIGN KEY (sach_id) REFERENCES SACH(sach_id)
+    chitietdonhang_id INT,
+    FOREIGN KEY (sach_id) REFERENCES SACH(sach_id),
+    FOREIGN KEY (chitietdonhang_id) REFERENCES CHITIETDONHANG(chitiet_id)
 );
 
+-- Tạo bảng DONBAOHANH (liên kết với đơn hàng và bản sao)
 CREATE TABLE DONBAOHANH (
     donbaohanh_id INT PRIMARY KEY AUTO_INCREMENT,
+    donhang_id INT,
+    chitietsach_id VARCHAR(255),
     ly_do VARCHAR(255),
     ngay DATE,
-    trang_thai VARCHAR(20) CHECK (trang_thai IN ('Hoan thanh', 'Chua hoan thanh'))
+    trang_thai VARCHAR(20) DEFAULT 'Chua hoan thanh',
+    FOREIGN KEY (donhang_id) REFERENCES DONHANG(donhang_id),
+    FOREIGN KEY (chitietsach_id) REFERENCES CHITIETSACH(chitietsach_id),
+    CONSTRAINT chk_trang_thai CHECK (trang_thai IN ('Chua hoan thanh', 'Hoan thanh', 'Tu choi'))
 );
 
-CREATE TABLE CHITIET_BAOHANH (
-    chitietbaohanh_id INT PRIMARY KEY AUTO_INCREMENT,
-    donbaohanh_id INT,
-    chitietsach_id VARCHAR(255),
-    soluong_sachbaohanh INT,
-    FOREIGN KEY (donbaohanh_id) REFERENCES DONBAOHANH(donbaohanh_id),
-    FOREIGN KEY (chitietsach_id) REFERENCES CHITIETSACH(chitietsach_id)
-);
+-- Stored procedure để tạo CHITIETSACH khi bán sách
+DELIMITER //
+CREATE PROCEDURE CreateChiTietSach(
+    IN p_sach_id INT,
+    IN p_chitietdonhang_id INT,
+    IN p_so_luong INT
+)
+BEGIN
+    DECLARE v_count INT;
+    DECLARE v_index INT DEFAULT 1;
+    DECLARE v_chitietsach_id VARCHAR(255);
+    
+    -- Lấy số bản sao hiện có để tiếp tục đánh số
+    SELECT COUNT(*) INTO v_count
+    FROM CHITIETSACH
+    WHERE sach_id = p_sach_id;
+    
+    -- Tạo chitietsach_id cho từng bản sao
+    WHILE v_index <= p_so_luong DO
+        SET v_chitietsach_id = CONCAT('CT', LPAD(p_sach_id, 3, '0'), '_', LPAD(v_count + v_index, 2, '0'));
+        INSERT INTO CHITIETSACH (chitietsach_id, sach_id, chitietdonhang_id)
+        VALUES (v_chitietsach_id, p_sach_id, p_chitietdonhang_id);
+        SET v_index = v_index + 1;
+    END WHILE;
+END //
+DELIMITER ;
 
 -- Chèn dữ liệu vào bảng LOAISACH
 INSERT INTO LOAISACH (ten_loai) VALUES
-('Văn học'),
-('Kinh tế'),
-('Khoa học'),
-('Tiểu thuyết'),
-('Lịch sử'),
-('Tâm lý'),
-('Kỹ thuật'),
-('Truyện tranh'),
-('Giáo dục');
+('Văn học'), ('Kinh tế'), ('Khoa học'), ('Tiểu thuyết'), ('Lịch sử'),
+('Tâm lý'), ('Kỹ thuật'), ('Truyện tranh'), ('Giáo dục');
 
 -- Chèn dữ liệu vào bảng SACH
 INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban) VALUES
-('Blue Box tập 2', 'Kouji Miura', 250000, 50, 8, 'Blue Box - Tập 2 - Một Cô Gái Bình Thường
-Taiki được ghép cặp với đàn anh Haryu. Trải qua chuỗi ngày luyện tập gian khổ, cuối cùng vòng loại cấp khu vực đã bắt đầu. Đang băng băng tiến vào vòng trong, thì Taiki gặp một đối thủ đang tìm cách có được số điện thoại của chị Chinatsu! Trận đấu này cậu nhất định không được thua. Cậu phải dốc hết sức cho cả việc luyện tập lẫn tình yêu của mình.', '../Picture/Products/bluebox.jpg', 'NXB Kim Đồng'),
-('BlueLock tập 24', 'Không có', 260000, 30, 8, 'BlueLock - Tập 24
-CHỈ TRONG “KHOẢNH KHẮC” THÔI LÀ KHÔNG ĐỦ! “CHIẾN THẮNG HOÀN TOÀN” MỚI LÀ THỨ CẦN PHẢI THEO ĐUỔI!!
-Đội Đức đã hạ gục đội Anh nhờ pha phối hợp sút bóng của Isagi và Yukimiya. Isagi đang chăm chỉ luyện tập hơn nữa để định hình lí thuyết “hoàn hảo” của mình, nhằm đánh bại Kaiser bằng bàn thắng của bản thân vào lần tới. Trái ngược hẳn với điều đó thì Hiori, người vẫn chưa được ra sân lại mang một vẻ mặt chán nản. “Quá khứ” được chôn giấu trong lòng Hiori là gì, và đâu mới là “cảm xúc thực sự” cậu dành cho bóng đá? Đối thủ trong trận đấu tiếp theo của đội Đức chính là đội bóng mà Baro đầu quân, Ý! 11 cầu thủ ra sân trong trận đấu được mọi ánh mắt đổ dồn vào sẽ là ai đây!?
-BẮT ĐẦU TRẬN ĐẤU THỨ 5 VỚI UBERS! MỌI THỨ SẼ ĐƯỢC CHỨNG MINH BẰNG “BÀN THẮNG”! VÀ TÔI MỚI LÀ “TIỀN ĐẠO THỰC THỤ”!!', '../Picture/Products/bluelock.jpg', 'NXB Kim Đồng'),
+('Blue Box tập 2', 'Kouji Miura', 250000, 50, 8, 'Blue Box - Tập 2 - Một Cô Gái Bình Thường...', '../Picture/Products/bluebox.jpg', 'NXB Kim Đồng'),
+('BlueLock tập 24', 'Không có', 260000, 30, 8, 'BlueLock - Tập 24...', '../Picture/Products/bluelock.jpg', 'NXB Kim Đồng'),
 ('Bocchi The Rock tập 5', 'Không có', 180000, 40, 8, 'Truyện tranh', '../Picture/Products/bocchi.jpg', 'NXB Kim Đồng'),
 ('Búp Sen', 'Sơn Tùng MTP', 120000, 60, 9, 'Giáo dục', '../Picture/Products/bupsen.webp', 'NXB Trẻ'),
 ('Dược sư tự sự tập 11', 'Không có', 130000, 35, 8, 'Truyện tranh', '../Picture/Products/duocsu.jpg', 'NXB Kim Đồng'),
@@ -128,20 +151,31 @@ BẮT ĐẦU TRẬN ĐẤU THỨ 5 VỚI UBERS! MỌI THỨ SẼ ĐƯỢC CHỨN
 
 -- Chèn dữ liệu vào bảng USER
 INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id) VALUES
-('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', null),
+('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', NULL),
 ('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1),
 ('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2),
-('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 4),
-('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 5),
-('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 6),
-('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 7),
-('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 8),
-('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 9);
+('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 3),
+('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 4),
+('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 5),
+('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 6),
+('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 7),
+('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 8);
+
+-- Chèn dữ liệu vào bảng GIOHANG
+INSERT INTO GIOHANG (user_id, sach_id, so_luong) VALUES
+(2, 1, 2),
+(3, 2, 1),
+(4, 3, 1),
+(5, 4, 2),
+(6, 5, 1),
+(7, 6, 1),
+(8, 7, 1),
+(9, 8, 3);
 
 -- Chèn dữ liệu vào bảng DONHANG
 INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
+(2, '2025-03-02 11:00:00', 540000, 'da_xac_nhan'), -- Mua 3 bản Bocchi
 (1, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan'),
-(2, '2025-03-02 11:00:00', 450000, 'da_xac_nhan'),
 (4, '2025-03-03 12:00:00', 180000, 'da_duoc_giao'),
 (5, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan'),
 (6, '2025-03-05 14:00:00', 350000, 'da_xac_nhan'),
@@ -152,9 +186,9 @@ INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
 
 -- Chèn dữ liệu vào bảng CHITIETDONHANG
 INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
-(1, 1, 150000, 2),
-(2, 2, 200000, 1),
-(3, 3, 180000, 1),
+(1, 3, 180000, 3), -- 3 bản Bocchi
+(2, 1, 150000, 2),
+(3, 2, 200000, 1),
 (4, 4, 120000, 2),
 (5, 5, 220000, 1),
 (6, 6, 130000, 1),
@@ -162,17 +196,12 @@ INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES
 (8, 8, 90000, 3),
 (9, 9, 170000, 1);
 
--- Chèn dữ liệu vào bảng GIOHANG
-INSERT INTO GIOHANG (sach_id, donhang_id, so_luong) VALUES
-(1, 1, 2),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 2),
-(5, 5, 1),
-(6, 6, 1),
-(7, 7, 1),
-(8, 8, 3),
-(9, 9, 1);
+-- Tạo CHITIETSACH cho đơn hàng 1 (3 bản Bocchi)
+CALL CreateChiTietSach(3, 1, 3);
+
+-- Chèn dữ liệu vào bảng DONBAOHANH (bảo hành 1 bản Bocchi)
+INSERT INTO DONBAOHANH (donhang_id, chitietsach_id, ly_do, ngay, trang_thai) VALUES
+(1, 'CT003_01', 'In mờ', '2025-03-10', 'Chua hoan thanh');
 
 -- Chèn dữ liệu vào bảng FEEDBACK
 INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES
@@ -186,42 +215,3 @@ INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES
 (9, 8, 5, 'Hấp dẫn', '2025-03-08 17:00:00'),
 (1, 9, 3, 'Tạm ổn', '2025-03-09 18:00:00'),
 (2, 10, 4, 'Đáng đọc', '2025-03-10 19:00:00');
-
--- Chèn dữ liệu vào bảng CHITIETSACH
-INSERT INTO CHITIETSACH (chitietsach_id, sach_id) VALUES
-('CT001', 1),
-('CT002', 2),
-('CT003', 3),
-('CT004', 4),
-('CT005', 5),
-('CT006', 6),
-('CT007', 7),
-('CT008', 8),
-('CT009', 9),
-('CT010', 10);
-
--- Chèn dữ liệu vào bảng DONBAOHANH
-INSERT INTO DONBAOHANH (ly_do, ngay, trang_thai) VALUES
-('Sách rách', '2025-03-01', 'Chua hoan thanh'),
-('In lỗi', '2025-03-02', 'Hoan thanh'),
-('Giao sai', '2025-03-03', 'Chua hoan thanh'),
-('Hỏng bìa', '2025-03-04', 'Hoan thanh'),
-('Thiếu trang', '2025-03-05', 'Chua hoan thanh'),
-('Mực lem', '2025-03-06', 'Hoan thanh'),
-('Bìa rách', '2025-03-07', 'Chua hoan thanh'),
-('Sai nội dung', '2025-03-08', 'Hoan thanh'),
-('Hỏng gáy', '2025-03-09', 'Chua hoan thanh'),
-('In mờ', '2025-03-10', 'Hoan thanh');
-
--- Chèn dữ liệu vào bảng CHITIET_BAOHANH
-INSERT INTO CHITIET_BAOHANH (donbaohanh_id, chitietsach_id, soluong_sachbaohanh) VALUES
-(1, 'CT001', 1),
-(2, 'CT002', 1),
-(3, 'CT003', 2),
-(4, 'CT004', 1),
-(5, 'CT005', 1),
-(6, 'CT006', 2),
-(7, 'CT007', 1),
-(8, 'CT008', 3),
-(9, 'CT009', 1),
-(10, 'CT010', 2);
