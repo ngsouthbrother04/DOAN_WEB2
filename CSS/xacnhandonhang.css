@@ -1,0 +1,121 @@
+.order-confirmation-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.order-confirmation-container h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.success-message {
+    text-align: center;
+    font-size: 18px;
+    color: #155724;
+    background-color: #d4edda;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.order-details {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-info,
+.shipping-info,
+.order-items {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.order-info h2,
+.shipping-info h2,
+.order-items h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.order-info p,
+.shipping-info p {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.order-info p strong,
+.shipping-info p strong {
+    font-weight: 500;
+}
+
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order-table th,
+.order-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+    background-color: #f5f5f5;
+    font-weight: 500;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+}
+
+.product-info img {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+.product-info span {
+    font-size: 16px;
+}
+
+.order-total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.order-total h3 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.order-total span {
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.actions {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.continue-shopping {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.continue-shopping:hover {
+    background-color: #0056b3;
+}

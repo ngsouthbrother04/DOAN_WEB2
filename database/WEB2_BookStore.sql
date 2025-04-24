@@ -175,14 +175,14 @@ INSERT INTO GIOHANG (user_id, sach_id, so_luong) VALUES
 -- Chèn dữ liệu vào bảng DONHANG
 INSERT INTO DONHANG (user_id, ngay_dat, tong_tien, trang_thai) VALUES
 (2, '2025-03-02 11:00:00', 540000, 'da_xac_nhan'), -- Mua 3 bản Bocchi
-(1, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan'),
+(2, '2025-03-01 10:00:00', 300000, 'cho_xac_nhan'),
 (4, '2025-03-03 12:00:00', 180000, 'da_duoc_giao'),
 (5, '2025-03-04 13:00:00', 240000, 'cho_xac_nhan'),
 (6, '2025-03-05 14:00:00', 350000, 'da_xac_nhan'),
 (7, '2025-03-06 15:00:00', 150000, 'da_bi_huy'),
 (8, '2025-03-08 17:00:00', 390000, 'da_duoc_giao'),
 (9, '2025-03-09 18:00:00', 200000, 'da_xac_nhan'),
-(1, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan');
+(2, '2025-03-10 19:00:00', 310000, 'cho_xac_nhan');
 
 -- Chèn dữ liệu vào bảng CHITIETDONHANG
 INSERT INTO CHITIETDONHANG (donhang_id, sach_id, gia_tien, so_luong) VALUES

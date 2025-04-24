@@ -1,60 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const quantityInput = document.getElementById("quantity");
-  const decreaseBtn = document.getElementById("decrease-btn");
-  const increaseBtn = document.getElementById("increase-btn");
-  const maxQuantity = parseInt(quantityInput.getAttribute("max"));
+document.addEventListener('DOMContentLoaded', function () {
+  const decreaseBtn = document.getElementById('decrease-btn');
+  const increaseBtn = document.getElementById('increase-btn');
+  const quantityInput = document.getElementById('quantity');
+  const productForm = document.getElementById('product-form');
 
-  // Xử lý nút giảm số lượng
-  decreaseBtn.addEventListener("click", () => {
-    let currentValue = parseInt(quantityInput.value);
-    if (currentValue > 1) {
-      currentValue--;
-      quantityInput.value = currentValue;
-
-      // Cập nhật trạng thái nút
-      updateButtonStates(currentValue);
-    }
+  decreaseBtn.addEventListener('click', function () {
+      let currentValue = parseInt(quantityInput.value);
+      if (currentValue > 1) {
+          quantityInput.value = currentValue - 1;
+          decreaseBtn.disabled = (currentValue - 1) <= 1;
+          increaseBtn.disabled = false;
+          submitForm();
+      }
   });
 
-  // Xử lý nút tăng số lượng
-  increaseBtn.addEventListener("click", () => {
-    let currentValue = parseInt(quantityInput.value);
-    if (currentValue < maxQuantity) {
-      currentValue++;
-      quantityInput.value = currentValue;
-
-      // Cập nhật trạng thái nút
-      updateButtonStates(currentValue);
-    }
+  increaseBtn.addEventListener('click', function () {
+      let currentValue = parseInt(quantityInput.value);
+      let maxValue = parseInt(quantityInput.getAttribute('max'));
+      if (currentValue < maxValue) {
+          quantityInput.value = currentValue + 1;
+          increaseBtn.disabled = (currentValue + 1) >= maxValue;
+          decreaseBtn.disabled = false;
+          submitForm();
+      }
   });
 
-  // Hàm cập nhật trạng thái nút
-  const updateButtonStates = (currentValue) => {
-    // Cập nhật nút giảm
-    if (currentValue <= 1) {
-      decreaseBtn.disabled = true;
-    } else {
-      decreaseBtn.disabled = false;
-    }
+  quantityInput.addEventListener('change', function () {
+      let value = parseInt(quantityInput.value);
+      let maxValue = parseInt(quantityInput.getAttribute('max'));
+      let minValue = parseInt(quantityInput.getAttribute('min'));
 
-    // Cập nhật nút tăng
-    if (currentValue >= maxQuantity) {
-      increaseBtn.disabled = true;
-    } else {
-      increaseBtn.disabled = false;
-    }
-  };
-
-  // Đảm bảo giá trị nhập vào hợp lệ khi người dùng thay đổi trực tiếp
-  quantityInput.addEventListener("change", function () {
-    let value = parseInt(this.value);
-    if (isNaN(value) || value < 1) {
-      value = 1;
-    } else if (value > maxQuantity) {
-      value = maxQuantity;
-    }
-
-    this.value = value;
-    updateButtonStates(value);
+      if (value < minValue || isNaN(value)) {
+          quantityInput.value = minValue;
+      } else if (value > maxValue) {
+          quantityInput.value = maxValue;
+      }
+      decreaseBtn.disabled = quantityInput.value <= minValue;
+      increaseBtn.disabled = quantityInput.value >= maxValue;
+      submitForm();
   });
+
+  function submitForm() {
+      // Tạo một form ẩn để gửi yêu cầu cập nhật số lượng
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = window.location.href;
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'quantity';
+      input.value = quantityInput.value;
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+  }
 });

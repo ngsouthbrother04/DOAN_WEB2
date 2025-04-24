@@ -2,6 +2,7 @@
 session_start();
 require_once 'db_connect.php';
 
+
 // Biến lưu thông báo
 $message = '';
 if (isset($_SESSION['message'])) {
@@ -57,7 +58,7 @@ $where_sql = $where_clause ? "WHERE " . implode(" AND ", $where_clause) : "";
 // Xử lý sắp xếp
 $sort_field = isset($_GET['sort']) ? $_GET['sort'] : 'donbaohanh_id';
 $sort_direction = isset($_GET['direction']) ? $_GET['direction'] : 'desc';
-$valid_sort_fields = ['donbaohanh_id', 'donhang_id', 'tieu_de', 'chitietsach_id', 'ngay', 'trang_thai'];
+$valid_sort_fields = ['donbaohanh_id', 'donhang_id', 'ho_ten', 'tieu_de', 'chitietsach_id', 'ngay', 'trang_thai'];
 if (!in_array($sort_field, $valid_sort_fields)) {
     $sort_field = 'donbaohanh_id';
 }
@@ -66,7 +67,7 @@ if ($sort_direction != 'asc' && $sort_direction != 'desc') {
 }
 
 // Lấy danh sách yêu cầu bảo hành
-$sql_warranties = "SELECT dbh.donbaohanh_id, dbh.donhang_id, dbh.chitietsach_id, s.tieu_de, dbh.ly_do, dbh.ngay, dbh.trang_thai, u.sdt
+$sql_warranties = "SELECT dbh.donbaohanh_id, dbh.donhang_id, dbh.chitietsach_id, s.tieu_de, dbh.ly_do, dbh.ngay, dbh.trang_thai, u.sdt, u.ho_ten
                    FROM DONBAOHANH dbh
                    JOIN CHITIETSACH cts ON dbh.chitietsach_id = cts.chitietsach_id
                    JOIN SACH s ON cts.sach_id = s.sach_id
@@ -282,6 +283,11 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                                 </a>
                             </th>
                             <th class="sort-header">
+                                <a href="<?php echo getSortLink('ho_ten', $sort_field, $sort_direction, $search_query, $status_filter); ?>">
+                                    Tên Khách Hàng <?php echo getSortIcon('ho_ten', $sort_field, $sort_direction); ?>
+                                </a>
+                            </th>
+                            <th class="sort-header">
                                 <a href="<?php echo getSortLink('tieu_de', $sort_field, $sort_direction, $search_query, $status_filter); ?>">
                                     Tựa Sách <?php echo getSortIcon('tieu_de', $sort_field, $sort_direction); ?>
                                 </a>
@@ -305,6 +311,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                             <tr>
                                 <td><?php echo htmlspecialchars($warranty['donbaohanh_id']); ?></td>
                                 <td><?php echo htmlspecialchars($warranty['donhang_id']); ?></td>
+                                <td><?php echo htmlspecialchars($warranty['ho_ten']); ?></td>
                                 <td><?php echo htmlspecialchars($warranty['tieu_de']); ?></td>
                                 <td><?php echo htmlspecialchars($warranty['chitietsach_id']); ?></td>
                                 <td><?php echo htmlspecialchars($warranty['ly_do']); ?></td>

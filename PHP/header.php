@@ -74,7 +74,7 @@ if ($category_result) {
       </div>
 
       <div class="right-buttons">
-         <div class="cartbutton">
+      <div class="cartbutton" onclick="goToCart()">
             <img src="../icon/cart-shopping-solid.svg" alt="" id="cartbutton">
             <p>Giỏ Hàng</p>
          </div>
@@ -93,4 +93,6 @@ if ($category_result) {
          </div>
       </div>
    </div>
+   <script src="../js/header.js"></script>
 </div>
+

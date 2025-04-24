@@ -19,67 +19,73 @@ $message = '';
 $message_type = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-   // Xử lý số lượng
-   if (isset($_POST['quantity'])) {
-      $quantity = (int)$_POST['quantity'];
-   }
-
-   // Xử lý tăng giảm số lượng
-   if (isset($_POST['decrease'])) {
-      $quantity = max(1, $quantity - 1);
-   } elseif (isset($_POST['increase'])) {
-      // Số lượng tối đa sẽ được kiểm tra sau khi lấy thông tin sản phẩm
-   } elseif (isset($_POST['add_to_cart'])) {
-      // Thêm vào giỏ hàng
-      if (!isset($_SESSION['cart'])) {
-         $_SESSION['cart'] = [];
+   // Kiểm tra đăng nhập
+   if (!isset($_SESSION['user_id'])) {
+      $message = 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!';
+      $message_type = 'error';
+   } else {
+      // Xử lý số lượng
+      if (isset($_POST['quantity'])) {
+         $quantity = (int)$_POST['quantity'];
       }
 
-      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-      $found = false;
-      foreach ($_SESSION['cart'] as &$item) {
-         if ($item['id'] == $sach_id) {
-            $item['quantity'] += $quantity;
-            $found = true;
-            break;
+      // Xử lý tăng giảm số lượng
+      if (isset($_POST['decrease'])) {
+         $quantity = max(1, $quantity - 1);
+      } elseif (isset($_POST['increase'])) {
+         // Số lượng tối đa sẽ được kiểm tra sau khi lấy thông tin sản phẩm
+      } elseif (isset($_POST['add_to_cart'])) {
+         // Thêm vào giỏ hàng
+         if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
          }
-      }
 
-      if (!$found) {
-         $_SESSION['cart'][] = [
-            'id' => $sach_id,
-            'quantity' => $quantity
-         ];
-      }
-
-      $message = 'Đã thêm sản phẩm vào giỏ hàng!';
-      $message_type = 'success';
-   } elseif (isset($_POST['buy_now'])) {
-      // Thêm vào giỏ hàng và chuyển đến trang thanh toán
-      if (!isset($_SESSION['cart'])) {
-         $_SESSION['cart'] = [];
-      }
-
-      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-      $found = false;
-      foreach ($_SESSION['cart'] as &$item) {
-         if ($item['id'] == $sach_id) {
-            $item['quantity'] += $quantity;
-            $found = true;
-            break;
+         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+         $found = false;
+         foreach ($_SESSION['cart'] as &$item) {
+            if ($item['id'] == $sach_id) {
+               $item['quantity'] += $quantity;
+               $found = true;
+               break;
+            }
          }
-      }
 
-      if (!$found) {
-         $_SESSION['cart'][] = [
-            'id' => $sach_id,
-            'quantity' => $quantity
-         ];
-      }
+         if (!$found) {
+            $_SESSION['cart'][] = [
+               'id' => $sach_id,
+               'quantity' => $quantity
+            ];
+         }
 
-      // Chuyển hướng đến trang thanh toán
-      header("Location: thanhtoan.php");
-      exit;
+         $message = 'Đã thêm sản phẩm vào giỏ hàng!';
+         $message_type = 'success';
+      } elseif (isset($_POST['buy_now'])) {
+         // Thêm vào giỏ hàng và chuyển đến trang thanh toán
+         if (!isset($_SESSION['cart'])) {
+            $_SESSION['cart'] = [];
+         }
+
+         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+         $found = false;
+         foreach ($_SESSION['cart'] as &$item) {
+            if ($item['id'] == $sach_id) {
+               $item['quantity'] += $quantity;
+               $found = true;
+               break;
+            }
+         }
+
+         if (!$found) {
+            $_SESSION['cart'][] = [
+               'id' => $sach_id,
+               'quantity' => $quantity
+            ];
+         }
+
+         // Chuyển hướng đến trang thanh toán
+         header("Location: thanhtoan.php");
+         exit;
+      }
    }
 }
 
