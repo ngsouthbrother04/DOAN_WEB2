@@ -353,8 +353,8 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="tai_khoan.php">Tài khoản</div>
-        <div class="menu-item" data-target="hoa_don.php">Hóa đơn</div>
-        <div class="menu-item" data-target="bao_hanh.php">Bảo hành</div>
+        <div class="menu-item" data-target="admin_orders.php">Đơn hàng</div>
+        <div class="menu-item" data-target="admin_warranty.php">Bảo hành</div>
         <div class="menu-item" data-target="logout.php">Đăng xuất</div>
 
     </div>
@@ -474,12 +474,12 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
                     window.location.href = 'edit_sach.php';
                 } else if (menuText === 'Tài khoản') {
                     window.location.href = 'edit_taikhoan.php';
-                } else if (menuText === 'Hóa đơn') {
-                    window.location.href = 'edit_hoadon.php';
-                } else if (menuText === 'Bảo hành') {
-                    window.location.href = 'edit_baohanh.php';
                 } else if (menuText === 'Trang chủ') {
                     window.location.href = 'trangchu.php';
+                } else if (menuText === 'Đơn hàng') {
+                    window.location.href = 'admin_orders.php';
+                } else if (menuText === 'Bảo hành') {
+                    window.location.href = 'admin_warranty.php';
                 }
             });
         });

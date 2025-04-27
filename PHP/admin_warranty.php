@@ -237,7 +237,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="edit_taikhoan.php">Tài khoản</div>
-        <div class="menu-item" data-target="hoa_don.php">Hóa đơn</div>
+        <div class="menu-item" data-target="admin_orders.php">Đơn hàng</div>
         <div class="menu-item active" data-target="admin_warranty.php">Bảo hành</div>
         <div class="menu-item" data-target="logout.php">Đăng xuất</div>
     </div>

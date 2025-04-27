@@ -520,7 +520,7 @@ function getSortIcon($field, $current_sort, $current_order)
       <div class="menu-item">Thể loại</div>
       <div class="menu-item">Sách</div>
       <div class="menu-item active">Tài khoản</div>
-      <div class="menu-item">Hóa đơn</div>
+      <div class="menu-item">Đơn hàng</div>
       <div class="menu-item">Bảo hành</div>
       <div class="menu-item">Đăng xuất</div>
    </div>
@@ -653,11 +653,11 @@ function getSortIcon($field, $current_sort, $current_order)
                case 'Tài khoản':
                   page = 'edit_taikhoan.php';
                   break;
-               case 'Hóa đơn':
-                  page = 'hoa_don.php';
+               case 'Đơn hàng':
+                  page = 'admin_orders.php';
                   break;
                case 'Bảo hành':
-                  page = 'bao_hanh.php';
+                  page = 'admin_warranty.php';
                   break;
                case 'Trang chủ':
                   page = 'trangchu.php';

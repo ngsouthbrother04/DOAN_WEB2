@@ -74,13 +74,13 @@ if ($category_result) {
       </div>
 
       <div class="right-buttons">
-      <div class="cartbutton" onclick="goToCart()">
+         <div class="cartbutton" onclick="goToCart()">
             <img src="../icon/cart-shopping-solid.svg" alt="" id="cartbutton">
             <p>Giỏ Hàng</p>
          </div>
-         <div class="bellbutton">
+         <div class="bellbutton" onclick="goToHis()">
             <img src="../icon/bell-regular.svg" alt="" id="bellbutton">
-            <p>Thông Báo</p>
+            <p>Lịch sử</p>
          </div>
          <div class="userbutton">
             <?php if (isset($_SESSION['user_id']) && isset($_SESSION['user_phone'])): ?>
@@ -93,6 +93,13 @@ if ($category_result) {
          </div>
       </div>
    </div>
-   <script src="../js/header.js"></script>
-</div>
+   <script>
+      function goToCart() {
+         window.location.href = 'giohang.php';
+      }
 
+      function goToHis() {
+         window.location.href = 'baohanh.php';
+      }
+   </script>
+</div>

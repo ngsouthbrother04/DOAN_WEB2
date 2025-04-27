@@ -483,13 +483,13 @@ function getSortIcon($field, $current_sort, $current_order)
          <div>Admin</div>
       </div>
 
-      <div class="menu-item">Trang chủ</div>
-      <div class="menu-item">Thể loại</div>
-      <div class="menu-item active">Sách</div>
-      <div class="menu-item">Tài khoản</div>
-      <div class="menu-item">Hóa đơn</div>
-      <div class="menu-item">Bảo hành</div>
-      <div class="menu-item">Đăng xuất</div>
+      <div class="menu-item" data-target="trangchu.php">Trang chủ</div>
+      <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
+      <div class="menu-item" data-target="edit_sach.php">Sách</div>
+      <div class="menu-item" data-target="tai_khoan.php">Tài khoản</div>
+      <div class="menu-item" data-target="admin_orders.php">Đơn hàng</div>
+      <div class="menu-item" data-target="admin_warranty.php">Bảo hành</div>
+      <div class="menu-item" data-target="logout.php">Đăng xuất</div>
    </div>
 
    <div class="content">
@@ -678,11 +678,14 @@ function getSortIcon($field, $current_sort, $current_order)
                case 'Hóa đơn':
                   page = 'hoa_don.php';
                   break;
-               case 'Bảo hành':
-                  page = 'bao_hanh.php';
-                  break;
                case 'Trang chủ':
                   page = 'trangchu.php';
+                  break;
+               case 'Đơn hàng':
+                  page = 'admin_orders.php';
+                  break;
+               case 'Bảo hành':
+                  page = 'admin_warranty.php';
                   break;
                case 'Đăng xuất':
                   if (confirm('Bạn có chắc muốn đăng xuất?')) {

@@ -5,10 +5,10 @@ require_once 'db_connect.php';
 // Giả định user_id từ session
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 2;
 
-// Hiển thị danh sách đơn hàng
+// Hiển thị danh sách đơn hàng đã hoàn thành
 $sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
                FROM DONHANG
-               WHERE user_id = ?
+               WHERE user_id = ? AND trang_thai = 'da_duoc_giao'
                ORDER BY ngay_dat DESC";
 $stmt_orders = $conn->prepare($sql_orders);
 $stmt_orders->bind_param("i", $user_id);
@@ -240,7 +240,7 @@ $result_orders = $stmt_orders->get_result();
     <div class="main">
         <!-- Danh sách đơn hàng -->
         <section class="product-section">
-            <h2>Đơn Hàng</h2>
+            <h2>Đơn Hàng Đã Hoàn Thành</h2>
             <?php if ($result_orders->num_rows > 0): ?>
                 <table class="warranty-table">
                     <thead>
@@ -259,30 +259,32 @@ $result_orders = $stmt_orders->get_result();
                                 <td><?php echo htmlspecialchars($order['ngay_dat']); ?></td>
                                 <td><?php echo number_format($order['tong_tien'], 0, ',', '.'); ?> VNĐ</td>
                                 <td><?php echo htmlspecialchars($order['trang_thai']); ?></td>
-                                <td><a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Xem bản sao</a></td>
+                                <td><a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Xem thêm</a></td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
                 </table>
             <?php else: ?>
-                <p class="error" style="display: block;">Bạn chưa có đơn hàng nào.</p>
+                <p class="error" style="display: block;">Bạn chưa có đơn hàng nào đã hoàn thành.</p>
             <?php endif; ?>
             <?php $stmt_orders->close(); ?>
         </section>
+
+        
 
         <!-- Chọn bản sao để bảo hành -->
         <?php if (isset($_GET['donhang_id'])): ?>
             <?php
             $donhang_id = intval($_GET['donhang_id']);
 
-            // Kiểm tra đơn hàng thuộc về người dùng
-            $sql_check = "SELECT user_id FROM DONHANG WHERE donhang_id = ?";
+            // Kiểm tra đơn hàng thuộc về người dùng và có trạng thái đã hoàn thành
+            $sql_check = "SELECT user_id FROM DONHANG WHERE donhang_id = ? AND trang_thai = 'da_duoc_giao'";
             $stmt_check = $conn->prepare($sql_check);
             $stmt_check->bind_param("i", $donhang_id);
             $stmt_check->execute();
             $result_check = $stmt_check->get_result();
             if ($result_check->num_rows == 0 || $result_check->fetch_assoc()['user_id'] != $user_id) {
-                echo "<p class='error' style='display: block;'>Đơn hàng không hợp lệ hoặc không thuộc về bạn.</p>";
+                echo "<p class='error' style='display: block;'>Đơn hàng không hợp lệ, không thuộc về bạn hoặc chưa hoàn thành.</p>";
                 $stmt_check->close();
             } else {
                 $stmt_check->close();
@@ -299,7 +301,7 @@ $result_orders = $stmt_orders->get_result();
                 $result_books = $stmt_books->get_result();
             ?>
                 <section class="product-section">
-                    <h2>Chọn Bản Sao Để Bảo Hành (Đơn Hàng #<?php echo $donhang_id; ?>)</h2>
+                    <h2>Chọn Sách Bạn Muốn Bảo Hành (Đơn Hàng #<?php echo $donhang_id; ?>)</h2>
                     <div class="error"></div>
                     <div class="success"></div>
                     <?php if ($result_books->num_rows > 0): ?>
@@ -326,7 +328,7 @@ $result_orders = $stmt_orders->get_result();
                                         <thead>
                                             <tr>
                                                 <th>Chọn</th>
-                                                <th>Mã Bản Sao</th>
+                                                <th>Mã Sách</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -379,9 +381,9 @@ $result_orders = $stmt_orders->get_result();
                 <table class="warranty-table">
                     <thead>
                         <tr>
-                            <th>ID Yêu Cầu</th>
-                            <th>Đơn Hàng</th>
-                            <th>Tựa Sách</th>
+                            <th>ID-BH</th>
+                            <th>ID-DH</th>
+                            <th>Tên Sách</th>
                             <th>Mã Bản Sao</th>
                             <th>Lý Do</th>
                             <th>Ngày</th>
@@ -461,11 +463,11 @@ $result_orders = $stmt_orders->get_result();
             });
         });
     </script>
-       <?php include 'login-register/login-register-form.php'; ?>
-   <?php include 'profile-form.php'; ?>
-   <?php include 'footer.php'; ?>
+    <?php include 'login-register/login-register-form.php'; ?>
+    <?php include 'profile-form.php'; ?>
+    <?php include 'footer.php'; ?>
 
-   <script src="../js/search.js"></script>
+    <script src="../js/search.js"></script>
     <?php $conn->close(); ?>
 </body>
 </html>
