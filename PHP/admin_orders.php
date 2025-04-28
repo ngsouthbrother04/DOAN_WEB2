@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
         $sql_update = "UPDATE DONHANG SET trang_thai = ? WHERE donhang_id = ?";
         $stmt_update = $conn->prepare($sql_update);
         $stmt_update->bind_param("si", $trang_thai, $donhang_id);
-        
+
         if ($stmt_update->execute()) {
             $_SESSION['message'] = "Cập nhật trạng thái thành công!";
         } else {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_status'])) {
         }
         $stmt_update->close();
     }
-    
+
     // Redirect để tránh form resubmission
     header("Location: admin_orders.php");
     exit();
@@ -89,7 +89,8 @@ $sql_orders = "SELECT dh.donhang_id, dh.ngay_dat, dh.tong_tien, dh.trang_thai, u
 $result_orders = $conn->query($sql_orders);
 
 // Hàm tạo liên kết sắp xếp
-function getSortLink($field, $current_sort_field, $current_sort_direction, $search_query, $status_filter, $from_date, $to_date) {
+function getSortLink($field, $current_sort_field, $current_sort_direction, $search_query, $status_filter, $from_date, $to_date)
+{
     $direction = ($field == $current_sort_field && $current_sort_direction == 'asc') ? 'desc' : 'asc';
     $link = "admin_orders.php?sort=" . $field . "&direction=" . $direction;
     if (!empty($search_query)) {
@@ -108,16 +109,35 @@ function getSortLink($field, $current_sort_field, $current_sort_direction, $sear
 }
 
 // Hàm hiển thị mũi tên sắp xếp
-function getSortIcon($field, $current_sort_field, $current_sort_direction) {
+function getSortIcon($field, $current_sort_field, $current_sort_direction)
+{
     if ($field == $current_sort_field) {
         return ($current_sort_direction == 'asc') ? '<i class="fas fa-sort-up"></i>' : '<i class="fas fa-sort-down"></i>';
     }
     return '<i class="fas fa-sort"></i>';
 }
+
+// Hàm chuyển trạng thái không dấu sang có dấu
+function displayStatus($status)
+{
+    switch ($status) {
+        case 'da_duoc_giao':
+            return '<span class="order-status-delivered">Đã được giao</span>';
+        case 'cho_xac_nhan':
+            return '<span class="order-status-pending">Chờ xác nhận</span>';
+        case 'da_xac_nhan':
+            return '<span class="order-status-confirmed">Đã xác nhận</span>';
+        case 'da_bi_huy':
+            return '<span class="order-status-canceled">Đã bị hủy</span>';
+        default:
+            return htmlspecialchars($status);
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -262,7 +282,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             overflow: auto;
         }
 
@@ -315,8 +335,30 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         .modal-section h4 {
             margin-bottom: 10px;
         }
+
+        /* Trạng thái đơn hàng */
+        .order-status-delivered {
+            color: #2ecc71;
+            font-weight: 500;
+        }
+
+        .order-status-pending {
+            color: #FFA500;
+            font-weight: 500;
+        }
+
+        .order-status-confirmed {
+            color: #27ae60;
+            font-weight: 500;
+        }
+
+        .order-status-canceled {
+            color: #c22432;
+            font-weight: 500;
+        }
     </style>
 </head>
+
 <body>
     <div class="sidebar">
         <div class="admin-profile" onclick="window.location.href='admin.php';" style="cursor:pointer;">
@@ -402,7 +444,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                                 <td><?php echo htmlspecialchars($order['ho_ten']); ?></td>
                                 <td><?php echo htmlspecialchars($order['ngay_dat']); ?></td>
                                 <td><?php echo number_format($order['tong_tien'], 0, ',', '.'); ?> VNĐ</td>
-                                <td><?php echo htmlspecialchars($order['trang_thai']); ?></td>
+                                <td><?php echo displayStatus($order['trang_thai']); ?></td>
                                 <td class="action-buttons">
                                     <form method="POST" action="">
                                         <input type="hidden" name="donhang_id" value="<?php echo $order['donhang_id']; ?>">
@@ -410,7 +452,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
                                             <option value="cho_xac_nhan" <?php if ($order['trang_thai'] == 'cho_xac_nhan') echo 'selected'; ?>>Chờ xác nhận</option>
                                             <option value="da_xac_nhan" <?php if ($order['trang_thai'] == 'da_xac_nhan') echo 'selected'; ?>>Đã xác nhận</option>
                                             <option value="da_duoc_giao" <?php if ($order['trang_thai'] == 'da_duoc_giao') echo 'selected'; ?>>Đã được giao</option>
-                                            <option value="da_bi_huy" <?php if ($order['trang_thai'] == 'da_bi_huy') echo 'selected'; ?>>Đã bị hủy</ overtake>
+                                            <option value="da_bi_huy" <?php if ($order['trang_thai'] == 'da_bi_huy') echo 'selected'; ?>>Đã bị hủy</option>
                                         </select>
                                         <button type="submit" name="update_status" class="action-btn edit-btn"><i class="fas fa-save"></i> Lưu</button>
                                     </form>
@@ -452,61 +494,83 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
 
             // Gửi AJAX request để lấy chi tiết đơn hàng
             fetch('fetch_order_details.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'donhang_id=' + orderId + '&user_id=' + userId
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    content.innerHTML = '<p>' + data.error + '</p>';
-                } else {
-                    let html = '<div class="modal-section">';
-                    html += '<h4>Chi tiết đơn hàng #' + orderId + '</h4>';
-                    html += '<table class="modal-table">';
-                    html += '<thead><tr><th>Tựa sách</th><th>Số lượng</th><th>Giá tiền</th><th>Tổng</th></tr></thead>';
-                    html += '<tbody>';
-                    data.order_details.forEach(item => {
-                        html += '<tr>';
-                        html += '<td>' + item.tieu_de + '</td>';
-                        html += '<td>' + item.so_luong + '</td>';
-                        html += '<td>' + Number(item.gia_tien).toLocaleString('vi-VN') + ' VNĐ</td>';
-                        html += '<td>' + (item.gia_tien * item.so_luong).toLocaleString('vi-VN') + ' VNĐ</td>';
-                        html += '</tr>';
-                    });
-                    html += '</tbody></table>';
-                    html += '</div>';
-
-                    html += '<div class="modal-section">';
-                    html += '<h4>Lịch sử mua hàng của khách hàng</h4>';
-                    if (data.purchase_history.length > 0) {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'donhang_id=' + orderId + '&user_id=' + userId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        content.innerHTML = '<p>' + data.error + '</p>';
+                    } else {
+                        let html = '<div class="modal-section">';
+                        html += '<h4>Chi tiết đơn hàng #' + orderId + '</h4>';
                         html += '<table class="modal-table">';
-                        html += '<thead><tr><th>ID Đơn hàng</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>';
+                        html += '<thead><tr><th>Tựa sách</th><th>Số lượng</th><th>Giá tiền</th><th>Tổng</th></tr></thead>';
                         html += '<tbody>';
-                        data.purchase_history.forEach(order => {
+                        data.order_details.forEach(item => {
                             html += '<tr>';
-                            html += '<td>' + order.donhang_id + '</td>';
-                            html += '<td>' + order.ngay_dat + '</td>';
-                            html += '<td>' + Number(order.tong_tien).toLocaleString('vi-VN') + ' VNĐ</td>';
-                            html += '<td>' + order.trang_thai + '</td>';
+                            html += '<td>' + item.tieu_de + '</td>';
+                            html += '<td>' + item.so_luong + '</td>';
+                            html += '<td>' + Number(item.gia_tien).toLocaleString('vi-VN') + ' VNĐ</td>';
+                            html += '<td>' + (item.gia_tien * item.so_luong).toLocaleString('vi-VN') + ' VNĐ</td>';
                             html += '</tr>';
                         });
                         html += '</tbody></table>';
-                    } else {
-                        html += '<p>Không có lịch sử mua hàng khác.</p>';
-                    }
-                    html += '</div>';
+                        html += '</div>';
 
-                    content.innerHTML = html;
-                }
-                modal.style.display = 'block';
-            })
-            .catch(error => {
-                content.innerHTML = '<p>Lỗi khi tải chi tiết đơn hàng: ' + error + '</p>';
-                modal.style.display = 'block';
-            });
+                        html += '<div class="modal-section">';
+                        html += '<h4>Lịch sử mua hàng của khách hàng</h4>';
+                        if (data.purchase_history.length > 0) {
+                            html += '<table class="modal-table">';
+                            html += '<thead><tr><th>ID Đơn hàng</th><th>Ngày đặt</th><th>Tổng tiền</th><th>Trạng thái</th></tr></thead>';
+                            html += '<tbody>';
+                            data.purchase_history.forEach(order => {
+                                let statusClass = '';
+                                let statusDisplay = '';
+                                switch (order.trang_thai) {
+                                    case 'da_duoc_giao':
+                                        statusClass = 'order-status-delivered';
+                                        statusDisplay = 'Đã được giao';
+                                        break;
+                                    case 'cho_xac_nhan':
+                                        statusClass = 'order-status-pending';
+                                        statusDisplay = 'Chờ xác nhận';
+                                        break;
+                                    case 'da_xac_nhan':
+                                        statusClass = 'order-status-confirmed';
+                                        statusDisplay = 'Đã xác nhận';
+                                        break;
+                                    case 'da_bi_huy':
+                                        statusClass = 'order-status-canceled';
+                                        statusDisplay = 'Đã bị hủy';
+                                        break;
+                                    default:
+                                        statusDisplay = order.trang_thai;
+                                }
+                                html += '<tr>';
+                                html += '<td>' + order.donhang_id + '</td>';
+                                html += '<td>' + order.ngay_dat + '</td>';
+                                html += '<td>' + Number(order.tong_tien).toLocaleString('vi-VN') + ' VNĐ</td>';
+                                html += '<td><span class="' + statusClass + '">' + statusDisplay + '</span></td>';
+                                html += '</tr>';
+                            });
+                            html += '</tbody></table>';
+                        } else {
+                            html += '<p>Không có lịch sử mua hàng khác.</p>';
+                        }
+                        html += '</div>';
+
+                        content.innerHTML = html;
+                    }
+                    modal.style.display = 'block';
+                })
+                .catch(error => {
+                    content.innerHTML = '<p>Lỗi khi tải chi tiết đơn hàng: ' + error + '</p>';
+                    modal.style.display = 'block';
+                });
         }
 
         function closeModal() {
@@ -522,5 +586,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         }
     </script>
 </body>
+
 </html>
 <?php $conn->close(); ?>
