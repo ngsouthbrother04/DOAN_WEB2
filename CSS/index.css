@@ -14,8 +14,10 @@ body {
     position: fixed;
     width: 100%;
     z-index: 999;
-    background-color: #fff; /* Đảm bảo header không trong suốt */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+    background-color: #fff;
+    /* Äáº£m báº£o header khÃ´ng trong suá»‘t */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* Äá»• bÃ³ng nháº¹ */
     top: 0;
 }
 
@@ -315,7 +317,7 @@ body {
 
 }
 
-/* Bỏ banner và quảng cáo khi search sản phẩm */
+/* Bá» banner vÃ  quáº£ng cÃ¡o khi search sáº£n pháº©m */
 .main.search-active .banner,
 .main.search-active .quangcao {
     display: none;
@@ -381,7 +383,7 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 16px;
 }
 
@@ -669,12 +671,13 @@ body {
 }
 
 .btn-secondary:hover {
-    background: #999; /* tối hơn #ccc một chút */
+    background: #999;
+    /* tá»‘i hÆ¡n #ccc má»™t chÃºt */
     color: #fff;
     transition: 0.3s;
 }
 
-/* Đảm bảo modal-overlay không bị ảnh hưởng */
+/* Äáº£m báº£o modal-overlay khÃ´ng bá»‹ áº£nh hÆ°á»Ÿng */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -759,7 +762,7 @@ body {
     transition: 0.3s;
 }
 
-/* Thông báo đăng nhập */
+/* ThÃ´ng bÃ¡o Ä‘Äƒng nháº­p */
 #login-message {
     margin-bottom: 15px;
 }
@@ -780,7 +783,7 @@ body {
     text-align: center;
 }
 
-/* Thông tin người dùng */
+/* ThÃ´ng tin ngÆ°á»i dÃ¹ng */
 #user-info-container {
     position: fixed;
     top: 50%;
@@ -788,7 +791,7 @@ body {
     transform: translate(-50%, -50%);
     background-color: white;
     padding: 20px;
-    border-radius: 8px; 
+    border-radius: 8px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
     z-index: 1001;
     width: 650px;
@@ -838,7 +841,7 @@ body {
     padding: 8px 15px;
     background-color: white;
     color: rgb(18, 107, 232);
-    border: 1px solid rgb(18, 107, 232); 
+    border: 1px solid rgb(18, 107, 232);
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
@@ -860,14 +863,15 @@ body {
     text-align: end;
     border-radius: 5px;
     border: 1px solid #5f5f5f;
-  }
-  
+}
+
 .user-info .btn {
     display: inline-block;
     padding: 8px 15px;
     background-color: white;
-    color: rgb(18, 107, 232);;
-    border: 1px solid rgb(18, 107, 232); 
+    color: rgb(18, 107, 232);
+    ;
+    border: 1px solid rgb(18, 107, 232);
     border-radius: 5px;
     cursor: pointer;
     text-decoration: none;
@@ -889,7 +893,7 @@ body {
     flex-direction: row-reverse;
 }
 
- .btn-log-out {
+.btn-log-out {
     display: inline-block;
     padding: 8px 15px;
     background-color: #c22432;
@@ -913,7 +917,7 @@ body {
 .input-container {
     display: flex;
     align-items: center;
-  }
+}
 
 @media (max-width: 1250px) {
 
@@ -949,16 +953,20 @@ body {
     .search-container {
         max-width: 40%;
     }
-    
-    .userbutton p, .cartbutton p, .bellbutton p {
+
+    .userbutton p,
+    .cartbutton p,
+    .bellbutton p {
         font-size: 12px;
         max-width: 70px;
     }
-    
-    .userbutton, .cartbutton, .bellbutton {
+
+    .userbutton,
+    .cartbutton,
+    .bellbutton {
         margin-left: 10px;
     }
-    
+
     #user-info-container {
         width: 250px;
     }
@@ -1013,7 +1021,7 @@ body {
 }
 
 .hoan-tat-btn {
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 16px;
 }
 
@@ -1021,30 +1029,30 @@ body {
     display: flex;
     flex-direction: column;
     /* gap: 20px; */
-  }
+}
 
-    .register-form-content{
+.register-form-content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-  }
-  
-  
-  .form-left{
+}
+
+
+.form-left {
     display: flex;
     flex-direction: column;
     margin-left: 20px;
-  }
+}
 
-  .form-right {
+.form-right {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
-  }
-  
-  .vertical-line {
+}
+
+.vertical-line {
     width: 1px;
     background-color: #d4cfcf;
     height: 250px;
     margin-top: 20px;
-  }
+}

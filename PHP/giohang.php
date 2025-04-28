@@ -66,7 +66,7 @@ $cart_items = [];
 $total_price = 0;
 if (!empty($_SESSION['cart'])) {
    $sach_ids = array_column($_SESSION['cart'], 'id');
-   $sach_ids = array_map(function($id) use ($conn) {
+   $sach_ids = array_map(function ($id) use ($conn) {
       return "'" . mysqli_real_escape_string($conn, $id) . "'";
    }, $sach_ids);
    $sach_ids_str = implode(',', $sach_ids);
@@ -97,6 +97,7 @@ $page_title = "Giỏ Hàng";
 
 <!DOCTYPE html>
 <html>
+
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -105,6 +106,7 @@ $page_title = "Giỏ Hàng";
    <link rel="stylesheet" href="../CSS/giohang.css">
    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
    <?php include 'header.php'; ?>
 
@@ -168,7 +170,11 @@ $page_title = "Giỏ Hàng";
       <?php endif; ?>
    </div>
 
+   <?php include 'login-register/login-register-form.php'; ?>
+   <?php include 'profile-form.php'; ?>
    <?php include 'footer.php'; ?>
+
    <script src="../js/giohang.js"></script>
 </body>
+
 </html>

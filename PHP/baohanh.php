@@ -3,17 +3,19 @@ session_start();
 require_once 'db_connect.php';
 
 // Giả định user_id từ session
-$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 2;
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
-// Hiển thị danh sách đơn hàng đã hoàn thành
-$sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
-               FROM DONHANG
-               WHERE user_id = ? AND trang_thai = 'da_duoc_giao'
-               ORDER BY ngay_dat DESC";
-$stmt_orders = $conn->prepare($sql_orders);
-$stmt_orders->bind_param("i", $user_id);
-$stmt_orders->execute();
-$result_orders = $stmt_orders->get_result();
+// Nếu người dùng đã đăng nhập, truy vấn danh sách đơn hàng
+if ($user_id) {
+    $sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
+                   FROM DONHANG
+                   WHERE user_id = ? AND trang_thai = 'da_duoc_giao'
+                   ORDER BY ngay_dat DESC";
+    $stmt_orders = $conn->prepare($sql_orders);
+    $stmt_orders->bind_param("i", $user_id);
+    $stmt_orders->execute();
+    $result_orders = $stmt_orders->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -234,6 +236,43 @@ $result_orders = $stmt_orders->get_result();
             text-align: center;
             display: none;
         }
+
+        .login-prompt {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-prompt h2 {
+            color: #c22432;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .login-prompt p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .login-prompt a {
+            display: inline-block;
+            background-color: #c22432;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .login-prompt a:hover {
+            background-color: #a71d2a;
+        }
     </style>
 </head>
 
@@ -241,285 +280,292 @@ $result_orders = $stmt_orders->get_result();
     <?php include 'header.php'; ?>
 
     <div class="main">
-        <!-- Danh sách đơn hàng -->
-        <section class="product-section">
-            <h2>Danh Sách Đơn Hàng</h2>
-            <?php
-            // Truy vấn tất cả đơn hàng của người dùng
-            $sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
-                   FROM DONHANG
-                   WHERE user_id = ?
-                   ORDER BY ngay_dat DESC";
-            $stmt_orders = $conn->prepare($sql_orders);
-            $stmt_orders->bind_param("i", $user_id);
-            $stmt_orders->execute();
-            $result_orders = $stmt_orders->get_result();
-            ?>
-
-            <?php if ($result_orders->num_rows > 0): ?>
-                <table class="warranty-table">
-                    <thead>
-                        <tr>
-                            <th>ID Đơn Hàng</th>
-                            <th>Ngày Đặt</th>
-                            <th>Tổng Tiền</th>
-                            <th>Trạng Thái</th>
-                            <th>Chi Tiết</th>
-                            <th>Bảo Hành</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($order = $result_orders->fetch_assoc()): ?>
-                            <?php
-                            // Chuyển trạng thái không dấu sang có dấu
-                            $trang_thai_display = '';
-                            switch ($order['trang_thai']) {
-                                case 'da_duoc_giao':
-                                    $trang_thai_display = 'Đã được giao';
-                                    break;
-                                case 'cho_xac_nhan':
-                                    $trang_thai_display = 'Chờ xác nhận';
-                                    break;
-                                case 'da_xac_nhan':
-                                    $trang_thai_display = 'Đã xác nhận';
-                                    break;
-                                case 'da_bi_huy':
-                                    $trang_thai_display = 'Đã bị hủy';
-                                    break;
-                                default:
-                                    $trang_thai_display = $order['trang_thai'];
-                            }
-                            ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($order['donhang_id']); ?></td>
-                                <td><?php echo htmlspecialchars($order['ngay_dat']); ?></td>
-                                <td><?php echo number_format($order['tong_tien'], 0, ',', '.'); ?> VNĐ</td>
-                                <td><?php echo htmlspecialchars($trang_thai_display); ?></td>
-                                <td><a href="javascript:void(0);" class="view-details" data-donhang-id="<?php echo $order['donhang_id']; ?>">Xem chi tiết</a></td>
-                                <td>
-                                    <?php if ($order['trang_thai'] === 'da_duoc_giao'): ?>
-                                        <a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Bảo hành</a>
-                                    <?php else: ?>
-                                        <span style="color: #999;">Bảo hành</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p class="error" style="display: block;">Bạn chưa có đơn hàng nào.</p>
-            <?php endif; ?>
-            <?php $stmt_orders->close(); ?>
-        </section>
-
-        <!-- Modal hiển thị chi tiết đơn hàng -->
-        <div id="order-details-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
-            <div style="background: #fff; width: 600px; margin: 100px auto; padding: 20px; border-radius: 8px; position: relative;">
-                <h3 style="margin-top: 0;">Chi Tiết Đơn Hàng</h3>
-                <table class="warranty-table" id="order-details-table">
-                    <thead>
-                        <tr>
-                            <th>Tên Sách</th>
-                            <th>Đơn Giá</th>
-                            <th>Số Lượng</th>
-                            <th>Tổng Tiền</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-                <button onclick="closeModal()" style="margin-top: 20px; background-color: #c22432; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
+        <?php if (!$user_id): ?>
+            <!-- Hiển thị thông báo nếu người dùng chưa đăng nhập -->
+            <div class="login-prompt">
+                <h2>Đăng Nhập Yêu Cầu</h2>
+                <p>Vui lòng đăng nhập để xem và gửi yêu cầu bảo hành.</p>
+                <a href="javascript:void(0);" onclick="document.querySelector('.userbutton').click();">Đăng Nhập Ngay</a>
             </div>
-        </div>
+        <?php else: ?>
+            <!-- Danh sách đơn hàng -->
+            <section class="product-section">
+                <h2>Danh Sách Đơn Hàng</h2>
+                <?php
+                // Truy vấn tất cả đơn hàng của người dùng
+                $sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
+                       FROM DONHANG
+                       WHERE user_id = ?
+                       ORDER BY ngay_dat DESC";
+                $stmt_orders = $conn->prepare($sql_orders);
+                $stmt_orders->bind_param("i", $user_id);
+                $stmt_orders->execute();
+                $result_orders = $stmt_orders->get_result();
+                ?>
 
-        <script>
-            $(document).ready(function() {
-                // Xử lý khi nhấn "Xem chi tiết"
-                $('.view-details').on('click', function() {
-                    var donhang_id = $(this).data('donhang-id');
+                <?php if ($result_orders->num_rows > 0): ?>
+                    <table class="warranty-table">
+                        <thead>
+                            <tr>
+                                <th>ID Đơn Hàng</th>
+                                <th>Ngày Đặt</th>
+                                <th>Tổng Tiền</th>
+                                <th>Trạng Thái</th>
+                                <th>Chi Tiết</th>
+                                <th>Bảo Hành</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($order = $result_orders->fetch_assoc()): ?>
+                                <?php
+                                // Chuyển trạng thái không dấu sang có dấu
+                                $trang_thai_display = '';
+                                switch ($order['trang_thai']) {
+                                    case 'da_duoc_giao':
+                                        $trang_thai_display = 'Đã được giao';
+                                        break;
+                                    case 'cho_xac_nhan':
+                                        $trang_thai_display = 'Chờ xác nhận';
+                                        break;
+                                    case 'da_xac_nhan':
+                                        $trang_thai_display = 'Đã xác nhận';
+                                        break;
+                                    case 'da_bi_huy':
+                                        $trang_thai_display = 'Đã bị hủy';
+                                        break;
+                                    default:
+                                        $trang_thai_display = $order['trang_thai'];
+                                }
+                                ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($order['donhang_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($order['ngay_dat']); ?></td>
+                                    <td><?php echo number_format($order['tong_tien'], 0, ',', '.'); ?> VNĐ</td>
+                                    <td><?php echo htmlspecialchars($trang_thai_display); ?></td>
+                                    <td><a href="javascript:void(0);" class="view-details" data-donhang-id="<?php echo $order['donhang_id']; ?>">Xem chi tiết</a></td>
+                                    <td>
+                                        <?php if ($order['trang_thai'] === 'da_duoc_giao'): ?>
+                                            <a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Bảo hành</a>
+                                        <?php else: ?>
+                                            <span style="color: #999;">Bảo hành</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p class="error" style="display: block;">Bạn chưa có đơn hàng nào.</p>
+                <?php endif; ?>
+                <?php $stmt_orders->close(); ?>
+            </section>
 
-                    // Gửi yêu cầu AJAX để lấy chi tiết đơn hàng
-                    $.ajax({
-                        url: 'get_order_details.php',
-                        method: 'POST',
-                        data: {
-                            donhang_id: donhang_id
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            if (response.success) {
-                                var tbody = $('#order-details-table tbody');
-                                tbody.empty(); // Xóa nội dung cũ
+            <!-- Modal hiển thị chi tiết đơn hàng -->
+            <div id="order-details-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+                <div style="background: #fff; width: 600px; margin: 100px auto; padding: 20px; border-radius: 8px; position: relative;">
+                    <h3 style="margin-top: 0;">Chi Tiết Đơn Hàng</h3>
+                    <table class="warranty-table" id="order-details-table">
+                        <thead>
+                            <tr>
+                                <th>Tên Sách</th>
+                                <th>Đơn Giá</th>
+                                <th>Số Lượng</th>
+                                <th>Tổng Tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <button onclick="closeModal()" style="margin-top: 20px; background-color: #c22432; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
+                </div>
+            </div>
 
-                                // Thêm dữ liệu vào bảng
-                                response.data.forEach(function(item) {
-                                    var row = '<tr>' +
-                                        '<td>' + item.tieu_de + '</td>' +
-                                        '<td>' + Number(item.gia_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
-                                        '<td>' + item.so_luong + '</td>' +
-                                        '<td>' + Number(item.tong_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
-                                        '</tr>';
-                                    tbody.append(row);
-                                });
+            <script>
+                $(document).ready(function() {
+                    // Xử lý khi nhấn "Xem chi tiết"
+                    $('.view-details').on('click', function() {
+                        var donhang_id = $(this).data('donhang-id');
 
-                                // Hiển thị modal
-                                $('#order-details-modal').show();
-                            } else {
-                                alert('Không thể lấy chi tiết đơn hàng: ' + response.message);
+                        // Gửi yêu cầu AJAX để lấy chi tiết đơn hàng
+                        $.ajax({
+                            url: 'get_order_details.php',
+                            method: 'POST',
+                            data: {
+                                donhang_id: donhang_id
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    var tbody = $('#order-details-table tbody');
+                                    tbody.empty(); // Xóa nội dung cũ
+
+                                    // Thêm dữ liệu vào bảng
+                                    response.data.forEach(function(item) {
+                                        var row = '<tr>' +
+                                            '<td>' + item.tieu_de + '</td>' +
+                                            '<td>' + Number(item.gia_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
+                                            '<td>' + item.so_luong + '</td>' +
+                                            '<td>' + Number(item.tong_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
+                                            '</tr>';
+                                        tbody.append(row);
+                                    });
+
+                                    // Hiển thị modal
+                                    $('#order-details-modal').show();
+                                } else {
+                                    alert('Không thể lấy chi tiết đơn hàng: ' + response.message);
+                                }
+                            },
+                            error: function() {
+                                alert('Có lỗi xảy ra khi lấy chi tiết đơn hàng.');
                             }
-                        },
-                        error: function() {
-                            alert('Có lỗi xảy ra khi lấy chi tiết đơn hàng.');
-                        }
+                        });
                     });
                 });
-            });
 
-            // Đóng modal
-            function closeModal() {
-                $('#order-details-modal').hide();
-            }
-        </script>
+                // Đóng modal
+                function closeModal() {
+                    $('#order-details-modal').hide();
+                }
+            </script>
 
+            <!-- Chọn bản sao để bảo hành -->
+            <?php if (isset($_GET['donhang_id'])): ?>
+                <?php
+                $donhang_id = intval($_GET['donhang_id']);
 
+                // Kiểm tra đơn hàng thuộc về người dùng và có trạng thái đã hoàn thành
+                $sql_check = "SELECT user_id FROM DONHANG WHERE donhang_id = ? AND trang_thai = 'da_duoc_giao'";
+                $stmt_check = $conn->prepare($sql_check);
+                $stmt_check->bind_param("i", $donhang_id);
+                $stmt_check->execute();
+                $result_check = $stmt_check->get_result();
+                if ($result_check->num_rows == 0 || $result_check->fetch_assoc()['user_id'] != $user_id) {
+                    echo "<p class='error' style='display: block;'>Đơn hàng không hợp lệ, không thuộc về bạn hoặc chưa hoàn thành.</p>";
+                    $stmt_check->close();
+                } else {
+                    $stmt_check->close();
 
-        <!-- Chọn bản sao để bảo hành -->
-        <?php if (isset($_GET['donhang_id'])): ?>
-            <?php
-            $donhang_id = intval($_GET['donhang_id']);
-
-            // Kiểm tra đơn hàng thuộc về người dùng và có trạng thái đã hoàn thành
-            $sql_check = "SELECT user_id FROM DONHANG WHERE donhang_id = ? AND trang_thai = 'da_duoc_giao'";
-            $stmt_check = $conn->prepare($sql_check);
-            $stmt_check->bind_param("i", $donhang_id);
-            $stmt_check->execute();
-            $result_check = $stmt_check->get_result();
-            if ($result_check->num_rows == 0 || $result_check->fetch_assoc()['user_id'] != $user_id) {
-                echo "<p class='error' style='display: block;'>Đơn hàng không hợp lệ, không thuộc về bạn hoặc chưa hoàn thành.</p>";
-                $stmt_check->close();
-            } else {
-                $stmt_check->close();
-
-                // Truy vấn danh sách sách và bản sao trong đơn hàng
-                $sql_books = "SELECT s.sach_id, s.tieu_de
-                              FROM CHITIETDONHANG ctd
-                              JOIN SACH s ON ctd.sach_id = s.sach_id
-                              WHERE ctd.donhang_id = ?
-                              GROUP BY s.sach_id";
-                $stmt_books = $conn->prepare($sql_books);
-                $stmt_books->bind_param("i", $donhang_id);
-                $stmt_books->execute();
-                $result_books = $stmt_books->get_result();
-            ?>
-                <section class="product-section">
-                    <h2>Chọn Sách Bạn Muốn Bảo Hành (Đơn Hàng #<?php echo $donhang_id; ?>)</h2>
-                    <div class="error"></div>
-                    <div class="success"></div>
-                    <?php if ($result_books->num_rows > 0): ?>
-                        <form id="warranty-form" class="filter-section">
-                            <input type="hidden" name="donhang_id" value="<?php echo $donhang_id; ?>">
-                            <?php while ($book = $result_books->fetch_assoc()): ?>
-                                <?php
-                                $sach_id = $book['sach_id'];
-                                // Truy vấn danh sách bản sao và kiểm tra trạng thái bảo hành
-                                $sql_copies = "SELECT cts.chitietsach_id,
-                                               CASE WHEN dbh.chitietsach_id IS NOT NULL THEN 1 ELSE 0 END AS has_warranty
-                                               FROM CHITIETSACH cts
-                                               JOIN CHITIETDONHANG ctd ON cts.chitietdonhang_id = ctd.chitiet_id
-                                               LEFT JOIN DONBAOHANH dbh ON cts.chitietsach_id = dbh.chitietsach_id
-                                               WHERE ctd.donhang_id = ? AND cts.sach_id = ?";
-                                $stmt_copies = $conn->prepare($sql_copies);
-                                $stmt_copies->bind_param("ii", $donhang_id, $sach_id);
-                                $stmt_copies->execute();
-                                $result_copies = $stmt_copies->get_result();
-                                ?>
-                                <h3><?php echo htmlspecialchars($book['tieu_de']); ?></h3>
-                                <?php if ($result_copies->num_rows > 0): ?>
-                                    <table class="warranty-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Chọn</th>
-                                                <th>Mã Sách</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php while ($copy = $result_copies->fetch_assoc()): ?>
-                                                <tr data-chitietsach-id="<?php echo htmlspecialchars($copy['chitietsach_id']); ?>" class="<?php echo $copy['has_warranty'] ? 'disabled' : ''; ?>">
-                                                    <td><input type="radio" name="chitietsach_id" value="<?php echo htmlspecialchars($copy['chitietsach_id']); ?>" <?php echo $copy['has_warranty'] ? 'disabled' : 'required'; ?>></td>
-                                                    <td><?php echo htmlspecialchars($copy['chitietsach_id']); ?></td>
+                    // Truy vấn danh sách sách và bản sao trong đơn hàng
+                    $sql_books = "SELECT s.sach_id, s.tieu_de
+                                  FROM CHITIETDONHANG ctd
+                                  JOIN SACH s ON ctd.sach_id = s.sach_id
+                                  WHERE ctd.donhang_id = ?
+                                  GROUP BY s.sach_id";
+                    $stmt_books = $conn->prepare($sql_books);
+                    $stmt_books->bind_param("i", $donhang_id);
+                    $stmt_books->execute();
+                    $result_books = $stmt_books->get_result();
+                ?>
+                    <section class="product-section">
+                        <h2>Chọn Sách Bạn Muốn Bảo Hành (Đơn Hàng #<?php echo $donhang_id; ?>)</h2>
+                        <div class="error"></div>
+                        <div class="success"></div>
+                        <?php if ($result_books->num_rows > 0): ?>
+                            <form id="warranty-form" class="filter-section">
+                                <input type="hidden" name="donhang_id" value="<?php echo $donhang_id; ?>">
+                                <?php while ($book = $result_books->fetch_assoc()): ?>
+                                    <?php
+                                    $sach_id = $book['sach_id'];
+                                    // Truy vấn danh sách bản sao và kiểm tra trạng thái bảo hành
+                                    $sql_copies = "SELECT cts.chitietsach_id,
+                                                   CASE WHEN dbh.chitietsach_id IS NOT NULL THEN 1 ELSE 0 END AS has_warranty
+                                                   FROM CHITIETSACH cts
+                                                   JOIN CHITIETDONHANG ctd ON cts.chitietdonhang_id = ctd.chitiet_id
+                                                   LEFT JOIN DONBAOHANH dbh ON cts.chitietsach_id = dbh.chitietsach_id
+                                                   WHERE ctd.donhang_id = ? AND cts.sach_id = ?";
+                                    $stmt_copies = $conn->prepare($sql_copies);
+                                    $stmt_copies->bind_param("ii", $donhang_id, $sach_id);
+                                    $stmt_copies->execute();
+                                    $result_copies = $stmt_copies->get_result();
+                                    ?>
+                                    <h3><?php echo htmlspecialchars($book['tieu_de']); ?></h3>
+                                    <?php if ($result_copies->num_rows > 0): ?>
+                                        <table class="warranty-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Chọn</th>
+                                                    <th>Mã Sách</th>
                                                 </tr>
-                                            <?php endwhile; ?>
-                                        </tbody>
-                                    </table>
-                                <?php else: ?>
-                                    <p class="error" style="display: block;">Không có bản sao nào cho sách này.</p>
-                                <?php endif; ?>
-                                <?php $stmt_copies->close(); ?>
-                            <?php endwhile; ?>
-                            <div class="filter-group">
-                                <label style="padding-top: 20px;" for="ly_do">Lý do bảo hành:</label>
-                                <textarea id="ly_do" name="ly_do" required></textarea>
-                            </div>
-                            <div class="filter-buttons">
-                                <button type="submit">Gửi Yêu Cầu Bảo Hành</button>
-                            </div>
-                        </form>
-                    <?php else: ?>
-                        <p class="error" style="display: block;">Không tìm thấy sách nào trong đơn hàng này.</p>
-                    <?php endif; ?>
-                    <?php $stmt_books->close(); ?>
-                </section>
-            <?php } ?>
-        <?php endif; ?>
-
-        <!-- Lịch sử yêu cầu bảo hành -->
-        <?php
-        $sql_warranties = "SELECT dbh.donbaohanh_id, dbh.donhang_id, dbh.chitietsach_id, s.tieu_de, dbh.ly_do, dbh.ngay, dbh.trang_thai
-                           FROM DONBAOHANH dbh
-                           JOIN CHITIETSACH cts ON dbh.chitietsach_id = cts.chitietsach_id
-                           JOIN SACH s ON cts.sach_id = s.sach_id
-                           JOIN DONHANG dh ON dbh.donhang_id = dh.donhang_id
-                           WHERE dh.user_id = ?
-                           ORDER BY dbh.ngay DESC";
-        $stmt_warranties = $conn->prepare($sql_warranties);
-        $stmt_warranties->bind_param("i", $user_id);
-        $stmt_warranties->execute();
-        $result_warranties = $stmt_warranties->get_result();
-        ?>
-        <section class="product-section">
-            <h2>Lịch Sử Yêu Cầu Bảo Hành</h2>
-            <?php if ($result_warranties->num_rows > 0): ?>
-                <table class="warranty-table">
-                    <thead>
-                        <tr>
-                            <th>ID-BH</th>
-                            <th>ID-DH</th>
-                            <th>Tên Sách</th>
-                            <th>Mã Bản Sao</th>
-                            <th>Lý Do</th>
-                            <th>Ngày</th>
-                            <th>Trạng Thái</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($warranty = $result_warranties->fetch_assoc()): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($warranty['donbaohanh_id']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['donhang_id']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['tieu_de']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['chitietsach_id']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['ly_do']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['ngay']); ?></td>
-                                <td><?php echo htmlspecialchars($warranty['trang_thai']); ?></td>
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            <?php else: ?>
-                <p class="error" style="display: block;">Chưa có yêu cầu bảo hành nào.</p>
+                                            </thead>
+                                            <tbody>
+                                                <?php while ($copy = $result_copies->fetch_assoc()): ?>
+                                                    <tr data-chitietsach-id="<?php echo htmlspecialchars($copy['chitietsach_id']); ?>" class="<?php echo $copy['has_warranty'] ? 'disabled' : ''; ?>">
+                                                        <td><input type="radio" name="chitietsach_id" value="<?php echo htmlspecialchars($copy['chitietsach_id']); ?>" <?php echo $copy['has_warranty'] ? 'disabled' : 'required'; ?>></td>
+                                                        <td><?php echo htmlspecialchars($copy['chitietsach_id']); ?></td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            </tbody>
+                                        </table>
+                                    <?php else: ?>
+                                        <p class="error" style="display: block;">Không có bản sao nào cho sách này.</p>
+                                    <?php endif; ?>
+                                    <?php $stmt_copies->close(); ?>
+                                <?php endwhile; ?>
+                                <div class="filter-group">
+                                    <label style="padding-top: 20px;" for="ly_do">Lý do bảo hành:</label>
+                                    <textarea id="ly_do" name="ly_do" required></textarea>
+                                </div>
+                                <div class="filter-buttons">
+                                    <button type="submit">Gửi Yêu Cầu Bảo Hành</button>
+                                </div>
+                            </form>
+                        <?php else: ?>
+                            <p class="error" style="display: block;">Không tìm thấy sách nào trong đơn hàng này.</p>
+                        <?php endif; ?>
+                        <?php $stmt_books->close(); ?>
+                    </section>
+                <?php } ?>
             <?php endif; ?>
-            <?php $stmt_warranties->close(); ?>
-        </section>
+
+            <!-- Lịch sử yêu cầu bảo hành -->
+            <?php
+            $sql_warranties = "SELECT dbh.donbaohanh_id, dbh.donhang_id, dbh.chitietsach_id, s.tieu_de, dbh.ly_do, dbh.ngay, dbh.trang_thai
+                               FROM DONBAOHANH dbh
+                               JOIN CHITIETSACH cts ON dbh.chitietsach_id = cts.chitietsach_id
+                               JOIN SACH s ON cts.sach_id = s.sach_id
+                               JOIN DONHANG dh ON dbh.donhang_id = dh.donhang_id
+                               WHERE dh.user_id = ?
+                               ORDER BY dbh.ngay DESC";
+            $stmt_warranties = $conn->prepare($sql_warranties);
+            $stmt_warranties->bind_param("i", $user_id);
+            $stmt_warranties->execute();
+            $result_warranties = $stmt_warranties->get_result();
+            ?>
+            <section class="product-section">
+                <h2>Lịch Sử Yêu Cầu Bảo Hành</h2>
+                <?php if ($result_warranties->num_rows > 0): ?>
+                    <table class="warranty-table">
+                        <thead>
+                            <tr>
+                                <th>ID-BH</th>
+                                <th>ID-DH</th>
+                                <th>Tên Sách</th>
+                                <th>Mã Bản Sao</th>
+                                <th>Lý Do</th>
+                                <th>Ngày</th>
+                                <th>Trạng Thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php while ($warranty = $result_warranties->fetch_assoc()): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($warranty['donbaohanh_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['donhang_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['tieu_de']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['chitietsach_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['ly_do']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['ngay']); ?></td>
+                                    <td><?php echo htmlspecialchars($warranty['trang_thai']); ?></td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p class="error" style="display: block;">Chưa có yêu cầu bảo hành nào.</p>
+                <?php endif; ?>
+                <?php $stmt_warranties->close(); ?>
+            </section>
+        <?php endif; ?>
     </div>
 
     <script>

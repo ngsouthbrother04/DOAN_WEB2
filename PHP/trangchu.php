@@ -131,10 +131,6 @@ $pagination = $filtered_data['pagination'];
                         <?php if (!empty($row['gia_tien'])): ?>
                            <p style="color: #c22432; font-weight: bold;">Giá: <?php echo number_format($row['gia_tien'], 0, ',', '.'); ?> VND</p>
                         <?php endif; ?>
-                        <div class="button-container">
-                           <button class="buy-now-btn">Mua</button>
-                           <button class="add-to-cart-btn">Thêm</button>
-                        </div>
                      </div>
                   <?php endforeach; ?>
                </div>
