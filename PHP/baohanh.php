@@ -18,6 +18,7 @@ $result_orders = $stmt_orders->get_result();
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +79,8 @@ $result_orders = $stmt_orders->get_result();
             border: 10px;
         }
 
-        .warranty-table th, .warranty-table td {
+        .warranty-table th,
+        .warranty-table td {
             padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
@@ -234,13 +236,26 @@ $result_orders = $stmt_orders->get_result();
         }
     </style>
 </head>
+
 <body>
     <?php include 'header.php'; ?>
 
     <div class="main">
         <!-- Danh sách đơn hàng -->
         <section class="product-section">
-            <h2>Đơn Hàng Đã Hoàn Thành</h2>
+            <h2>Danh Sách Đơn Hàng</h2>
+            <?php
+            // Truy vấn tất cả đơn hàng của người dùng
+            $sql_orders = "SELECT donhang_id, ngay_dat, tong_tien, trang_thai
+                   FROM DONHANG
+                   WHERE user_id = ?
+                   ORDER BY ngay_dat DESC";
+            $stmt_orders = $conn->prepare($sql_orders);
+            $stmt_orders->bind_param("i", $user_id);
+            $stmt_orders->execute();
+            $result_orders = $stmt_orders->get_result();
+            ?>
+
             <?php if ($result_orders->num_rows > 0): ?>
                 <table class="warranty-table">
                     <thead>
@@ -250,27 +265,123 @@ $result_orders = $stmt_orders->get_result();
                             <th>Tổng Tiền</th>
                             <th>Trạng Thái</th>
                             <th>Chi Tiết</th>
+                            <th>Bảo Hành</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php while ($order = $result_orders->fetch_assoc()): ?>
+                            <?php
+                            // Chuyển trạng thái không dấu sang có dấu
+                            $trang_thai_display = '';
+                            switch ($order['trang_thai']) {
+                                case 'da_duoc_giao':
+                                    $trang_thai_display = 'Đã được giao';
+                                    break;
+                                case 'cho_xac_nhan':
+                                    $trang_thai_display = 'Chờ xác nhận';
+                                    break;
+                                case 'da_xac_nhan':
+                                    $trang_thai_display = 'Đã xác nhận';
+                                    break;
+                                case 'da_bi_huy':
+                                    $trang_thai_display = 'Đã bị hủy';
+                                    break;
+                                default:
+                                    $trang_thai_display = $order['trang_thai'];
+                            }
+                            ?>
                             <tr>
                                 <td><?php echo htmlspecialchars($order['donhang_id']); ?></td>
                                 <td><?php echo htmlspecialchars($order['ngay_dat']); ?></td>
                                 <td><?php echo number_format($order['tong_tien'], 0, ',', '.'); ?> VNĐ</td>
-                                <td><?php echo htmlspecialchars($order['trang_thai']); ?></td>
-                                <td><a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Xem thêm</a></td>
+                                <td><?php echo htmlspecialchars($trang_thai_display); ?></td>
+                                <td><a href="javascript:void(0);" class="view-details" data-donhang-id="<?php echo $order['donhang_id']; ?>">Xem chi tiết</a></td>
+                                <td>
+                                    <?php if ($order['trang_thai'] === 'da_duoc_giao'): ?>
+                                        <a href="?donhang_id=<?php echo $order['donhang_id']; ?>">Bảo hành</a>
+                                    <?php else: ?>
+                                        <span style="color: #999;">Bảo hành</span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>
                 </table>
             <?php else: ?>
-                <p class="error" style="display: block;">Bạn chưa có đơn hàng nào đã hoàn thành.</p>
+                <p class="error" style="display: block;">Bạn chưa có đơn hàng nào.</p>
             <?php endif; ?>
             <?php $stmt_orders->close(); ?>
         </section>
 
-        
+        <!-- Modal hiển thị chi tiết đơn hàng -->
+        <div id="order-details-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+            <div style="background: #fff; width: 600px; margin: 100px auto; padding: 20px; border-radius: 8px; position: relative;">
+                <h3 style="margin-top: 0;">Chi Tiết Đơn Hàng</h3>
+                <table class="warranty-table" id="order-details-table">
+                    <thead>
+                        <tr>
+                            <th>Tên Sách</th>
+                            <th>Đơn Giá</th>
+                            <th>Số Lượng</th>
+                            <th>Tổng Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <button onclick="closeModal()" style="margin-top: 20px; background-color: #c22432; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Đóng</button>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                // Xử lý khi nhấn "Xem chi tiết"
+                $('.view-details').on('click', function() {
+                    var donhang_id = $(this).data('donhang-id');
+
+                    // Gửi yêu cầu AJAX để lấy chi tiết đơn hàng
+                    $.ajax({
+                        url: 'get_order_details.php',
+                        method: 'POST',
+                        data: {
+                            donhang_id: donhang_id
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                var tbody = $('#order-details-table tbody');
+                                tbody.empty(); // Xóa nội dung cũ
+
+                                // Thêm dữ liệu vào bảng
+                                response.data.forEach(function(item) {
+                                    var row = '<tr>' +
+                                        '<td>' + item.tieu_de + '</td>' +
+                                        '<td>' + Number(item.gia_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
+                                        '<td>' + item.so_luong + '</td>' +
+                                        '<td>' + Number(item.tong_tien).toLocaleString('vi-VN') + ' VNĐ</td>' +
+                                        '</tr>';
+                                    tbody.append(row);
+                                });
+
+                                // Hiển thị modal
+                                $('#order-details-modal').show();
+                            } else {
+                                alert('Không thể lấy chi tiết đơn hàng: ' + response.message);
+                            }
+                        },
+                        error: function() {
+                            alert('Có lỗi xảy ra khi lấy chi tiết đơn hàng.');
+                        }
+                    });
+                });
+            });
+
+            // Đóng modal
+            function closeModal() {
+                $('#order-details-modal').hide();
+            }
+        </script>
+
+
 
         <!-- Chọn bản sao để bảo hành -->
         <?php if (isset($_GET['donhang_id'])): ?>
@@ -470,4 +581,5 @@ $result_orders = $stmt_orders->get_result();
     <script src="../js/search.js"></script>
     <?php $conn->close(); ?>
 </body>
+
 </html>
