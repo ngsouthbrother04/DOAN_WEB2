@@ -14,14 +14,13 @@ function isValidPhoneNumber($sdt)
 // Xử lý thêm tài khoản mới
 if (isset($_POST['them_taikhoan'])) {
    // Kiểm tra tất cả các trường bắt buộc
-   if (!isset($_POST['ho_ten'], $_POST['email'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'], $_POST['mat_khau'])) {
+   if (!isset($_POST['ho_ten'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'], $_POST['mat_khau'])) {
       $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
       header("Location: edit_taikhoan.php?error=add");
       exit();
    }
 
    $ho_ten = mysqli_real_escape_string($conn, trim($_POST['ho_ten']));
-   $email = mysqli_real_escape_string($conn, trim($_POST['email']));
    $sdt = mysqli_real_escape_string($conn, trim($_POST['sdt']));
    $dia_chi = mysqli_real_escape_string($conn, trim($_POST['dia_chi']));
    $ngay_sinh = $_POST['ngay_sinh'];
@@ -29,15 +28,8 @@ if (isset($_POST['them_taikhoan'])) {
    $mat_khau = password_hash($_POST['mat_khau'], PASSWORD_DEFAULT);
 
    // Kiểm tra các trường không được để trống
-   if (empty($ho_ten) || empty($email) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen) || empty($_POST['mat_khau'])) {
+   if (empty($ho_ten) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen) || empty($_POST['mat_khau'])) {
       $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
-      header("Location: edit_taikhoan.php?error=add");
-      exit();
-   }
-
-   // Kiểm tra định dạng email
-   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $_SESSION['error'] = "Email không hợp lệ!";
       header("Location: edit_taikhoan.php?error=add");
       exit();
    }
@@ -49,27 +41,19 @@ if (isset($_POST['them_taikhoan'])) {
       exit();
    }
 
-   // Kiểm tra trùng email
-   $check_email_sql = "SELECT user_id FROM `USER` WHERE email = '$email'";
-   $email_result = mysqli_query($conn, $check_email_sql);
-
    // Kiểm tra trùng số điện thoại
    $check_sdt_sql = "SELECT user_id FROM `USER` WHERE sdt = '$sdt'";
    $sdt_result = mysqli_query($conn, $check_sdt_sql);
 
-   if (mysqli_num_rows($email_result) > 0) {
-      $_SESSION['error'] = "Email '$email' đã được sử dụng!";
-      header("Location: edit_taikhoan.php?error=add");
-      exit();
-   } elseif (mysqli_num_rows($sdt_result) > 0) {
+   if (mysqli_num_rows($sdt_result) > 0) {
       $_SESSION['error'] = "Số điện thoại '$sdt' đã được sử dụng!";
       header("Location: edit_taikhoan.php?error=add");
       exit();
    }
 
    // Thêm tài khoản vào database
-   $sql = "INSERT INTO `USER` (ho_ten, email, sdt, dia_chi, ngay_sinh, quyen, mat_khau) 
-           VALUES ('$ho_ten', '$email', '$sdt', '$dia_chi', '$ngay_sinh', '$quyen', '$mat_khau')";
+   $sql = "INSERT INTO `USER` (ho_ten, sdt, dia_chi, ngay_sinh, quyen, mat_khau) 
+           VALUES ('$ho_ten', '$sdt', '$dia_chi', '$ngay_sinh', '$quyen', '$mat_khau')";
 
    if (mysqli_query($conn, $sql)) {
       header("Location: edit_taikhoan.php?success=add");
@@ -81,55 +65,53 @@ if (isset($_POST['them_taikhoan'])) {
    }
 }
 
-// Xử lý xóa tài khoản
-if (isset($_GET['delete_id'])) {
-   $delete_id = intval($_GET['delete_id']);
+               // Xử lý xóa tài khoản
+               if (isset($_GET['delete_id'])) {
+                  $delete_id = intval($_GET['delete_id']);
 
-   // Bắt đầu giao dịch
-   mysqli_begin_transaction($conn);
+                  // Bắt đầu giao dịch
+                  mysqli_begin_transaction($conn);
 
-   try {
-      // Xóa các bản ghi trong CHITIETDONHANG liên quan đến DONHANG của user
-      $sql_delete_chitiet = "DELETE c FROM CHITIETDONHANG c 
+                  try {
+                     // Xóa các bản ghi trong CHITIETDONHANG liên quan đến DONHANG của user
+                     $sql_delete_chitiet = "DELETE c FROM CHITIETDONHANG c 
                            INNER JOIN DONHANG d ON c.donhang_id = d.donhang_id 
                            WHERE d.user_id = $delete_id";
-      mysqli_query($conn, $sql_delete_chitiet);
+                     mysqli_query($conn, $sql_delete_chitiet);
 
-      // Xóa các bản ghi trong GIOHANG liên quan đến DONHANG của user
-      $sql_delete_giohang = "DELETE g FROM GIOHANG g 
-                           INNER JOIN DONHANG d ON g.donhang_id = d.donhang_id 
-                           WHERE d.user_id = $delete_id";
-      mysqli_query($conn, $sql_delete_giohang);
+                     // Xóa các bản ghi trong GIOHANG của user
+                     $sql_delete_giohang = "DELETE FROM GIOHANG WHERE user_id = $delete_id";
+                     mysqli_query($conn, $sql_delete_giohang);
 
-      // Xóa các bản ghi trong DONHANG
-      $sql_delete_donhang = "DELETE FROM DONHANG WHERE user_id = $delete_id";
-      mysqli_query($conn, $sql_delete_donhang);
+                     // Xóa các bản ghi trong DONHANG
+                     $sql_delete_donhang = "DELETE FROM DONHANG WHERE user_id = $delete_id";
+                     mysqli_query($conn, $sql_delete_donhang);
 
-      // Xóa các bản ghi trong FEEDBACK
-      $sql_delete_feedback = "DELETE FROM FEEDBACK WHERE user_id = $delete_id";
-      mysqli_query($conn, $sql_delete_feedback);
+                     // Xóa các bản ghi trong FEEDBACK
+                     $sql_delete_feedback = "DELETE FROM FEEDBACK WHERE user_id = $delete_id";
+                     mysqli_query($conn, $sql_delete_feedback);
 
-      // Xóa tài khoản trong USER
-      $sql_delete_user = "DELETE FROM `USER` WHERE user_id = $delete_id";
-      if (mysqli_query($conn, $sql_delete_user)) {
-         mysqli_commit($conn);
-         header("Location: edit_taikhoan.php?success=delete");
-         exit();
-      } else {
-         throw new Exception("Lỗi khi xóa tài khoản: " . mysqli_error($conn));
-      }
-   } catch (Exception $e) {
-      mysqli_rollback($conn);
-      $_SESSION['error'] = $e->getMessage();
-      header("Location: edit_taikhoan.php?error=delete");
-      exit();
-   }
-}
+                     // Xóa tài khoản trong USER
+                     $sql_delete_user = "DELETE FROM `USER` WHERE user_id = $delete_id";
+                     if (mysqli_query($conn, $sql_delete_user)) {
+                        mysqli_commit($conn);
+                        header("Location: edit_taikhoan.php?success=delete");
+                        exit();
+                     } else {
+                        throw new Exception("Lỗi khi xóa tài khoản: " . mysqli_error($conn));
+                     }
+                  } catch (Exception $e) {
+                     mysqli_rollback($conn);
+                     $_SESSION['error'] = $e->getMessage();
+                     header("Location: edit_taikhoan.php?error=delete");
+                     exit();
+                  }
+               }
 
 // Xử lý sửa tài khoản
 if (isset($_POST['sua_taikhoan'])) {
    // Kiểm tra các trường bắt buộc
-   if (!isset($_POST['user_id'], $_POST['ho_ten'], $_POST['email'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'])) {
+   if (!isset($_POST['user_id'], $_POST['ho_ten'], $_POST['sdt'], $_POST['dia_chi'], $_POST['ngay_sinh'], $_POST['quyen'])) {
       $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
       header("Location: edit_taikhoan.php?error=update");
       exit();
@@ -137,22 +119,14 @@ if (isset($_POST['sua_taikhoan'])) {
 
    $user_id = intval($_POST['user_id']);
    $ho_ten = mysqli_real_escape_string($conn, trim($_POST['ho_ten']));
-   $email = mysqli_real_escape_string($conn, trim($_POST['email']));
    $sdt = mysqli_real_escape_string($conn, trim($_POST['sdt']));
    $dia_chi = mysqli_real_escape_string($conn, trim($_POST['dia_chi']));
    $ngay_sinh = $_POST['ngay_sinh'];
    $quyen = $_POST['quyen'];
 
    // Kiểm tra các trường không được để trống
-   if (empty($ho_ten) || empty($email) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen)) {
+   if (empty($ho_ten) || empty($sdt) || empty($dia_chi) || empty($ngay_sinh) || empty($quyen)) {
       $_SESSION['error'] = "Vui lòng điền đầy đủ thông tin!";
-      header("Location: edit_taikhoan.php?error=update");
-      exit();
-   }
-
-   // Kiểm tra định dạng email
-   if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $_SESSION['error'] = "Email không hợp lệ!";
       header("Location: edit_taikhoan.php?error=update");
       exit();
    }
@@ -164,19 +138,11 @@ if (isset($_POST['sua_taikhoan'])) {
       exit();
    }
 
-   // Kiểm tra trùng email (ngoại trừ chính tài khoản đang sửa)
-   $check_email_sql = "SELECT user_id FROM `USER` WHERE email = '$email' AND user_id != $user_id";
-   $email_result = mysqli_query($conn, $check_email_sql);
-
    // Kiểm tra trùng số điện thoại (ngoại trừ chính tài khoản đang sửa)
    $check_sdt_sql = "SELECT user_id FROM `USER` WHERE sdt = '$sdt' AND user_id != $user_id";
    $sdt_result = mysqli_query($conn, $check_sdt_sql);
 
-   if (mysqli_num_rows($email_result) > 0) {
-      $_SESSION['error'] = "Email '$email' đã được sử dụng bởi tài khoản khác!";
-      header("Location: edit_taikhoan.php?error=update");
-      exit();
-   } elseif (mysqli_num_rows($sdt_result) > 0) {
+   if (mysqli_num_rows($sdt_result) > 0) {
       $_SESSION['error'] = "Số điện thoại '$sdt' đã được sử dụng bởi tài khoản khác!";
       header("Location: edit_taikhoan.php?error=update");
       exit();
@@ -188,7 +154,7 @@ if (isset($_POST['sua_taikhoan'])) {
       $mat_khau_sql = ", mat_khau='$mat_khau'";
    }
 
-   $sql = "UPDATE `USER` SET ho_ten='$ho_ten', email='$email', sdt='$sdt', 
+   $sql = "UPDATE `USER` SET ho_ten='$ho_ten', sdt='$sdt', 
            dia_chi='$dia_chi', ngay_sinh='$ngay_sinh', quyen='$quyen' $mat_khau_sql 
            WHERE user_id=$user_id";
 
@@ -229,7 +195,7 @@ $search_keyword = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GE
 $sort_by = isset($_GET['sort']) ? $_GET['sort'] : 'user_id';
 $sort_order = isset($_GET['order']) ? $_GET['order'] : 'DESC';
 
-$valid_sort_fields = ['user_id', 'ho_ten', 'email', 'quyen'];
+$valid_sort_fields = ['user_id', 'ho_ten', 'quyen'];
 if (!in_array($sort_by, $valid_sort_fields)) {
    $sort_by = 'user_id';
 }
@@ -244,7 +210,7 @@ if (!empty($filter_quyen)) {
    $query .= " AND quyen = '$filter_quyen'";
 }
 if (!empty($search_keyword)) {
-   $query .= " AND (ho_ten LIKE '%$search_keyword%' OR email LIKE '%$search_keyword%')";
+   $query .= " AND (ho_ten LIKE '%$search_keyword%' OR sdt LIKE '%$search_keyword%')";
 }
 $query .= " ORDER BY $sort_by $sort_order";
 
@@ -336,22 +302,22 @@ function getSortIcon($field, $current_sort, $current_order)
 
       .account-table th:nth-child(2),
       .account-table td:nth-child(2) {
-         width: 150px;
+         width: 180px;
       }
 
       .account-table th:nth-child(3),
       .account-table td:nth-child(3) {
-         width: 150px;
+         width: 120px;
       }
 
       .account-table th:nth-child(4),
       .account-table td:nth-child(4) {
-         width: 100px;
+         width: 180px;
       }
 
       .account-table th:nth-child(5),
       .account-table td:nth-child(5) {
-         width: 150px;
+         width: 120px;
       }
 
       .account-table th:nth-child(6),
@@ -361,11 +327,6 @@ function getSortIcon($field, $current_sort, $current_order)
 
       .account-table th:nth-child(7),
       .account-table td:nth-child(7) {
-         width: 80px;
-      }
-
-      .account-table th:nth-child(8),
-      .account-table td:nth-child(8) {
          width: 120px;
       }
 
@@ -536,7 +497,6 @@ function getSortIcon($field, $current_sort, $current_order)
          <form action="" method="post">
             <input type="hidden" name="user_id" id="user_id">
             <input type="text" name="ho_ten" id="ho_ten" placeholder="Họ tên" required>
-            <input type="email" name="email" id="email" placeholder="Email" required>
             <input type="text" name="sdt" id="sdt" placeholder="Số điện thoại" pattern="0[0-9]{9}" title="Số điện thoại phải bắt đầu bằng 0 và có đúng 10 số" required>
             <input type="text" name="dia_chi" id="dia_chi" placeholder="Địa chỉ" required>
             <input type="date" name="ngay_sinh" id="ngay_sinh" required>
@@ -581,11 +541,6 @@ function getSortIcon($field, $current_sort, $current_order)
                         Họ tên <?php echo getSortIcon('ho_ten', $sort_by, $sort_order); ?>
                      </a>
                   </th>
-                  <th class="sort-header">
-                     <a href="<?php echo getSortUrl('email', $sort_by, $sort_order, $filter_quyen, $search_keyword); ?>">
-                        Email <?php echo getSortIcon('email', $sort_by, $sort_order); ?>
-                     </a>
-                  </th>
                   <th>Số điện thoại</th>
                   <th>Địa chỉ</th>
                   <th>Ngày sinh</th>
@@ -606,7 +561,6 @@ function getSortIcon($field, $current_sort, $current_order)
                      <tr>
                         <td><?php echo $stt++; ?></td>
                         <td data-full-text="<?php echo htmlspecialchars($user['ho_ten']); ?>"><?php echo htmlspecialchars($user['ho_ten']); ?></td>
-                        <td data-full-text="<?php echo htmlspecialchars($user['email']); ?>"><?php echo htmlspecialchars($user['email']); ?></td>
                         <td><?php echo htmlspecialchars($user['sdt']); ?></td>
                         <td data-full-text="<?php echo htmlspecialchars($user['dia_chi']); ?>"><?php echo htmlspecialchars($user['dia_chi']); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($user['ngay_sinh'])); ?></td>
@@ -629,7 +583,7 @@ function getSortIcon($field, $current_sort, $current_order)
                } else {
                   ?>
                   <tr>
-                     <td colspan="8" style="text-align: center;">Không tìm thấy tài khoản nào</td>
+                     <td colspan="7" style="text-align: center;">Không tìm thấy tài khoản nào</td>
                   </tr>
                <?php } ?>
             </tbody>
@@ -679,7 +633,6 @@ function getSortIcon($field, $current_sort, $current_order)
       const editTaiKhoan = user => {
          document.getElementById('user_id').value = user.user_id;
          document.getElementById('ho_ten').value = user.ho_ten;
-         document.getElementById('email').value = user.email;
          document.getElementById('sdt').value = user.sdt;
          document.getElementById('dia_chi').value = user.dia_chi;
          document.getElementById('ngay_sinh').value = user.ngay_sinh.split(' ')[0];
@@ -690,7 +643,7 @@ function getSortIcon($field, $current_sort, $current_order)
          document.getElementById('submit_btn').name = 'sua_taikhoan';
          window.scrollTo(0, 0);
       }
-      
+
       const deleteTaiKhoan = userId => {
          if (confirm('Bạn có chắc muốn xóa tài khoản này?')) {
             window.location.href = 'edit_taikhoan.php?delete_id=' + userId;
