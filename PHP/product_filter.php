@@ -6,7 +6,7 @@ function getFilteredProducts($conn, $items_per_page = 6, $page_param = 'page')
    $price_max = isset($_GET['price_max']) ? (int)$_GET['price_max'] : 0;
    $sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
 
-   $where_clause = '';
+   $where_clause = "trang_thai = 'active'";
    $params = [];
    $param_types = '';
    if (!empty($category)) {

@@ -111,7 +111,6 @@ function getPaginationWithFilter($conn, $table, $items_per_page, $where_clause =
    $current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
    $current_page = max(1, $current_page);
 
-
    $count_query = "SELECT COUNT(*) as total FROM $table" . $where_clause;
 
    $total_items = 0;

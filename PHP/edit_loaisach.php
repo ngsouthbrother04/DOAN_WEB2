@@ -114,7 +114,7 @@ if ($sort_direction != 'asc' && $sort_direction != 'desc') {
 
 // Lấy tất cả thể loại với số lượng sách
 $categories_query = "SELECT l.*, 
-                    (SELECT COUNT(*) FROM SACH s WHERE s.loaisach_id = l.loaisach_id) as book_count 
+                    (SELECT COUNT(*) FROM SACH s WHERE s.loaisach_id = l.loaisach_id AND s.trang_thai = 'active') as book_count 
                     FROM LOAISACH l" . $filter_query;
 
 // Thêm mệnh đề ORDER BY

@@ -4,7 +4,7 @@ include 'db_connect.php';
 
 // Lấy số liệu thống kê
 $totalUsers = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM `USER`"))['total'];
-$totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM SACH"))['total'];
+$totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM SACH WHERE trang_thai = 'active'"))['total'];
 $totalOrders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM DONHANG"))['total'];
 $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM DONHANG"))['total'];
 

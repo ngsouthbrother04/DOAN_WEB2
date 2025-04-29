@@ -62,7 +62,7 @@ if (isset($_POST['them_sach'])) {
 // Xử lý xóa sách
 if (isset($_GET['delete_id'])) {
    $delete_id = $_GET['delete_id'];
-   $sql = "DELETE FROM SACH WHERE sach_id = $delete_id";
+   $sql = "UPDATE SACH SET trang_thai = 'deleted' WHERE sach_id = $delete_id";
 
    if (mysqli_query($conn, $sql)) {
       header("Location: edit_sach.php?success=delete");
@@ -168,7 +168,7 @@ if (!in_array($sort_order, $valid_sort_orders)) {
 
 // Xây dựng câu truy vấn với điều kiện lọc
 $query = "SELECT s.*, l.ten_loai FROM SACH s 
-          LEFT JOIN LOAISACH l ON s.loaisach_id = l.loaisach_id WHERE 1=1";
+          LEFT JOIN LOAISACH l ON s.loaisach_id = l.loaisach_id WHERE s.trang_thai = 'active'";
 
 if ($filter_category > 0) {
    $query .= " AND s.loaisach_id = $filter_category";

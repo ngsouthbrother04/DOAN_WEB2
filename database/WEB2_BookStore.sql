@@ -19,6 +19,7 @@ CREATE TABLE SACH (
     mo_ta VARCHAR(1000),
     hinh_anh VARCHAR(255),
     nha_xuat_ban VARCHAR(255),
+    trang_thai VARCHAR(8) CHECK (trang_thai IN ('active', 'deleted')),
     FOREIGN KEY (loaisach_id) REFERENCES LOAISACH(loaisach_id)
 );
 
@@ -132,22 +133,22 @@ INSERT INTO LOAISACH (ten_loai) VALUES
 ('Tâm lý'), ('Kỹ thuật'), ('Truyện tranh'), ('Giáo dục');
 
 -- Chèn dữ liệu vào bảng SACH
-INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban) VALUES
-('Blue Box tập 2', 'Kouji Miura', 250000, 50, 8, 'Blue Box - Tập 2 - Một Cô Gái Bình Thường...', '../Picture/Products/bluebox.jpg', 'NXB Kim Đồng'),
-('BlueLock tập 24', 'Không có', 260000, 30, 8, 'BlueLock - Tập 24...', '../Picture/Products/bluelock.jpg', 'NXB Kim Đồng'),
-('Bocchi The Rock tập 5', 'Không có', 180000, 40, 8, 'Truyện tranh', '../Picture/Products/bocchi.jpg', 'NXB Kim Đồng'),
-('Búp Sen', 'Sơn Tùng MTP', 120000, 60, 9, 'Giáo dục', '../Picture/Products/bupsen.webp', 'NXB Trẻ'),
-('Dược sư tự sự tập 11', 'Không có', 130000, 35, 8, 'Truyện tranh', '../Picture/Products/duocsu.jpg', 'NXB Kim Đồng'),
-('Lũ Trẻ Đường Tàu', 'Edith Nesbit', 90000, 80, 4, 'Tiểu thuyết', '../Picture/Products/lutre.jpg', 'NXB Thanh Niên'),
-('Nhà Giả Kim', 'PAULO COELHO', 170000, 45, 5, 'Lịch sử', '../Picture/Products/nhagiakim.jpg', 'NXB Giáo dục'),
-('Nhật Kí Trong Tù', 'Hồ Chí Minh', 150000, 50, 5, 'Lịch sử', '../Picture/Products/nhatki.jpg', 'NXB Văn học'),
-('Tăng cường khả năng học tập', 'Không có', 200000, 30, 9, 'Giáo dục', '../Picture/Products/quyluat.webp', 'NXB Giáo Dục'),
-('Điều kì diệu của tiệm tạp hóa NAMIYA', 'Higashino Keigo', 180000, 40, 3, 'Tiểu thuyết', '../Picture/Products/taphoa.jpg', 'NXB Trẻ'),
-('Tiền có tệ?', 'Không có', 120000, 60, 4, 'Giáo dục', '../Picture/Products/tien.webp', 'NXB Trẻ'),
-('250 bài toán chọn lọc', 'Nhiều tác giả', 130000, 35, 9, 'Giáo dục', '../Picture/Products/toan.jpg', 'NXB Tâm lý'),
-('Trường học biết tuốt', 'Không có', 250000, 20, 8, 'Truyện tranh', '../Picture/Products/truonghoc.webp', 'NXB Thông tin'),
-('Nghệ thuật đàm phán', 'Đỗ Nam Trung', 90000, 80, 6, 'Tâm lý', '../Picture/Products/trump.jpg', 'NXB Giáo Dục'),
-('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', '../Picture/Products/tien.webp', 'NXB Giáo dục');
+INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban, trang_thai) VALUES
+('Blue Box tập 2', 'Kouji Miura', 250000, 50, 8, 'Blue Box - Tập 2 - Một Cô Gái Bình Thường...', '../Picture/Products/bluebox.jpg', 'NXB Kim Đồng','active'),
+('BlueLock tập 24', 'Không có', 260000, 30, 8, 'BlueLock - Tập 24...', '../Picture/Products/bluelock.jpg', 'NXB Kim Đồng', 'active'),
+('Bocchi The Rock tập 5', 'Không có', 180000, 40, 8, 'Truyện tranh', '../Picture/Products/bocchi.jpg', 'NXB Kim Đồng', 'active'),
+('Búp Sen', 'Sơn Tùng MTP', 120000, 60, 9, 'Giáo dục', '../Picture/Products/bupsen.webp', 'NXB Trẻ', 'active'),
+('Dược sư tự sự tập 11', 'Không có', 130000, 35, 8, 'Truyện tranh', '../Picture/Products/duocsu.jpg', 'NXB Kim Đồng', 'active'),
+('Lũ Trẻ Đường Tàu', 'Edith Nesbit', 90000, 80, 4, 'Tiểu thuyết', '../Picture/Products/lutre.jpg', 'NXB Thanh Niên', 'active'),
+('Nhà Giả Kim', 'PAULO COELHO', 170000, 45, 5, 'Lịch sử', '../Picture/Products/nhagiakim.jpg', 'NXB Giáo dục', 'active'),
+('Nhật Kí Trong Tù', 'Hồ Chí Minh', 150000, 50, 5, 'Lịch sử', '../Picture/Products/nhatki.jpg', 'NXB Văn học', 'active'),
+('Tăng cường khả năng học tập', 'Không có', 200000, 30, 9, 'Giáo dục', '../Picture/Products/quyluat.webp', 'NXB Giáo Dục', 'active'),
+('Điều kì diệu của tiệm tạp hóa NAMIYA', 'Higashino Keigo', 180000, 40, 3, 'Tiểu thuyết', '../Picture/Products/taphoa.jpg', 'NXB Trẻ', 'active'),
+('Tiền có tệ?', 'Không có', 120000, 60, 4, 'Giáo dục', '../Picture/Products/tien.webp', 'NXB Trẻ', 'active'),
+('250 bài toán chọn lọc', 'Nhiều tác giả', 130000, 35, 9, 'Giáo dục', '../Picture/Products/toan.jpg', 'NXB Tâm lý', 'active'),
+('Trường học biết tuốt', 'Không có', 250000, 20, 8, 'Truyện tranh', '../Picture/Products/truonghoc.webp', 'NXB Thông tin', 'active'),
+('Nghệ thuật đàm phán', 'Đỗ Nam Trung', 90000, 80, 6, 'Tâm lý', '../Picture/Products/trump.jpg', 'NXB Giáo Dục', 'active'),
+('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', '../Picture/Products/tien.webp', 'NXB Giáo dục', 'active');
 
 -- Chèn dữ liệu vào bảng USER
 INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id) VALUES
