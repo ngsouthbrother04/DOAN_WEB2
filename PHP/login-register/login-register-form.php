@@ -33,19 +33,19 @@
                 <div class="form-left">
                     <div class="form-group">
                         <label>Họ và tên</label>
-                        <input type="text" id="full-name" placeholder="Nhập họ và tên"
+                        <input type="text" id="full-name" name="full_name" placeholder="Nhập họ và tên"
                             style="border: 1px solid #ccc; outline: none; width: 200px;">
                     </div>
 
                     <div class="form-group">
                         <label>Ngày sinh</label>
-                        <input type="date" id="dob"
+                        <input type="date" id="dob" name="dob"
                             style="border: 1px solid #ccc; outline: none; width: 200px;">
                     </div>
 
                     <div class="form-group">
                         <label>Địa chỉ</label>
-                        <input type="text" id="address" placeholder="Nhập địa chỉ"
+                        <input type="text" id="address" name="address" placeholder="Nhập địa chỉ"
                             style="border: 1px solid #ccc; outline: none; width: 200px;">
                     </div>
                 </div>
@@ -57,14 +57,14 @@
                 <div class="form-right register-info">
                     <div class="form-group">
                         <label>Tên đăng nhập (Số điện thoại)</label>
-                        <input type="text" id="username" placeholder="Nhập số điện thoại"
+                        <input type="text" id="username" name="username" placeholder="Nhập số điện thoại"
                             style="border: 1px solid #ccc; outline: none;">
                     </div>
 
                     <div class="form-group">
                         <label>Mật khẩu</label>
                         <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-                            <input type="password" id="reg-password" placeholder="Nhập mật khẩu"
+                            <input type="password" id="reg-password" name="password" placeholder="Nhập mật khẩu"
                                 style="border: none; outline: none;">
                             <button type="button" class="show-password" id="toggleRegPassword">Hiện</button>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <label>Xác nhận mật khẩu</label>
                         <div class="password-container" style="border: 1px solid #ccc; border-radius: 5px;">
-                            <input type="password" id="confirm-password" placeholder="Xác nhận mật khẩu"
+                            <input type="password" id="confirm-password" name="confirm_password" placeholder="Xác nhận mật khẩu"
                                 style="border: none; outline: none;">
                             <button type="button" class="show-password" id="toggleConfirmPassword">Hiện</button>
                         </div>

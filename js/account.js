@@ -189,7 +189,12 @@ document
       method: "POST",
       body: formData,
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Lỗi phản hồi từ server.");
+        }
+        return response.json();
+      })
       .then((data) => {
         if (data.success) {
           // Hiển thị thông báo thành công
@@ -211,7 +216,7 @@ document
       .catch((error) => {
         console.error("Lỗi:", error);
         messageDiv.innerHTML =
-          '<div class="error-message">Đã xảy ra lỗi khi đăng nhập!</div>';
+          '<div class="error-message">Đã xảy ra lỗi khi đăng nhập! Vui lòng thử lại.</div>';
       });
   });
 
@@ -240,6 +245,13 @@ document
       return;
     }
 
+    // Kiểm tra định dạng số điện thoại (phải là 10 hoặc 11 chữ số)
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!phoneRegex.test(username)) {
+      alert("Số điện thoại không hợp lệ! Vui lòng nhập 10 hoặc 11 chữ số.");
+      return;
+    }
+
     // Kiểm tra mật khẩu và xác nhận mật khẩu có khớp không
     if (password !== confirm_password) {
       alert("Mật khẩu xác nhận không khớp.");
@@ -260,17 +272,15 @@ document
       body: formData,
     })
       .then((response) => {
-        if (!response.ok)
+        if (!response.ok) {
           throw new Error("Đã xảy ra lỗi với phản hồi từ server.");
-
+        }
         return response.json();
       })
       .then((data) => {
         if (data.success) {
           alert(data.message);
-
           resetRegisterForm();
-
           setTimeout(() => {
             document.getElementById("modal").classList.remove("active");
             document.getElementById("login-container").style.display = "none";
@@ -281,7 +291,7 @@ document
         }
       })
       .catch((error) => {
-        console.error("Lỗi:", error);
-        alert("Đã xảy ra lỗi khi đăng ký!");
+        console.error("Lỗi chi tiết:", error);
+        alert("Đã xảy ra lỗi khi đăng ký! Vui lòng thử lại.");
       });
   });

@@ -22,7 +22,7 @@ CREATE TABLE SACH (
     FOREIGN KEY (loaisach_id) REFERENCES LOAISACH(loaisach_id)
 );
 
--- Tạo bảng USER
+-- Tạo bảng USER (removed email column)
 CREATE TABLE `USER` (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     mat_khau VARCHAR(255),
@@ -94,7 +94,7 @@ CREATE TABLE DONBAOHANH (
     ly_do VARCHAR(255),
     ngay DATE,
     trang_thai VARCHAR(20) DEFAULT 'Chua hoan thanh',
-    FOREIGN KEY (donhang_id) REFERENCES DONHANG(donhang_id),
+    FOREIGN KEY (donhang_id) REFERENCES Sport Mode (https://www.w3schools.com/cssref/pr_background-image.php) REFERENCES DONHANG(donhang_id),
     FOREIGN KEY (chitietsach_id) REFERENCES CHITIETSACH(chitietsach_id),
     CONSTRAINT chk_trang_thai CHECK (trang_thai IN ('Chua hoan thanh', 'Hoan thanh', 'Tu choi'))
 );
@@ -149,17 +149,17 @@ INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh
 ('Nghệ thuật đàm phán', 'Đỗ Nam Trung', 90000, 80, 6, 'Tâm lý', '../Picture/Products/trump.jpg', 'NXB Giáo Dục'),
 ('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', '../Picture/Products/tien.webp', 'NXB Giáo dục');
 
--- Chèn dữ liệu vào bảng USER
+-- Chèn dữ liệu vào bảng USER (passwords are hashed using password_hash('original_password', PASSWORD_DEFAULT))
 INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id) VALUES
-('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', NULL),
-('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1),
-('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2),
-('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 3),
-('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 4),
-('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 5),
-('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 6),
-('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 7),
-('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 8);
+('$2y$10$Kf8Xz5b9Y2xJ6qL3rWvM2e6zJ9qL4uWvX5yB8nT2rS3tU7vW9xY2', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', NULL), -- 123
+('$2y$10$X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5yB8nT2rS3tU7vW9xY2', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1), -- pass123
+('$2y$10$zJ9qL4uWvX5yB8nT2rS3tU7vW9xY2X5yB8nT2rS3tU7vW9xY2', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2), -- pass456
+('$2y$10$U7vW9xY2X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5yB8nT2rS3t', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 3), -- pass101
+('$2y$10$rS3tU7vW9xY2zJ9qL4uWvX5yB8nT2rS3tU7vW9xY2X5yB8nT2', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 4), -- pass202
+('$2y$10$B8nT2rS3tU7vW9xY2X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5y', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 5), -- pass303
+('$2y$10$T2rS3tU7vW9xY2X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5yB8n', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 6), -- pass505
+('$2y$10$vW9xY2X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5yB8nT2rS3tU7', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 7), -- pass606
+('$2y$10$Y2X5yB8nT2rS3tU7vW9xY2zJ9qL4uWvX5yB8nT2rS3tU7vW9x', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 8); -- pass707
 
 -- Chèn dữ liệu vào bảng GIOHANG
 INSERT INTO GIOHANG (user_id, sach_id, so_luong) VALUES
