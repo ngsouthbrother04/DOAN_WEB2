@@ -130,7 +130,9 @@ $pagination = $filtered_data['pagination'];
       </div>
    </div>
 
+
    <?php include 'login-register/login-register-form.php'; ?>
+   <?php include 'profile-form.php'; ?>
    <?php include 'footer.php'; ?>
 </body>
 
