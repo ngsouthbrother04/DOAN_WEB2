@@ -20,6 +20,7 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
    <title>T1 Bookstore | ADMIN</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <link rel="stylesheet" href="../CSS/admin.css">
+   <link rel="stylesheet" href="../CSS/index.css">
 </head>
 
 <body>

@@ -166,7 +166,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
     <title>T1 Bookstore | Quản lý thể loại</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../CSS/admin.css">
-    <link rel="stylesheet" href="../CSS/index.css">
     <style>
         .category-form {
             background-color: #fff;
@@ -174,6 +173,15 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+        }
+
+        .category-form h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
         }
 
         .form-group {
@@ -194,10 +202,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
             border-radius: 4px;
         }
 
-        .form-group textarea {
-            height: 100px;
-        }
-
         .btn {
             padding: 10px 15px;
             background-color: #4CAF50;
@@ -205,11 +209,20 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin-right: 10px;
         }
 
         .btn:hover {
             background-color: #45a049;
             transition: 0.3s;
+        }
+
+        #cancel-btn {
+            background-color: #f44336;
+        }
+
+        #cancel-btn:hover {
+            background-color: #d32f2f;
         }
 
         .categories-table {
@@ -372,6 +385,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
 
             <!-- Form thêm/sửa thể loại -->
             <div class="category-form">
+                <h3 id="form-title">Thêm thể loại mới</h3>
                 <form method="POST" id="category-form">
                     <input type="hidden" name="category_id" id="category_id">
                     <div class="form-group">
