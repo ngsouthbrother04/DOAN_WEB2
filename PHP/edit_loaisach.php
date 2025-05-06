@@ -166,6 +166,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
     <title>T1 Bookstore | Quản lý thể loại</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../CSS/admin.css">
+    <link rel="stylesheet" href="../CSS/index.css">
     <style>
         .category-form {
             background-color: #fff;
@@ -349,7 +350,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
             </div>
             <div>Admin</div>
         </div>
-        <div class="menu-item" data-target="trangchu.php">Trang chủ</div>
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="tai_khoan.php">Tài khoản</div>

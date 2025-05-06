@@ -367,7 +367,6 @@ function displayStatus($status)
             </div>
             <div>Admin</div>
         </div>
-        <div class="menu-item" data-target="admin.php">Tổng quan</div>
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="edit_taikhoan.php">Tài khoản</div>
