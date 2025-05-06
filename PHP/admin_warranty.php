@@ -340,8 +340,12 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => {
                 const target = item.getAttribute('data-target');
-                if (target === 'logout.php' && confirm('Bạn có chắc muốn đăng xuất?')) {
-                    window.location.href = target;
+                if (target === 'logout.php') {
+                    // Sửa lại logic xử lý đăng xuất
+                    if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                        window.location.href = target;
+                    }
+                    // Không làm gì nếu người dùng bấm Cancel
                 } else {
                     window.location.href = target;
                 }
