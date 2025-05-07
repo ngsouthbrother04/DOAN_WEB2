@@ -233,7 +233,6 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
             </div>
             <div>Admin</div>
         </div>
-        <div class="menu-item" data-target="admin.php">Tổng quan</div>
         <div class="menu-item" data-target="edit_loaisach.php">Thể loại</div>
         <div class="menu-item" data-target="edit_sach.php">Sách</div>
         <div class="menu-item" data-target="edit_taikhoan.php">Tài khoản</div>
@@ -341,8 +340,12 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction) {
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', () => {
                 const target = item.getAttribute('data-target');
-                if (target === 'logout.php' && confirm('Bạn có chắc muốn đăng xuất?')) {
-                    window.location.href = target;
+                if (target === 'logout.php') {
+                    // Sửa lại logic xử lý đăng xuất
+                    if (confirm('Bạn có chắc muốn đăng xuất?')) {
+                        window.location.href = target;
+                    }
+                    // Không làm gì nếu người dùng bấm Cancel
                 } else {
                     window.location.href = target;
                 }

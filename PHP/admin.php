@@ -8,12 +8,7 @@ $totalProducts = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as tota
 $totalOrders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM DONHANG"))['total'];
 $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM DONHANG"))['total'];
 
-// Kiểm tra phiên đăng nhập admin
-// session_start();
-// if (!isset($_SESSION['admin_id'])) {
-//    header("Location: login.php");
-//    exit();
-// }
+
 ?>
 
 <!DOCTYPE html>
@@ -25,6 +20,7 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
    <title>T1 Bookstore | ADMIN</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
    <link rel="stylesheet" href="../CSS/admin.css">
+   <link rel="stylesheet" href="../CSS/index.css">
 </head>
 
 <body>
@@ -36,7 +32,6 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
          <div>Admin</div>
       </div>
 
-      <div class="menu-item" data-target="edit_taikhoan.php">Trang chủ</div>
       <div class="menu-item" data-target="edit_theLoai.php">Thể loại</div>
       <div class="menu-item" data-target="edit_sach.php">Sách</div>
       <div class="menu-item" data-target="edit_taikhoan.php">Tài khoản</div>
@@ -83,15 +78,6 @@ $orders = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM 
                </div>
             </div>
 
-            <div class="stat-card completed-stat">
-               <div class="stat-icon completed-icon">
-                  <i class="fas fa-check-circle"></i>
-               </div>
-               <div class="stat-info">
-                  <h3><?php echo $orders; ?></h3>
-                  <p>Đơn hàng đã giao</p>
-               </div>
-            </div>
          </div>
       </div>
    </div>
