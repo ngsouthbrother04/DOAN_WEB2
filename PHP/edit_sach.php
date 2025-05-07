@@ -62,7 +62,17 @@ if (isset($_POST['them_sach'])) {
 // Xử lý xóa sách
 if (isset($_GET['delete_id'])) {
    $delete_id = $_GET['delete_id'];
-   $sql = "UPDATE SACH SET trang_thai = 'deleted' WHERE sach_id = $delete_id";
+   $sql = "SELECT COUNT(*) AS total FROM CHITIETDONHANG WHERE sach_id = $delete_id";
+   $result = mysqli_query($conn, $sql);
+   $row = mysqli_fetch_assoc($result);
+   $count = $row['total'];
+
+   if($count > 0){
+      $sql = "UPDATE SACH SET trang_thai = 'deleted' WHERE sach_id = $delete_id";
+   } else{
+      $sql = "DELETE FROM SACH WHERE sach_id = $delete_id";
+   }
+
 
    if (mysqli_query($conn, $sql)) {
       header("Location: edit_sach.php?success=delete");

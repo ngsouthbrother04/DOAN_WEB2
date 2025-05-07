@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 require_once 'db_connect.php';
 
 // Fetch categories for the dropdown menu
-$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH";
+$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH WHERE trang_thai = 'active'";
 $category_result = $conn->query($category_query);
 $categories = [];
 if ($category_result) {

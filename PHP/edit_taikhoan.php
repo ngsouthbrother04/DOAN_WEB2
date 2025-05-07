@@ -65,7 +65,7 @@ if (isset($_POST['them_taikhoan'])) {
    }
 }
 
-               // Xử lý xóa tài khoản
+               // Xử lý khóa tài khoản
                if (isset($_GET['delete_id'])) {
                   $delete_id = intval($_GET['delete_id']);
 
@@ -73,32 +73,14 @@ if (isset($_POST['them_taikhoan'])) {
                   mysqli_begin_transaction($conn);
 
                   try {
-                     // Xóa các bản ghi trong CHITIETDONHANG liên quan đến DONHANG của user
-                     $sql_delete_chitiet = "DELETE c FROM CHITIETDONHANG c 
-                           INNER JOIN DONHANG d ON c.donhang_id = d.donhang_id 
-                           WHERE d.user_id = $delete_id";
-                     mysqli_query($conn, $sql_delete_chitiet);
-
-                     // Xóa các bản ghi trong GIOHANG của user
-                     $sql_delete_giohang = "DELETE FROM GIOHANG WHERE user_id = $delete_id";
-                     mysqli_query($conn, $sql_delete_giohang);
-
-                     // Xóa các bản ghi trong DONHANG
-                     $sql_delete_donhang = "DELETE FROM DONHANG WHERE user_id = $delete_id";
-                     mysqli_query($conn, $sql_delete_donhang);
-
-                     // Xóa các bản ghi trong FEEDBACK
-                     $sql_delete_feedback = "DELETE FROM FEEDBACK WHERE user_id = $delete_id";
-                     mysqli_query($conn, $sql_delete_feedback);
-
-                     // Xóa tài khoản trong USER
-                     $sql_delete_user = "DELETE FROM `USER` WHERE user_id = $delete_id";
+                     // Khóa tài khoản trong USER
+                     $sql_delete_user = "UPDATE USER SET trang_thai = 'isBlocked' WHERE user_id = $delete_id";
                      if (mysqli_query($conn, $sql_delete_user)) {
                         mysqli_commit($conn);
                         header("Location: edit_taikhoan.php?success=delete");
                         exit();
                      } else {
-                        throw new Exception("Lỗi khi xóa tài khoản: " . mysqli_error($conn));
+                        throw new Exception("Lỗi khi khóa tài khoản: " . mysqli_error($conn));
                      }
                   } catch (Exception $e) {
                      mysqli_rollback($conn);
@@ -205,7 +187,7 @@ if (!in_array($sort_order, $valid_sort_orders)) {
    $sort_order = 'DESC';
 }
 
-$query = "SELECT * FROM `USER` WHERE 1=1";
+$query = "SELECT * FROM `USER` WHERE trang_thai = 'active'";
 if (!empty($filter_quyen)) {
    $query .= " AND quyen = '$filter_quyen'";
 }
@@ -573,8 +555,8 @@ function getSortIcon($field, $current_sort, $current_order)
                            <button class="edit-btn" onclick="editTaiKhoan(<?php echo htmlspecialchars(json_encode($user)); ?>)">Sửa</button>
                            <button class="delete-btn <?php echo ($user['quyen'] === 'Admin') ? 'disabled' : ''; ?>"
                               onclick="deleteTaiKhoan(<?php echo $user['user_id']; ?>)"
-                              title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể xóa tài khoản Admin' : 'Xóa tài khoản'; ?>">
-                              Xóa
+                              title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể khóa tài khoản Admin' : 'Khóa tài khoản'; ?>">
+                              Khóa
                            </button>
                         </td>
                      </tr>
@@ -645,7 +627,7 @@ function getSortIcon($field, $current_sort, $current_order)
       }
 
       const deleteTaiKhoan = userId => {
-         if (confirm('Bạn có chắc muốn xóa tài khoản này?')) {
+         if (confirm('Bạn có chắc muốn khóa tài khoản này?')) {
             window.location.href = 'edit_taikhoan.php?delete_id=' + userId;
          }
       }

@@ -27,7 +27,7 @@ if (!$current_category) {
 }
 
 // Lấy danh sách tất cả các danh mục cho dropdown menu
-$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH";
+$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH WHERE trang_thai = 'active'";
 $category_result = $conn->query($category_query);
 $categories = [];
 if ($category_result) {

@@ -10,7 +10,7 @@ function getFilteredProducts($conn, $items_per_page = 6, $page_param = 'page')
    $params = [];
    $param_types = '';
    if (!empty($category)) {
-      $where_clause .= "loaisach_id = ?";
+      $where_clause .= " AND loaisach_id = ?";
       $params[] = $category;
       $param_types .= 's';
    }

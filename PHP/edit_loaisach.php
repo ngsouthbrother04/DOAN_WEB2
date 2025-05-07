@@ -61,14 +61,14 @@ if (isset($_GET['delete'])) {
     $category_id = mysqli_real_escape_string($conn, $_GET['delete']);
 
     // Kiểm tra xem có sách nào thuộc thể loại này không
-    $check_books = "SELECT COUNT(*) as total FROM SACH WHERE loaisach_id = '$category_id'";
+    $check_books = "SELECT COUNT(*) as total FROM SACH WHERE loaisach_id = '$category_id' AND trang_thai = 'active'";
     $result_check = mysqli_query($conn, $check_books);
     $count = mysqli_fetch_assoc($result_check)['total'];
 
     if ($count > 0) {
         $_SESSION['message'] = "Không thể xóa thể loại này vì có $count sách đang sử dụng!";
     } else {
-        $delete_query = "DELETE FROM LOAISACH WHERE loaisach_id = '$category_id'";
+        $delete_query = "UPDATE LOAISACH SET trang_thai = 'deleted' WHERE loaisach_id = '$category_id'";
         if (mysqli_query($conn, $delete_query)) {
             $_SESSION['message'] = "Xóa thể loại thành công!";
         } else {
@@ -90,11 +90,11 @@ if (isset($_SESSION['message'])) {
 
 // Xử lý lọc dữ liệu
 $search_keyword = '';
-$filter_query = '';
+$filter_query = " WHERE trang_thai = 'active'";
 
 if (isset($_GET['search'])) {
     $search_keyword = mysqli_real_escape_string($conn, $_GET['search']);
-    $filter_query = " WHERE ten_loai LIKE '%$search_keyword%'";
+    $filter_query = " WHERE ten_loai LIKE '%$search_keyword%' AND trang_thai = 'active'";
 }
 
 // Xử lý sắp xếp
@@ -113,7 +113,7 @@ if ($sort_direction != 'asc' && $sort_direction != 'desc') {
 }
 
 // Lấy tất cả thể loại với số lượng sách
-$categories_query = "SELECT l.*, 
+$categories_query = "SELECT l.*,
                     (SELECT COUNT(*) FROM SACH s WHERE s.loaisach_id = l.loaisach_id AND s.trang_thai = 'active') as book_count 
                     FROM LOAISACH l" . $filter_query;
 

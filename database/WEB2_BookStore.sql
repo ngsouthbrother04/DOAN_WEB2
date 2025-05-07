@@ -5,7 +5,8 @@ USE WEB2_BookStore;
 -- Tạo bảng LOAISACH
 CREATE TABLE LOAISACH (
     loaisach_id INT PRIMARY KEY AUTO_INCREMENT,
-    ten_loai VARCHAR(255)
+    ten_loai VARCHAR(255),
+    trang_thai VARCHAR(8) CHECK (trang_thai IN ('active', 'deleted'))
 );
 
 -- Tạo bảng SACH
@@ -32,6 +33,7 @@ CREATE TABLE `USER` (
     dia_chi VARCHAR(255),
     ngay_sinh DATETIME,
     quyen VARCHAR(20) CHECK (quyen IN ('Admin', 'KhachHang')),
+    trang_thai VARCHAR(10) CHECK (trang_thai IN ('active', 'isBlocked')),
     giohang_id INT
 );
 
@@ -128,9 +130,9 @@ END //
 DELIMITER ;
 
 -- Chèn dữ liệu vào bảng LOAISACH
-INSERT INTO LOAISACH (ten_loai) VALUES
-('Văn học'), ('Kinh tế'), ('Khoa học'), ('Tiểu thuyết'), ('Lịch sử'),
-('Tâm lý'), ('Kỹ thuật'), ('Truyện tranh'), ('Giáo dục');
+INSERT INTO LOAISACH (ten_loai, trang_thai) VALUES
+('Văn học', 'active'), ('Kinh tế', 'active'), ('Khoa học', 'active'), ('Tiểu thuyết', 'active'), ('Lịch sử', 'active'),
+('Tâm lý', 'active'), ('Kỹ thuật', 'active'), ('Truyện tranh', 'active'), ('Giáo dục', 'active');
 
 -- Chèn dữ liệu vào bảng SACH
 INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban, trang_thai) VALUES
@@ -151,16 +153,16 @@ INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh
 ('Giáo dục hiện đại', 'John Dewey', 170000, 45, 9, 'Lý thuyết giáo dục', '../Picture/Products/tien.webp', 'NXB Giáo dục', 'active');
 
 -- Chèn dữ liệu vào bảng USER
-INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id) VALUES
-('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', NULL),
-('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1),
-('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2),
-('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 3),
-('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 4),
-('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 5),
-('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 6),
-('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 7),
-('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 8);
+INSERT INTO `USER` (mat_khau, ho_ten, sdt, dia_chi, ngay_sinh, quyen, giohang_id, trang_thai) VALUES
+('123', 'Le Van C', '0123456789', 'Ho Chi Minh', '1988-03-10', 'Admin', NULL, 'active'),
+('pass123', 'Nguyen Van A', '0901234567', 'Ha Noi', '1990-05-15', 'KhachHang', 1, 'active'),
+('pass456', 'Tran Thi B', '0912345678', 'Ho Chi Minh', '1992-07-20', 'KhachHang', 2, 'active'),
+('pass101', 'Pham Thi D', '0934567890', 'Can Tho', '1995-09-25', 'KhachHang', 3, 'active'),
+('pass202', 'Hoang Van E', '0945678901', 'Hai Phong', '1991-11-30', 'KhachHang', 4, 'active'),
+('pass303', 'Do Thi F', '0956789012', 'Quang Ninh', '1987-04-05', 'KhachHang', 5, 'active'),
+('pass505', 'N Thi H', '0978901234', 'Nha Trang', '1994-08-20', 'KhachHang', 6, 'active'),
+('pass606', 'Dang Van I', '0989012345', 'Vung Tau', '1989-12-10', 'KhachHang', 7, 'active'),
+('pass707', 'Bui Thi K', '0990123456', 'Da Lat', '1996-02-25', 'KhachHang', 8, 'active');
 
 -- Chèn dữ liệu vào bảng GIOHANG
 INSERT INTO GIOHANG (user_id, sach_id, so_luong) VALUES
@@ -214,5 +216,4 @@ INSERT INTO FEEDBACK (user_id, sach_id, rating, noi_dung, ngay_feedback) VALUES
 (7, 6, 5, 'Nội dung sâu sắc', '2025-03-06 15:00:00'),
 (8, 7, 4, 'Hữu ích', '2025-03-07 16:00:00'),
 (9, 8, 5, 'Hấp dẫn', '2025-03-08 17:00:00'),
-(1, 9, 3, 'Tạm ổn', '2025-03-09 18:00:00'),
-(2, 10, 4, 'Đáng đọc', '2025-03-10 19:00:00');
+(1, 9, 3, 'Tạm ổn', '2025-03-09 18:00:00');

@@ -4,8 +4,9 @@ include 'db_connect.php';
 include 'pagination.php';
 include 'product_filter.php';
 
-$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH";
+$category_query = "SELECT loaisach_id, ten_loai FROM LOAISACH WHERE trang_thai = 'active'";
 $category_result = $conn->query($category_query);
+
 $categories = [];
 if ($category_result) {
    while ($row = $category_result->fetch_assoc()) {
@@ -81,6 +82,7 @@ $pagination = $filtered_data['pagination'];
                            <?php echo htmlspecialchars($category['ten_loai']); ?>
                         </option>
                      <?php endforeach; ?>
+                     <?php echo "<script>console.log(" . json_encode($categories) . ");</script>";?>
                   </select>
                </div>
                <div class="filter-group">

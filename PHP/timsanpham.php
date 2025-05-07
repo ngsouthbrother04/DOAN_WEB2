@@ -54,7 +54,7 @@ if (isset($_GET['sort'])) {
 $start = ($current_page - 1) * $items_per_page;
 
 // Khởi tạo truy vấn cơ bản
-$base_query = "SELECT * FROM SACH WHERE 1=1";
+$base_query = "SELECT * FROM SACH WHERE trang_thai = 'active'";
 $count_query = "SELECT COUNT(*) as total FROM SACH WHERE 1=1";
 $params = [];
 $param_types = "";
