@@ -205,7 +205,8 @@ $page_title = "Thanh Toán";
          </div>
       <?php endif; ?>
    </div>
-
+   <?php include 'login-register/login-register-form.php'; ?>
+    <?php include 'profile-form.php'; ?>
    <?php include 'footer.php'; ?>
 </body>
 </html>

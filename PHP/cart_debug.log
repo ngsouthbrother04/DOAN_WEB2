@@ -1,0 +1,35 @@
+Cart at thanhtoan.php load: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [tieu_de] => Blue Box tập 2
+            [gia_tien] => 250000.00
+            [hinh_anh] => Picture/Products/bluebox.jpg
+            [so_luong] => 3
+            [max_so_luong] => 50
+            [thanh_tien] => 750000
+        )
+
+)
+
+Processed cart items: Array
+(
+)
+
+Cart after update: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [tieu_de] => Blue Box tập 2
+            [gia_tien] => 250000.00
+            [hinh_anh] => Picture/Products/bluebox.jpg
+            [so_luong] => 3
+            [max_so_luong] => 50
+            [thanh_tien] => 750000
+            [quantity] => 1
+        )
+
+)
+

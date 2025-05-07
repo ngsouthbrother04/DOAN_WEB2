@@ -1,14 +1,6 @@
 <?php
 // Kết nối database
 include 'db_connect.php';
-
-// Kiểm tra phiên đăng nhập admin
-// session_start();
-// if (!isset($_SESSION['admin_id'])) {
-//    header("Location: login.php");
-//    exit();
-// }
-
 // Bắt đầu hoặc tiếp tục session để lưu thông báo
 session_start();
 
@@ -26,7 +18,7 @@ if (isset($_POST['add_category'])) {
     if (mysqli_num_rows($check_result) > 0) {
         $_SESSION['message'] = "Thể loại này đã tồn tại!";
     } else {
-        $insert_query = "INSERT INTO LOAISACH (ten_loai) VALUES ('$category_name')";
+        $insert_query = "INSERT INTO LOAISACH (ten_loai, trang_thai) VALUES ('$category_name', 'active')";
         if (mysqli_query($conn, $insert_query)) {
             $_SESSION['message'] = "Thêm thể loại thành công!";
         } else {
@@ -166,6 +158,7 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
     <title>T1 Bookstore | Quản lý thể loại</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../CSS/admin.css">
+    <link rel="stylesheet" href="../CSS/index.css">
     <style>
         .category-form {
             background-color: #fff;
@@ -392,8 +385,8 @@ function getSortIcon($field, $current_sort_field, $current_sort_direction)
                         <label for="category_name">Tên thể loại:</label>
                         <input type="text" id="category_name" name="category_name" required>
                     </div>
-                    <button type="submit" class="btn" id="submit-btn" name="add_category">Thêm thể loại</button>
-                    <button type="button" class="btn" id="cancel-btn" style="display:none; background-color: #ccc;">Hủy</button>
+                    <button style="width: 200px;" type="submit" class="btn" id="submit-btn" name="add_category">Thêm thể loại</button>
+                    <button type="button" class="btn" id="cancel-btn" style="width: 200px; display:none; background-color: #ccc;">Hủy</button>
                 </form>
             </div>
 

@@ -7,9 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const input = this.nextElementSibling;
             let value = parseInt(input.value);
-            if (value > 1) {
+            const min = parseInt(input.getAttribute('min'));
+            if (value > min) {
                 input.value = value - 1;
-                this.disabled = (value - 1) <= 1;
+                this.disabled = (value - 1) <= min;
                 updateIncreaseButton(input);
             }
         });
@@ -28,6 +29,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    function updateDecreaseButton(input) {
+        const decreaseButton = input.previousElementSibling;
+        decreaseButton.disabled = parseInt(input.value) <= parseInt(input.getAttribute('min'));
+    }
+
+    function updateIncreaseButton(input) {
+        const increaseButton = input.nextElementSibling;
+        increaseButton.disabled = parseInt(input.value) >= parseInt(input.getAttribute('max'));
+    }
+
+    // Đảm bảo giá trị input không bị thay đổi thủ công
     quantityInputs.forEach(input => {
         input.addEventListener('change', function() {
             let value = parseInt(this.value);
@@ -44,14 +56,4 @@ document.addEventListener('DOMContentLoaded', function() {
             updateIncreaseButton(this);
         });
     });
-
-    function updateDecreaseButton(input) {
-        const decreaseButton = input.previousElementSibling;
-        decreaseButton.disabled = parseInt(input.value) <= 1;
-    }
-
-    function updateIncreaseButton(input) {
-        const increaseButton = input.nextElementSibling;
-        increaseButton.disabled = parseInt(input.value) >= parseInt(input.getAttribute('max'));
-    }
 });
