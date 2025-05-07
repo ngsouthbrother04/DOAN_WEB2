@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "root";
-$dbname = "WEB2_BookStore"; // Tên cơ sở dữ liệu
+$password = "";
+$dbname = "WEB2_BookStore";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

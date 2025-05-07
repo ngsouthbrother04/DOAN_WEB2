@@ -19,20 +19,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          $user = $result->fetch_assoc();
 
          if ($password === $user['mat_khau']) {
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['user_name'] = $user['ho_ten'];
-            $_SESSION['user_phone'] = $user['sdt'];
-            $_SESSION['user_role'] = $user['quyen'];
-            $_SESSION['user_dob'] = date('d-m-Y', strtotime($user['ngay_sinh']));
-            $_SESSION['user_address'] = $user['dia_chi'];
+            if ($user['trang_thai'] === 'isBlocked') {
+               echo json_encode(['success' => false, 'message' => 'Tài khoản của bạn đã bị khóa!']);
+            } else {
+               $_SESSION['user_id'] = $user['user_id'];
+               $_SESSION['user_name'] = $user['ho_ten'];
+               $_SESSION['user_phone'] = $user['sdt'];
+               $_SESSION['user_role'] = $user['quyen'];
+               $_SESSION['user_dob'] = date('d-m-Y', strtotime($user['ngay_sinh']));
+               $_SESSION['user_address'] = $user['dia_chi'];
 
-            echo json_encode(['success' => true, 'message' => 'Đăng nhập thành công!', 'user' => [
-               'ho_ten' => $user['ho_ten'],
-               'sdt' => $user['sdt'],
-               'quyen' => $user['quyen'],
-               'ngay_sinh' => date('d-m-Y', strtotime($user['ngay_sinh'])),
-               'dia_chi' => $user['dia_chi'],
-            ]]);
+               echo json_encode([
+                  'success' => true,
+                  'message' => 'Đăng nhập thành công!',
+                  'user_role' => $user['quyen'],
+                  'user' => [
+                     'ho_ten' => $user['ho_ten'],
+                     'sdt' => $user['sdt'],
+                     'quyen' => $user['quyen'],
+                     'ngay_sinh' => date('d-m-Y', strtotime($user['ngay_sinh'])),
+                     'dia_chi' => $user['dia_chi'],
+                  ]
+               ]);
+            }
          } else {
             echo json_encode(['success' => false, 'message' => 'Mật khẩu không đúng!']);
          }

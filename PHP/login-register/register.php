@@ -61,12 +61,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Thêm người dùng mới
     $role = 'KhachHang';
-    $stmt = $conn->prepare("INSERT INTO `USER` (ho_ten, sdt, dia_chi, ngay_sinh, mat_khau, quyen) VALUES (?, ?, ?, ?, ?, ?)");
+    $status = 'active';
+
+    $stmt = $conn->prepare("INSERT INTO `USER` (ho_ten, sdt, dia_chi, ngay_sinh, mat_khau, quyen, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)");
     if (!$stmt) {
         echo json_encode(['success' => false, 'message' => 'Lỗi chuẩn bị truy vấn: ' . $conn->error]);
         exit;
     }
-    $stmt->bind_param("ssssss", $full_name, $username, $address, $dob, $password, $role);
+    $stmt->bind_param("sssssss", $full_name, $username, $address, $dob, $password, $role, $status);
 
     if ($stmt->execute()) {
         $_SESSION['user_id'] = $conn->insert_id;
@@ -75,6 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_dob'] = date('d-m-Y', strtotime($dob));
         $_SESSION['user_address'] = $address;
         $_SESSION['user_role'] = $role;
+        $_SESSION['user_status'] = $status;
 
         echo json_encode(['success' => true, 'message' => 'Đăng ký thành công!']);
     } else {
