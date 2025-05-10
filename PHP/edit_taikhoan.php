@@ -65,30 +65,55 @@ if (isset($_POST['them_taikhoan'])) {
    }
 }
 
-               // Xử lý khóa tài khoản
-               if (isset($_GET['delete_id'])) {
-                  $delete_id = intval($_GET['delete_id']);
+// Xử lý khóa tài khoản
+if (isset($_GET['delete_id'])) {
+   $delete_id = intval($_GET['delete_id']);
 
-                  // Bắt đầu giao dịch
-                  mysqli_begin_transaction($conn);
+   // Bắt đầu giao dịch
+   mysqli_begin_transaction($conn);
 
-                  try {
-                     // Khóa tài khoản trong USER
-                     $sql_delete_user = "UPDATE USER SET trang_thai = 'isBlocked' WHERE user_id = $delete_id";
-                     if (mysqli_query($conn, $sql_delete_user)) {
-                        mysqli_commit($conn);
-                        header("Location: edit_taikhoan.php?success=delete");
-                        exit();
-                     } else {
-                        throw new Exception("Lỗi khi khóa tài khoản: " . mysqli_error($conn));
-                     }
-                  } catch (Exception $e) {
-                     mysqli_rollback($conn);
-                     $_SESSION['error'] = $e->getMessage();
-                     header("Location: edit_taikhoan.php?error=delete");
-                     exit();
-                  }
-               }
+   try {
+      // Khóa tài khoản trong USER
+      $sql_delete_user = "UPDATE USER SET trang_thai = 'isBlocked' WHERE user_id = $delete_id";
+      if (mysqli_query($conn, $sql_delete_user)) {
+         mysqli_commit($conn);
+         header("Location: edit_taikhoan.php?success=delete");
+         exit();
+      } else {
+         throw new Exception("Lỗi khi khóa tài khoản: " . mysqli_error($conn));
+      }
+   } catch (Exception $e) {
+      mysqli_rollback($conn);
+      $_SESSION['error'] = $e->getMessage();
+      header("Location: edit_taikhoan.php?error=delete");
+      exit();
+   }
+}
+
+// Xử lý mở khóa tài khoản
+if (isset($_GET['unBlock_id'])) {
+   $delete_id = intval($_GET['unBlock_id']);
+
+   // Bắt đầu giao dịch
+   mysqli_begin_transaction($conn);
+
+   try {
+      // Mở khóa tài khoản trong USER
+      $sql_delete_user = "UPDATE USER SET trang_thai = 'active' WHERE user_id = $delete_id";
+      if (mysqli_query($conn, $sql_delete_user)) {
+         mysqli_commit($conn);
+         header("Location: edit_taikhoan.php?success=unBlock");
+         exit();
+      } else {
+         throw new Exception("Lỗi khi mở khóa tài khoản: " . mysqli_error($conn));
+      }
+   } catch (Exception $e) {
+      mysqli_rollback($conn);
+      $_SESSION['error'] = $e->getMessage();
+      header("Location: edit_taikhoan.php?error=unBlock");
+      exit();
+   }
+}
 
 // Xử lý sửa tài khoản
 if (isset($_POST['sua_taikhoan'])) {
@@ -161,7 +186,10 @@ if (isset($_GET['success'])) {
          $message = 'Cập nhật tài khoản thành công!';
          break;
       case 'delete':
-         $message = 'Xóa tài khoản thành công!';
+         $message = 'Khóa tài khoản thành công!';
+         break;
+      case 'unBlock':
+         $message = 'Mở khóa tài khoản thành công!';
          break;
    }
 }
@@ -187,7 +215,7 @@ if (!in_array($sort_order, $valid_sort_orders)) {
    $sort_order = 'DESC';
 }
 
-$query = "SELECT * FROM `USER` WHERE trang_thai = 'active'";
+$query = "SELECT * FROM `USER` WHERE 1=1";
 if (!empty($filter_quyen)) {
    $query .= " AND quyen = '$filter_quyen'";
 }
@@ -365,7 +393,7 @@ function getSortIcon($field, $current_sort, $current_order)
          cursor: pointer;
          padding: 8px;
          margin: 2px;
-         width: 50px;
+         width: auto;
          font-size: 12px;
       }
 
@@ -541,7 +569,7 @@ function getSortIcon($field, $current_sort, $current_order)
                   while ($user = mysqli_fetch_assoc($user_result)):
                ?>
                      <tr>
-                        <td><?php echo $stt++; ?></td>
+                        <td><?php echo $stt++ . ($user['trang_thai'] != 'active' ? ' 🔒' : ''); ?></td>
                         <td data-full-text="<?php echo htmlspecialchars($user['ho_ten']); ?>"><?php echo htmlspecialchars($user['ho_ten']); ?></td>
                         <td><?php echo htmlspecialchars($user['sdt']); ?></td>
                         <td data-full-text="<?php echo htmlspecialchars($user['dia_chi']); ?>"><?php echo htmlspecialchars($user['dia_chi']); ?></td>
@@ -553,10 +581,11 @@ function getSortIcon($field, $current_sort, $current_order)
                         </td>
                         <td class="action-buttons">
                            <button class="edit-btn" onclick="editTaiKhoan(<?php echo htmlspecialchars(json_encode($user)); ?>)">Sửa</button>
-                           <button class="delete-btn <?php echo ($user['quyen'] === 'Admin') ? 'disabled' : ''; ?>"
-                              onclick="deleteTaiKhoan(<?php echo $user['user_id']; ?>)"
-                              title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể khóa tài khoản Admin' : 'Khóa tài khoản'; ?>">
-                              Khóa
+                           <button class="delete-btn" <?php echo ($user['quyen'] === 'Admin') ? "'disabled' disabled style='opacity: 0.5; pointer-events: none;'" : ''; ?>
+                              onclick="deleteTaiKhoan(this, <?php echo $user['user_id']; ?>)"
+                              title="<?php echo ($user['quyen'] === 'Admin') ? 'Không thể khóa tài khoản Admin' : 'Khóa tài khoản'; ?>"
+                              id="<?php echo ($user['trang_thai'] == 'active' ? "Block" :  "unBlock")?>">
+                              <?php echo($user['trang_thai'] == 'active' ? "Khóa" :  "Mở Khóa")?>
                            </button>
                         </td>
                      </tr>
@@ -626,11 +655,19 @@ function getSortIcon($field, $current_sort, $current_order)
          window.scrollTo(0, 0);
       }
 
-      const deleteTaiKhoan = userId => {
-         if (confirm('Bạn có chắc muốn khóa tài khoản này?')) {
-            window.location.href = 'edit_taikhoan.php?delete_id=' + userId;
+      const deleteTaiKhoan = (button, userId) => {
+         const isActive = button.textContent.trim() === 'Khóa';
+
+         if (isActive) {
+            if (confirm('Bạn có chắc muốn khóa tài khoản này?')) {
+               window.location.href = 'edit_taikhoan.php?delete_id=' + userId;
+            }
+         } else {
+            if (confirm('Bạn có chắc muốn mở khóa tài khoản này?')) {
+               window.location.href = 'edit_taikhoan.php?unBlock_id=' + userId;
+            }
          }
-      }
+      };
    </script>
 </body>
 
