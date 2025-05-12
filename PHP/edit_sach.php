@@ -44,8 +44,8 @@ if (isset($_POST['them_sach'])) {
    }
 
    // Thêm sách vào database
-   $sql = "INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban) 
-            VALUES ('$tieu_de', '$tac_gia', '$gia_tien', '$so_luong', '$loaisach_id', '$mo_ta', '$hinh_anh', '$nha_xuat_ban')";
+   $sql = "INSERT INTO SACH (tieu_de, tac_gia, gia_tien, so_luong, loaisach_id, mo_ta, hinh_anh, nha_xuat_ban, trang_thai) 
+            VALUES ('$tieu_de', '$tac_gia', '$gia_tien', '$so_luong', '$loaisach_id', '$mo_ta', '$hinh_anh', '$nha_xuat_ban', 'active')";
 
    if (mysqli_query($conn, $sql)) {
       // Thay vì hiển thị alert, chuyển hướng người dùng với thông báo thành công
